@@ -5,3 +5,8 @@ out/parte01/*
 !out/parte01/poster*.png
 parte01/audio/*.wav
 parte01/fonts/hangul.ttc
+node_modules/
+parte01-3d/audio/*.wav
+!out/parte01-3d/
+out/parte01-3d/*
+!out/parte01-3d/final*.mp4
