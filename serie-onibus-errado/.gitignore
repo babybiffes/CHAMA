@@ -1,0 +1,7 @@
+out/*
+!out/parte01/
+out/parte01/*
+!out/parte01/final*.mp4
+!out/parte01/poster*.png
+parte01/audio/*.wav
+parte01/fonts/hangul.ttc
