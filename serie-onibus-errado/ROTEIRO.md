@@ -10,7 +10,7 @@ Analisei os 4 vídeos frame a frame (aprox. 63s, 179s, 104s e 95s, todos 720x128
 
 | Elemento | Como é na referência | Como vamos usar |
 |---|---|---|
-| **Câmera** | 1ª pessoa (POV), lente olho-de-peixe forte (~120°). Só vemos as mãos/braços do protagonista. | Igual. **Cada episódio é visto pelos olhos de UM dos 4 amigos**, e a manga dele entrega quem é: punho de bombacha + cuia (Bento), manga de flanela xadrez (Geraldim), braço com fitinha do Bonfim (Rai), mão com celular de 3% (Caio). |
+| **Câmera** | 1ª pessoa (POV), lente olho-de-peixe forte (~120°). Só vemos as mãos/braços do protagonista. | Igual. **A série inteira é vista pelos olhos do Caio, o paulista (protagonista).** O público vê as mãos dele (celular de 3%, alça da pochete e, depois, a manga verde com "011" no punho) e os outros 3 amigos sempre de frente, reagindo pra câmera. As escolhas da enquete são as decisões do Caio. |
 | **Traço** | Cartoon 2D/3D toon, contorno preto grosso, sombra chapada, personagens com olhos grandes e redondos. | Igual. |
 | **Paleta de tensão** | Céu **vermelho-sangue** com fumaça preta quando o perigo está lá fora; interiores azulados/escuros. | Arena dos jogos com cores pastel (contraste fofo × letal); dormitório azul-escuro; céu vermelho só na rodoviária no final do Ep. 1 e no último episódio. |
 | **Selo** | Etiqueta vermelha "PARTE 4" / "PARTE 04", canto superior esquerdo, nos primeiros segundos. | "PARTE 01", "PARTE 02"... mesmo estilo. |
@@ -38,7 +38,8 @@ Acordam na Coreia do Sul, de agasalho verde, num jogo mortal **onde todo mundo f
 
 ## 2. Os personagens
 
-### 🏙️ CAIO "FARIA LIMA" BORTOLOTTO — o Paulista (Mooca, SP) · Jogador **011**
+### 🏙️ CAIO "FARIA LIMA" BORTOLOTTO — o Paulista (Mooca, SP) · Jogador **011** · ⭐ PROTAGONISTA / CÂMERA POV
+- **Na câmera:** tudo é visto pelos olhos dele. Ele quase não aparece de corpo inteiro, só as mãos, o celular, o reflexo em vidros e a sombra. Mostre o rosto dele em poucos momentos (reflexo na janela do ônibus no Ep. 1, tela do celular rachada no Ep. 9) pra criar conexão sem quebrar o POV. As falas dele soam como voz "de dentro da cabeça", mais perto do microfone que as dos outros.
 - **Visual:** boné preto de aba reta, camisa listrada preta e branca, pochete atravessada, AirPods, tênis de corrida caríssimo e uma garrafa térmica de academia com adesivo "No pain no gain". O celular **sempre com 3% de bateria**.
 - **Silhueta:** magro, sempre andando rápido, uma mão no celular.
 - **Personalidade:** líder que ninguém escolheu, ansioso, transforma tudo em reunião ("vamo alinhar", "bora fazer uma call rapidinho"), reclama do trânsito até dentro da arena. No fundo é o mais leal: quem comprou as passagens se sente culpado.
@@ -149,7 +150,7 @@ Os números dos jogadores são os **DDDs** das cidades deles: **011, 053, 031, 0
 
 ## 4. Temporada 1 — roteiro episódio por episódio
 
-> Convenção: **[POV de X]** = olhos de quem estamos. Falas em `NOME:`. Entre colchetes, ação/som. A opção que eu indico como caminho principal está marcada com ★; a outra também tem destino (veja "Se ganhar…").
+> Convenção: **toda a série é em POV do Caio** (câmera = olhos dele). Falas em `NOME:`. Entre colchetes, ação/som. A opção que eu indico como caminho principal está marcada com ★; a outra também tem destino (veja "Se ganhar…").
 
 ---
 
@@ -168,7 +169,7 @@ GERALDIM: Uai… Europa vai de ônibus, é?
 CAIO: Até o aeroporto, meu! O link falou! Foi alguém do grupo que mandou.
 RAI: Quem do grupo?
 CAIO: …Sei lá, mano. Número desconhecido.
-[Dentro do ônibus, todos os passageiros olham para frente, imóveis. Silêncio.]
+[Dentro do ônibus, todos os passageiros olham para frente, imóveis. Silêncio. Caio se senta na janela e, pela primeira vez, vemos o **rosto dele refletido no vidro**, sorrindo com o celular carregando.]
 RAI: Ó paí ó… ninguém aqui pisca, véi.
 BENTO: É gringo, guri. Gringo é assim, quietinho. [SLUUURP]
 [Rai beija a fitinha do Bonfim.]
@@ -186,8 +187,8 @@ CAIO: …Mano. Isso não é Portugal.
 
 ---
 
-### PARTE 02 — "TERMO DE USO" · *[POV do Geraldim]* · ~100 s
-[Mãos de flanela segurando um pão de queijo. Os 4 de agasalho verde: **011, 053, 031, 071**.]
+### PARTE 02 — "TERMO DE USO" · *[POV do Caio]* · ~100 s
+[Caio olha pras próprias mãos: manga verde, **011** no punho. Levanta a cabeça: os outros 3 de agasalho verde, **053, 031, 071**. O Geraldim mastiga um pão de queijo.]
 
 BENTO: Bah… me tiraram a bombacha, tchê. Isso é crime.
 RAI: E meu chinelo ficou, véi! Olha só, Deus é baiano.
@@ -210,7 +211,7 @@ BENTO: Capaz que eu assino isso!
 BENTO: …Bah, onde é que eu assino, tchê?
 [Telão acende: um porquinho dourado cheio de dinheiro, com números subindo.]
 CAIO: Ôrra, meu… Isso aí é… dá pra ir pra Europa umas mil vezes.
-[Card de mensagem no celular que o Caio escondeu na meia: **Bruno 🏖️ — "Vocês tão bem?"**]
+[Caio puxa o celular escondido na meia. Card de mensagem: **Bruno 🏖️ — "Vocês tão bem?"**]
 CAIO: …Gente. Como o Bruno sabe que a gente não tá bem?
 
 **🗳️ O QUE VOCÊ FARIA?** 🔴 *RESPONDER O BRUNO* · 🔵 *ESCONDER O CELULAR* ★
@@ -218,30 +219,30 @@ CAIO: …Gente. Como o Bruno sabe que a gente não tá bem?
 
 ---
 
-### PARTE 03 — "BATATINHA FRITA" · *[POV do Rai]* · ~110 s
-[Campo enorme pintado de paisagem, céu falso. **Boneca gigante** de costas. Braço com a fitinha do Bonfim no canto da tela.]
+### PARTE 03 — "BATATINHA FRITA" · *[POV do Caio]* · ~110 s
+[Campo enorme pintado de paisagem, céu falso. **Boneca gigante** de costas. Caio olha pros lados: Rai à esquerda, Bento e Geraldim à direita.]
 
 RAI: Oxe… que bonequinha bonitinha, véi.
 GERALDIM: Uai… boneca grande desse tamanho num tem como ser coisa boa, não.
 VOZ: 무궁화 꽃이 피었습니다… *(cantiga)*
 GERALDIM: Nó… ela falou *cocô*?
-[A boneca **vira a cabeça**. Todo mundo congela. Um jogador coreano espirra: tiro abafado. Ele cai. Zumbido.]
-[Silêncio. Os 4 se entreolham, apavorados, congelados.]
+[A boneca **vira a cabeça**. Todo mundo congela. Um jogador coreano espirra: tiro abafado. Ele cai. Zumbido no ouvido do Caio.]
+[Silêncio. A câmera do Caio treme, congelada. Os olhos vão de um amigo pro outro.]
 CAIO: [cochichando] Mano… é batatinha frita 1, 2, 3… com tiro.
 RAI: [cochichando] Lá ele… lá ele… lá ele…
-[Boneca vira. Correm. **Chinelo do Rai voa longe** — estalo.]
+[Boneca vira. Correm. A respiração do Caio fica pesada. O **chinelo do Rai voa** na frente da câmera (estalo).]
 RAI: MEU CHINELO, VÉI!
 [Boneca vira. Rai congela num pé só, braços abertos, equilibrando. Treme.]
-BENTO: [cochichando] Aguenta, guri… aguenta…
-[A cuia do Bento escorrega. Ele segura com os dentes. Silêncio… e o som: **SLUUUUURP.**]
+CAIO: [cochichando] Aguenta, Rai… aguenta, mano…
+[Caio olha pra trás. A cuia do Bento escorrega, ele segura com os dentes. Silêncio… e o som: **SLUUUUURP.**]
 [A boneca gira os olhos lentamente para o Bento. Batida de coração.]
 BENTO: …Bah.
-[TIRO. Câmera cai junto com o Rai no susto. O Bento tomba de costas, a térmica voa, **água quente espirrando como sangue**. Corte seco. Silêncio total.]
-RAI: [sussurrando, voz quebrando] Bento…? BENTO!
-[Ao fundo, o Caio e o Geraldim já estão quase na linha. Faltam 4 segundos no telão.]
+[TIRO. A câmera do Caio se encolhe no susto. O Bento tomba de costas, a térmica voa, **água quente espirrando como sangue**. Corte seco. Silêncio total.]
+CAIO: [sussurrando, voz quebrando] Bento…? BENTO!
+[Caio olha pra frente: a linha de chegada está a poucos metros. Telão: **4 segundos**. Olha pra trás: Bento caído.]
 
 **🗳️ O QUE VOCÊ FARIA?** 🔴 *VOLTAR PRO BENTO* · 🔵 *CORRER PRA LINHA* ★
-- **Se ganhar 🔴:** Rai volta, arrasta o Bento pelo lenço e cruza a linha no último segundo. A boneca "pisca" pra ele (gancho bizarro).
+- **Se ganhar 🔴:** Caio volta, arrasta o Bento pelo lenço e cruza a linha no último segundo. A boneca "pisca" pra câmera (gancho bizarro).
 
 ---
 
@@ -270,8 +271,8 @@ GERALDIM: Uai, montem as cama! Barricada, sô!
 
 ---
 
-### PARTE 05 — "O DOCE" · *[POV do Bento]* · ~110 s
-[Mão grossa com cuia. Mesa com latinhas. Dentro, um doce fino de açúcar queimado com uma forma desenhada.]
+### PARTE 05 — "O DOCE" · *[POV do Caio]* · ~110 s
+[As mãos do Caio abrem uma latinha. Dentro, um doce fino de açúcar queimado com uma forma desenhada: **um guarda-chuva**.]
 
 CAIO: Mano, eu peguei o guarda-chuva. É o mais embaçado. ZICA.
 GERALDIM: [lambendo o doce] Uai… o meu é estrela. Se lamber, derrete. Ninguém me ensinou, mas eu sei.
@@ -280,7 +281,7 @@ BENTO: Bah, deixa comigo. [despeja água quente da térmica furada] Derrete esse
 RAI: Oxe… quem é que bota Cristo Redentor num doce coreano, véi?
 CAIO: Mano… isso é muito específico.
 GERALDIM: Isso aí tem trem.
-[Cronômetro. Agulhas. Rai treme. Ele começa a cantar baixinho pra se acalmar e dança com os ombros.]
+[Cronômetro. As mãos do Caio tremem raspando o guarda-chuva com a agulha. Ele olha pro lado: o Rai treme. Ele começa a cantar baixinho pra se acalmar e dança com os ombros.]
 MIN-JUN: [imitando a dança] 대박! *(Incrível!)*
 [Plac. **Um braço do Cristo quebra.** Silêncio.]
 RAI: …Gente. Ele perdeu um braço. É só um braço. O Cristo nem usa o braço, ele só fica assim parado…
@@ -288,15 +289,15 @@ RAI: …Gente. Ele perdeu um braço. É só um braço. O Cristo nem usa o braço
 RAI: [sorrindo, voz tremendo] Ei… ei, pai… relaxe… a gente pode conversar, né? É só um braço…
 GUARDA: 탈락. *(Eliminado.)*
 GERALDIM: Tá lá? TÁ LÁ ONDE, SÔ?!
-[TIRO. Câmera do Bento se joga pra frente. Rai cai. **A fitinha brilha forte no pulso dele.** Corte seco. Preto.]
+[TIRO. A câmera do Caio se joga no chão. Rai cai na frente dele, cara a cara. **A fitinha brilha forte no pulso dele.** Corte seco. Preto.]
 BENTO: [no escuro] …Rai…
 
 **🗳️ O QUE VOCÊ FARIA?** 🔴 *ATACAR O GUARDA* · 🔵 *TERMINAR O DOCE* ★
-- **Se ganhar 🔴:** Bento parte pra cima do guarda e ganha uma coronhada. Abre a Parte 06 acordando zonzo ao lado do caixão do Rai.
+- **Se ganhar 🔴:** Caio parte pra cima do guarda e leva uma coronhada (tela tremendo, apagão). Abre a Parte 06 com ele acordando zonzo ao lado do caixão do Rai.
 
 ---
 
-### PARTE 06 — "LÁ ELE" · *[POV do Geraldim]* · ~95 s
+### PARTE 06 — "LÁ ELE" · *[POV do Caio]* · ~95 s
 [Sala dos caixões, fria. Dois guardas carregam um caixão com laço. Os 3 escondidos atrás de uma pilha.]
 
 CAIO: [chorando baixo] Mano, ele era o único que ria das minhas piadas de LinkedIn…
@@ -350,35 +351,36 @@ CAIO: …Geraldim?
 
 ---
 
-### PARTE 08 — "BOLINHA DE GUDE" · *[POV do Geraldim]* · ~120 s (episódio emocional)
-[Abre de cabeça pra baixo. Geraldim pendurado na beira, preso pela alça da sacola.]
+### PARTE 08 — "BOLINHA DE GUDE" · *[POV do Caio]* · ~120 s (episódio emocional)
+[Abre com o Caio debruçado na beira do buraco, lanterna do celular (3%) apontada pra baixo. Lá embaixo, o Geraldim pendurado pela alça da sacola, comendo pão de queijo de cabeça pra baixo.]
 
 GERALDIM: Uai… a Vó Lurdinha costurou essa sacola reforçada pra durar a vida inteira. Durou, sô.
-[Os 3 puxam ele pra cima, rindo e chorando ao mesmo tempo.]
-[Corte. Cenário de vila antiga. Alto-falante: duplas. Só um da dupla sai vivo.]
+CAIO: MANO! Segura minha mão!
+[As mãos do Caio puxam. O Bento e o Rai puxam o Caio pela cintura. Os 4 caem pra trás, rindo e chorando ao mesmo tempo.]
+[Corte. Cenário de vila antiga. Alto-falante: duplas. Só um da dupla sai vivo. O guarda põe o Caio em dupla com o Geraldim.]
 CAIO: Mano… não. Não. Eu não vou jogar contra vocês.
 BENTO: Capaz. Eu não jogo contra irmão.
 RAI: E aí? A gente faz o quê?
 [Silêncio longo. Só o vento.]
 GERALDIM: Faz o que a gente sempre faz, uai. Resenha.
-[Montagem rápida e feliz (15 s): Rai ensina samba-reggae pros coreanos; Bento serve chimarrão pra Sra. Park; o Caio "faz uma call" com um guarda; o Geraldim divide o último pão de queijo em quatro.]
+[Montagem rápida e feliz (15 s), como se o Caio filmasse no celular: Rai ensina samba-reggae pros coreanos; Bento serve chimarrão pra Sra. Park; o Caio "faz uma call" com um guarda; o Geraldim divide o último pão de queijo em quatro.]
 GERALDIM: É o último. Vó Lurdinha falou: o último pão de queijo a gente divide com quem é família.
-[Eles comem juntos. Pausa. Ficam sérios.]
+[A mão do Caio pega o pedaço. Eles comem juntos. Pausa. Ficam sérios.]
 CAIO: Gente… fui eu que cliquei no link. Fui eu que vi a plataforma errada. Tudo isso é culpa minha, mano.
 RAI: Oxe, abestado, para com isso.
-[Guarda se aproxima: tempo esgotado. Alguém precisa ser eliminado. Aponta pro Geraldim.]
-CAIO: [entra na frente] Não, não, não. Eu. Eu perdi. Fui eu, mano.
+[Guarda se aproxima: tempo esgotado. Alguém da dupla precisa ser eliminado. Aponta pro Geraldim.]
+CAIO: [entra na frente, braços abertos na câmera] Não, não, não. Eu. Eu perdi. Fui eu, mano.
 GERALDIM: CAIO, NÃO, SÔ!
-CAIO: [sorrindo, de lado pra câmera] Fala pra minha mãe que o Wi-Fi do ônibus era bom.
-[TIRO no peito. Ele cai. Bipe de bateria fraca… e silêncio. Corte seco.]
+CAIO: [olhando pros amigos] Fala pra minha mãe que o Wi-Fi do ônibus era bom.
+[TIRO. A câmera **cai de costas**. Vemos o teto, depois os 3 rostos debruçados sobre ele, gritando, mas o som vai ficando abafado, como debaixo d'água. Bipe de bateria fraca… a imagem escurece pelas bordas…]
 
-**🗳️ O QUE VOCÊ FARIA?** 🔴 *PEGAR A ARMA DO GUARDA* · 🔵 *SEGURAR A MÃO DO CAIO* ★
-- **Se ganhar 🔴:** Geraldim pega a arma, mas ela está travada. O guarda ri e fala "mermão" de novo. Mais uma pista.
+**🗳️ O QUE VOCÊ FARIA?** 🔴 *LUTAR PRA FICAR ACORDADO* ★ · 🔵 *FECHAR OS OLHOS*
+- **Se ganhar 🔵:** a Parte 09 abre com 3 segundos de tela totalmente preta, só as vozes dos amigos chorando… até o bipe do celular trazer o Caio de volta. Mais tenso ainda.
 
 ---
 
-### PARTE 09 — "PONTE DE VIDRO" · *[POV do Bento]* · ~110 s
-[Abre: Caio deitado. Bento segurando a mão dele. Bipe… **o celular no bolso do peito tem um buraco de bala.**]
+### PARTE 09 — "PONTE DE VIDRO" · *[POV do Caio]* · ~110 s
+[Tela preta. Bipe. A imagem volta embaçada, de baixo pra cima: os 3 amigos debruçados, chorando. O Bento segura a mão do Caio. Caio tira o celular do bolso do peito: **buraco de bala no meio**, e na tela rachada vemos o reflexo do rosto dele.]
 
 CAIO: [tossindo] …Mano. A bateria… morreu no meu lugar.
 RAI: LÁ ELE! O CELULAR DE 3% SALVOU O HOMEM!
@@ -389,7 +391,7 @@ GERALDIM: Sorte nada, sô. [bate com o nó do dedo] Meu tio é vidraceiro em Sab
 [Tóc. Tlin. Tóc. Ele vai na frente, batendo.]
 CAIO: Mano… o Geraldim tá carregando a gente.
 GERALDIM: Desde sempre, sô. Só cês num percebia.
-[Penúltima placa. Bento pisa. **CRAC.** Rachadura. Ele congela.]
+[Caio vai atrás do Bento, olhando pros pés. Penúltima placa. Bento pisa. **CRAC.** Rachadura. Ele congela.]
 BENTO: …Bah.
 RAI: Bento, não respira, não fala, não toma chimarrão!
 [Bento olha pra térmica. Olha pro abismo. Joga a térmica na placa da frente: tóc, aguenta. Ele pula e chega.]
@@ -404,13 +406,13 @@ CAIO: Mano… quem tá por trás disso aqui… é brasileiro.
 
 ---
 
-### PARTE 10 — FINAL — "ROUND 7" · *[POV do Rai]* · ~120 s
+### PARTE 10 — FINAL — "ROUND 7" · *[POV do Caio]* · ~120 s
 [Arena. Os 4 contra 8 guardas. Do outro lado, a bandeira.]
 
 CAIO: Plano, mano: o Bento segura, o Geraldim passa despercebido, o Rai distrai.
 RAI: Distrair é comigo, véi.
 [Rai começa a dançar. Batucada. Os guardas… começam a mexer o ombro. Min-jun e a Sra. Park batem palma da arquibancada.]
-[Bento derruba dois de uma vez. Geraldim passa andando calmo, ninguém repara, e pega a bandeira.]
+[Caio corre pela lateral, puxando a atenção de mais dois guardas. Bento derruba dois de uma vez. Geraldim passa andando calmo, ninguém repara, e pega a bandeira.]
 GERALDIM: Uai… peguei.
 [Silêncio. Confete dourado. Os 4 se abraçam, gritando.]
 [Passos. O **Líder Mascarado** desce a escada. A câmera foca no punho: **021**.]
@@ -433,7 +435,7 @@ BRUNO: [sorri, com os olhos marejados] Eu sei. Por isso eu vim buscar vocês. Ag
 CAIO: MANO! PARIS! FOI SONHO, MEU!
 BENTO: BAH, TCHÊ! [SLUUURP]
 GERALDIM: Nó… bão demais, sô.
-[O Rai ri… e olha pro pulso. **A fitinha do Bonfim se solta sozinha** e cai no chão do ônibus. A música para.]
+[Caio filma tudo no celular (tela no POV, 100% de bateria). O Rai ri… e olha pro pulso. **A fitinha do Bonfim se solta sozinha** e cai no chão do ônibus. A música para.]
 RAI: …Gente. A fitinha caiu.
 CAIO: E daí, mano?
 RAI: Quando a fitinha cai sozinha… é porque os três pedidos foram atendidos. A gente nunca se separou. O Bruno voltou. E a gente… chegou na Europa.
