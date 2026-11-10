@@ -217,7 +217,7 @@ function friends(t, cp) {
     const base = { t, offset: 0.2, w: { idle: Math.max(0, 1 - 0.45 * tw - STEP.bento.walk), agree: 0.45 * tw, walk: STEP.bento.walk } };
     ben.pose(base);
     const head = ben.anchor('Head'), chest = ben.anchor('Spine2');
-    const rest = L(chest, R, U, F, 0.14, -0.2, 0.24), sip = head.clone().add(F.clone().multiplyScalar(0.2)).add(U.clone().multiplyScalar(-0.05)).add(R.clone().multiplyScalar(0.02));
+    const rest = L(chest, R, U, F, 0.13, -0.2, 0.19), sip = head.clone().add(F.clone().multiplyScalar(0.2)).add(U.clone().multiplyScalar(-0.05)).add(R.clone().multiplyScalar(0.02));
     let rT = rest.clone().lerp(sip, arm);
     rT = rT.lerp(L(chest, R, U, F, 0.26, 0.42, 0.25), salute).lerp(L(chest, R, U, F, 0.3, 0.72, 0.1), Math.max(pump, cheer * 0.0));
     let lT = L(chest, R, U, F, -0.24, -0.38, 0.05), lW = 0;
@@ -237,7 +237,7 @@ function friends(t, cp) {
     const base = { t, offset: 0.9, w: { idle: Math.max(0, 1 - 0.45 * tw - STEP.geraldim.walk), agree: 0.45 * tw, walk: STEP.geraldim.walk } };
     ger.pose(base);
     const head = ger.anchor('Head'), belly = ger.anchor('Spine1'), chest = ger.anchor('Spine2');
-    const bagPos = L(belly, R, U, F, -0.1, -0.12, 0.3), rest = L(belly, R, U, F, 0.16, -0.2, 0.24), atBag = bagPos.clone().add(U.clone().multiplyScalar(0.12)).add(R.clone().multiplyScalar(0.04));
+    const bagPos = L(belly, R, U, F, -0.08, -0.1, 0.22), rest = L(belly, R, U, F, 0.14, -0.2, 0.18), atBag = bagPos.clone().add(U.clone().multiplyScalar(0.12)).add(R.clone().multiplyScalar(0.04));
     const mouth = head.clone().add(F.clone().multiplyScalar(0.19)).add(U.clone().multiplyScalar(0.02));
     let tgt = rest.clone();
     if (k < 0.55) tgt = rest.clone().lerp(atBag, smooth(0, 0.55, k)); else if (k < 0.8) tgt = atBag.clone();

@@ -15,7 +15,7 @@ export function pipeline(R, W, H, { scale = 1 } = {}) {
       tColor: { value: color.texture }, tNormal: { value: normal.texture }, tDepth: { value: depthTex },
       res: { value: new THREE.Vector2(w, h) }, near: { value: 0.05 }, far: { value: 200 },
       k: { value: 0.9 }, aspect: { value: W / H }, ink: { value: 1.0 }, grain: { value: 1.0 }, time: { value: 0 },
-      lineW: { value: 2.2 },
+      lineW: { value: 2.8 },
     },
     vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
     fragmentShader: `
