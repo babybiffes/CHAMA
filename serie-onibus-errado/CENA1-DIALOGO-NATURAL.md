@@ -24,46 +24,29 @@ O que deixa a conversa real: **respostas curtas** ("Sabe nada…", "Hã?"), **pe
 
 ---
 
-## Passo 1 — Criar a voz de cada personagem (uma vez só)
+## Vozes (gratuitas, sem "Create new voice")
 
-Na tela do Playground, toque em **"Create new voice"** e crie as 4 vozes abaixo, uma por vez. Cole a descrição, gere a amostra, ouça e salve com o nome do personagem. Assim os 4 têm sempre a **mesma voz** em todos os episódios.
+Tudo é feito no **"Create new dialog"**, usando as vozes prontas do AI Studio. O sotaque e o jeito de cada um vêm da **descrição da cena**. Use sempre a mesma voz para cada personagem em todos os episódios:
 
-**Bento** (salve como "Bento")
-```
-Homem gaúcho de 30 anos, de Bagé, na fronteira do Rio Grande do Sul. Voz grave, um pouco rouca, firme e confiante, de quem gosta de mandar na turma. Sotaque gaúcho da campanha bem natural: o "e" final fechado ("tchê", "guri"), "s" seco, melodia que sobe no meio da frase e desce no fim, leve jeito castelhano. Fala como gente de verdade, sem voz de locutor.
-```
-Frase de teste: `Bah, ó… a entrada é pelos fundos, tchê. Confia, guri.`
-
-**Geraldim** (salve como "Geraldim")
-```
-Homem mineiro de 28 anos, de Sabará, interior de Minas. Voz mansa, baixa e calma, de gente simples e desconfiada. Sotaque mineiro forte e natural: emenda as palavras e come sílabas ("cês", "num", "Nu meu fi" sai quase "numêfi"), vogais fechadinhas, frase que termina subindo. "Uai" e "sô" bem naturais. Fala devagar, às vezes de boca cheia.
-```
-Frase de teste: `Nu meu fi… esse trem tá esquisito demais, sô.`
-
-**Rai** (salve como "Rai")
-```
-Rapaz baiano de 25 anos, de Itapuã, Salvador. Voz alegre, solta e risonha, de quem zoa todo mundo. Sotaque soteropolitano natural: vogais bem abertas, ritmo cantado que acelera e freia, "Oxe" esticado, "véi" arrastado no fim das frases. Fala rindo, sem voz de locutor.
-```
-Frase de teste: `Oxe, relaxe vu, véi! Arroche, arroche!`
-
-**Caio** (salve como "Caio")
-```
-Rapaz paulistano de 27 anos, da Mooca, São Paulo. Voz jovem e rápida, meio ansiosa. Sotaque paulistano natural: fala emendada, "mano" e "meu" bem paulistas, "não" e "ão" nasais, melodia levemente cantada da Mooca. Zoa os amigos com intimidade. Voz próxima, como quem fala do seu lado, sem voz de locutor.
-```
-Frase de teste: `Mano… cê tá de brincadeira, né, meu?`
-
-> Se não gostar da amostra, gere de novo ou acrescente na descrição "carregue mais no sotaque".
-
----
+| Personagem | Voz pronta | Alternativa |
+|---|---|---|
+| Bento (gaúcho) | **Algenib** (grave, rouca) | Alnilam |
+| Geraldim (mineiro) | **Umbriel** (calma) | Achird |
+| Rai (baiano) | **Puck** (animada) | Sadachbia |
+| Caio (paulista) | **Fenrir** (agitada) | Zubenelgenubi |
 
 ## Passo 2 — Gerar a conversa
 
 Volte ao Playground e toque em **"Create new dialog"**.
 
-1. **Adicione os personagens (speakers)** e escolha para cada um a voz que você criou no Passo 1. O nome do speaker tem que ser **igual** ao que está no texto: `Bento`, `Caio`, `Geraldim`, `Rai`.
-2. **Descrição da cena / estilo** (se o campo existir, cole isto):
+1. **Adicione os personagens (speakers)** e escolha para cada um a voz pronta da tabela acima. O nome do speaker tem que ser **igual** ao que está no texto: `Bento`, `Caio`, `Geraldim`, `Rai`.
+2. **Descrição da cena / estilo** — aqui vai o sotaque de cada um (cole tudo):
 ```
-Quatro amigos de regiões diferentes do Brasil conversando de noite atrás de um armazém, perto da rodoviária, antes de uma viagem. Papo de rua, rápido, natural e cheio de zoeira, como um áudio gravado no celular no meio do grupo. Um responde o outro sem pausa longa, às vezes quase em cima da fala do outro. Ninguém fala como locutor. O lugar é meio sinistro, então o Geraldim fica desconfiado, o Rai ri de tudo, o Bento é o guia confiante e o Caio reclama.
+Quatro amigos de regiões diferentes do Brasil conversando de noite atrás de um armazém, perto da rodoviária, antes de uma viagem. Papo de rua, rápido, natural e cheio de zoeira, como um áudio gravado no celular no meio do grupo. Um responde o outro sem pausa longa, às vezes quase em cima da fala do outro. Ninguém fala como locutor.
+Bento: gaúcho de Bagé, 30 anos, voz grave e rouca, confiante, sotaque da fronteira com o "e" final fechado ("tchê", "guri"), "Bah" curto, melodia que sobe no meio e cai no fim. É o guia da turma.
+Caio: paulistano da Mooca, 27 anos, fala rápida e emendada, "mano" bem paulista, "não" nasal. Reclama e zoa os amigos com intimidade; o "cuzão" é brincadeira.
+Geraldim: mineiro de Sabará, 28 anos, fala mansa, baixa e devagar, de boca cheia de pão de queijo, comendo sílabas ("Nu meu fi" quase "numêfi"), "uai" e "sô", frase que sobe no fim. Desconfiado.
+Rai: baiano de Salvador, 25 anos, voz alegre e risonha, vogais abertas, ritmo cantado, "Oxe" esticado e "véi" arrastado. Ri de tudo e apressa a turma.
 ```
 3. **Cole o texto da conversa** no formato `Nome: fala`, um por linha:
 
