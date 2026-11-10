@@ -15,7 +15,7 @@ Analisei os 4 vídeos frame a frame (aprox. 63s, 179s, 104s e 95s, todos 720x128
 | **Paleta de tensão** | Céu **vermelho-sangue** com fumaça preta quando o perigo está lá fora; interiores azulados/escuros. | Arena dos jogos com cores pastel (contraste fofo × letal); dormitório azul-escuro; céu vermelho só na rodoviária no final do Ep. 1 e no último episódio. |
 | **Selo** | Etiqueta vermelha "PARTE 4" / "PARTE 04", canto superior esquerdo, nos primeiros segundos. | "PARTE 01", "PARTE 02"... mesmo estilo. |
 | **Legendas** | Centralizadas, terço inferior, fonte sans bold com contorno. Branco = um personagem, amarelo = outro. | **Uma cor por personagem** (ver ficha). Coreanos falam em **hangul**, sem tradução. |
-| **Mensagens de celular** | Card branco no topo: nome do contato + texto ("Pai — Vem pra casa. URGENTE."). | Mensagens do **"Bruno 🏖️"** (o mistério da série) e do grupo "Os 4 do Porto". |
+| **Mensagens de celular** | Card branco no topo: nome do contato + texto. | **Tudo acontece na tela do celular do Caio** (vibração, aviso do WhatsApp, conversa abrindo), nada sobreposto ao vídeo. Mensagens do **"Luis"** (o mistério da série). |
 | **Ritmo** | 1 fala a cada 2–4 s, pausas de silêncio com zoom lento, corte seco no clímax. | Igual, com espaço para a piada **entre** os sustos. |
 | **Final** | Tela escurece → **"O QUE VOCÊ FARIA?"** / **"E AGORA, O QUE EU FAÇO?"** → 2 botões (vermelho com emoji 🏃, azul com emoji 🛡️/🏫) → "Comenta aqui 👇" em amarelo. | Igual. Botão vermelho = opção arriscada; azul = opção segura. |
 | **Gancho** | Começa no meio da ação ("Ele tá olhando… mas não vem."). | Toda parte começa com **"VOCÊS ESCOLHERAM: ___ (xx%)"** por 1,5 s e entra direto na ação. |
@@ -79,9 +79,9 @@ Acordam na Coreia do Sul, de agasalho verde, num jogo mortal **onde todo mundo f
 - **Legenda:** 🟠 LARANJA · **Trilha-tema:** batucada de timbau, 2 compassos.
 - **Morte falsa (Ep. 5):** quebra o doce no jogo do favo. **Volta (Ep. 6):** sai de dentro do caixão gritando "LÁ ELE!" e os guardas é que fogem. A fitinha está brilhando.
 
-### 🕶️ O MISTÉRIO — BRUNO "BRUNINHO DO MÉIER", o Carioca · Jogador **021**
+### 🕶️ O MISTÉRIO — LUIS "LUISINHO DO MÉIER", o Carioca · Jogador **021**
 Não aparece de rosto até o final. Existe só como **ligações perdidas, mensagens e pistas**.
-- **História:** em 2019, os 4 se conheceram numa excursão pra Porto Seguro… e **eram 5**. Na volta, numa "parada de 15 minutos" num posto em Registro (SP), esqueceram o Bruno. Ninguém foi buscar. O grupo "Os 5 do Porto ✌️" virou "Os 4 do Porto". Eles fazem piada disso até hoje.
+- **História:** em 2019, os 4 se conheceram numa excursão pra Porto Seguro… e **eram 5**. Na volta, numa "parada de 15 minutos" num posto em Registro (SP), esqueceram o Luis. Ninguém foi buscar. O grupo "Os 5 do Porto ✌️" virou "Os 4 do Porto". Eles fazem piada disso até hoje.
 - **Vocabulário (só no final):** *Coé, rapaziada · Mermão · Papo reto · Caô · Sinistro · Qual foi? · Tá de sacanagem*
 - **Legenda:** 🔵 AZUL.
 
@@ -154,36 +154,55 @@ Os números dos jogadores são os **DDDs** das cidades deles: **011, 053, 031, 0
 
 ---
 
-### PARTE 01 — "PLATAFORMA 6" · *[POV do Caio]* · ~95 s
-[Rodoviária lotada, de noite. Bipe de bateria: o celular mostra **3%**. Card de mensagem no topo: **Bruno 🏖️ — 17 chamadas perdidas**.]
+### PARTE 01 — "PLATAFORMA 6" · *[POV do Caio]* · ~100 s
+> Versão atualizada após os testes em vídeo (cenas 1 e 2 já produzidas como teste de 20 s cada).
 
-CAIO: Ôrra, meu… o Bruno de novo? Mano, faz seis anos.
-RAI: Oxe, bloqueia esse homem, véi. Ele ficou em Registro, deixa ele lá.
-GERALDIM: [mastigando] Uai, mas ês num deixou ele, ês esqueceu. É diferente.
-BENTO: Bah, foco, tchê! Plataforma nove. EUROPA. Seis anos juntando pila!
-[A placa "9" balança, range e **gira de ponta-cabeça: 6**. Ninguém vê. Grave de terror.]
-CAIO: Plataforma… seis. Firmeza. É ali, mano.
-[Ônibus verde, letreiro em hangul. Um homem de terno sorri e aponta: "Wi-Fi 📶 USB 🔌".]
-CAIO: MANO. TOMADA. [corre]
+**CENA 1 — Fundos da rodoviária (0–20 s)** · noite, fundos de um armazém com a porta "DOCA 2" iluminada, caminhão-baú verde, chão rachado com lixo; à esquerda a rua com lojas fechadas, fumaça no céu e um incêndio ao longe.
+[Os 3 amigos de frente para o Caio. Bento toma chimarrão, Geraldim come pão de queijo, Rai não para quieto.]
+BENTO: [aponta com o polegar para a porta] Bah, a entrada da rodoviária é pelos fundos, tchê. Eu sei o caminho.
+[A câmera olha para a rua: prédios baixos, fumaça preta, alguém correndo lá longe, sirene distante. Volta para os amigos.]
+GERALDIM: [para de comer e aponta para a fumaça] Uai, sô… cês viram aquela fumaça? Esse trem tá esquisito demais.
+RAI: [bate no pulso, depois acena para a porta] Oxe, relaxe, véi! O ônibus sai dez e quarenta. Bora!
+[Eles viram e andam até a DOCA 2. O Caio vai atrás.]
+CAIO: Mano… isso aqui não tem cara de rodoviária.
+BENTO: [lá de dentro, se virando] Vem, guris! É logo ali.
+
+**CENA 2 — A plataforma (20–40 s)** · a rodoviária cheia: pastelaria, bilheteria com fila, orelhão, pipoca, TVs de partidas ("EUROPA EXPRESS — PLAT. 9"), pombos, ônibus chegando.
+[Caio anda pela plataforma. O celular vibra na mão dele: na tela, "WhatsApp — Luis — 17 chamadas de voz perdidas". Ele toca no aviso, abre a conversa, "digitando…", chega a mensagem: "Vocês vão me deixar pra trás de novo?". Ele trava a tela.]
+CAIO: Ôrra, meu… o Luis de novo? Mano, faz seis anos.
+RAI: [chega mais perto, gesticulando] Oxe, bloqueia esse homem, véi. Ele ficou em Registro, deixa ele lá.
+[Bento ri.]
+GERALDIM: [dedo levantado, depois encolhe os ombros] Uai, mas ês num deixou ele, ês esqueceu. É diferente.
+[Rai: mão na boca, "oooh". Bento balança a cabeça.]
+BENTO: [aponta para a placa, depois braço pra cima] Bah, foco, tchê! Plataforma nove. EUROPA. Seis anos juntando pila!
+[Rai e Geraldim comemoram. Lá em cima, sem ninguém perceber, a placa "9" gira devagar no parafuso e para de cabeça pra baixo: **6**. Um rangido baixinho.]
+CAIO: Firmeza, mano. Bora!
+
+**CENA 3 — O ônibus errado (40–60 s)**
+[Na "plataforma 6" está um ônibus verde com letreiro em coreano (특별 운행 버스). Um homem de terno sorri segurando uma plaquinha "Wi-Fi / USB".]
+CAIO: [olha o celular: 3%] MANO. TOMADA! [corre]
 GERALDIM: Uai… Europa vai de ônibus, é?
 CAIO: Até o aeroporto, meu! O link falou! Foi alguém do grupo que mandou.
 RAI: Quem do grupo?
 CAIO: …Sei lá, mano. Número desconhecido.
-[Dentro do ônibus, todos os passageiros olham para frente, imóveis. Silêncio. Caio se senta na janela e, pela primeira vez, vemos o **rosto dele refletido no vidro**, sorrindo com o celular carregando.]
-RAI: Ó paí ó… ninguém aqui pisca, véi.
+
+**CENA 4 — Dentro do ônibus (60–80 s)**
+[Passageiros imóveis, olhando para a frente. Caio pluga o celular; no reflexo da janela vemos o rosto dele pela primeira vez.]
+RAI: [cochichando] Ó paí ó… ninguém aqui pisca, véi.
 BENTO: É gringo, guri. Gringo é assim, quietinho. [SLUUURP]
-[Rai beija a fitinha do Bonfim.]
-RAI: Fiz três pedidos no Bonfim antes de vir. Não conto senão não vale.
-[Ar-condicionado solta uma fumaça rosada. Os olhos pesam. Visão embaçando.]
+RAI: [beija a fitinha do Bonfim] Fiz três pedidos no Bonfim antes de vir. Não conto senão não vale.
+[Fumaça rosa sai do ar-condicionado. As pálpebras pesam.]
 GERALDIM: Nó… que cheirim bão de… algodão-doce…
 CAIO: Vou só… carregar… o celul…
-[Preto. Silêncio total. **Apito de guarda.** Luz branca estourando.]
-VOZ (alto-falante): **일어나세요!** *(Levantem-se!)*
-[Dormitório gigante, centenas de camas empilhadas. Caio olha pro peito: agasalho verde, **011**.]
+[Preto. Silêncio. Apito.]
+
+**CENA 5 — O despertar (80–100 s)**
+ALTO-FALANTE: 일어나세요! *(Levantem-se!)*
+[Dormitório gigante, beliches até o teto, guarda de macacão laranja com máscara ⭐. Caio olha a própria manga: agasalho verde, **011**. Vira: os amigos de verde, **053, 031, 071**, apavorados.]
 CAIO: …Mano. Isso não é Portugal.
 
 **🗳️ O QUE VOCÊ FARIA?** 🔴 *PERGUNTAR ONDE FICA A EUROPA* · 🔵 *FICAR QUIETO E OBSERVAR* ★
-- **Se ganhar 🔴:** Caio pergunta "Europa?" pro guarda, que responde com um tapa na nuca e uma frase longa em coreano. Piada pronta pra abrir a Parte 02.
+- **Se ganhar 🔴:** Caio pergunta "Europa?" pro guarda, que responde com um tapa na nuca e uma frase longa em coreano.
 
 ---
 
@@ -211,10 +230,10 @@ BENTO: Capaz que eu assino isso!
 BENTO: …Bah, onde é que eu assino, tchê?
 [Telão acende: um porquinho dourado cheio de dinheiro, com números subindo.]
 CAIO: Ôrra, meu… Isso aí é… dá pra ir pra Europa umas mil vezes.
-[Caio puxa o celular escondido na meia. Card de mensagem: **Bruno 🏖️ — "Vocês tão bem?"**]
-CAIO: …Gente. Como o Bruno sabe que a gente não tá bem?
+[Caio puxa o celular escondido na meia. Na tela, o WhatsApp: **Luis — "Vocês tão bem?"**]
+CAIO: …Gente. Como o Luis sabe que a gente não tá bem?
 
-**🗳️ O QUE VOCÊ FARIA?** 🔴 *RESPONDER O BRUNO* · 🔵 *ESCONDER O CELULAR* ★
+**🗳️ O QUE VOCÊ FARIA?** 🔴 *RESPONDER O LUIS* · 🔵 *ESCONDER O CELULAR* ★
 - **Se ganhar 🔴:** Caio digita "socorro" e a bateria morre no meio da palavra (1%). Mantém o mistério.
 
 ---
@@ -418,18 +437,18 @@ GERALDIM: Uai… peguei.
 [Passos. O **Líder Mascarado** desce a escada. A câmera foca no punho: **021**.]
 LÍDER: 축하합니다. *(Parabéns.)*
 [Pausa. Ele tira a máscara devagar.]
-BRUNO: …Coé, rapaziada.
-TODOS: **BRUNO?!**
-BRUNO: Registro. Posto de gasolina. 2019. "Parada de 15 minutos."
+LUIS: …Coé, rapaziada.
+TODOS: **LUIS?!**
+LUIS: Registro. Posto de gasolina. 2019. "Parada de 15 minutos."
 GERALDIM: Uai… ocê tá diferente. Cê tá coreano?
-BRUNO: Seis anos, mermão. Seis anos aprendendo coreano pra organizar isso aqui. O link da passagem? Fui eu. A placa da plataforma? Eu soltei o parafuso.
+LUIS: Seis anos, mermão. Seis anos aprendendo coreano pra organizar isso aqui. O link da passagem? Fui eu. A placa da plataforma? Eu soltei o parafuso.
 CAIO: Mano… cê quase matou a gente!
-BRUNO: Quase. [aponta pro pulso do Rai] Mas vocês não podiam morrer. Né, Rai?
+LUIS: Quase. [aponta pro pulso do Rai] Mas vocês não podiam morrer. Né, Rai?
 [Rai congela. Esconde a fitinha.]
-BRUNO: O terceiro pedido. Eu tava lá no Bonfim, sentado atrás de você. "Senhor do Bonfim… traz o Bruno de volta."
+LUIS: O terceiro pedido. Eu tava lá no Bonfim, sentado atrás de você. "Senhor do Bonfim… traz o Luis de volta."
 [Silêncio. Rai abaixa a cabeça. Os outros olham pra ele.]
 RAI: …A gente nunca foi te buscar, véi. Eu pensava nisso todo dia.
-BRUNO: [sorri, com os olhos marejados] Eu sei. Por isso eu vim buscar vocês. Agora… durmam. A Europa tá esperando.
+LUIS: [sorri, com os olhos marejados] Eu sei. Por isso eu vim buscar vocês. Agora… durmam. A Europa tá esperando.
 [Fumaça rosada. Preto.]
 [**Acordam no ônibus.** Sol. Pela janela: **a Torre Eiffel.** Música alegre!]
 CAIO: MANO! PARIS! FOI SONHO, MEU!
@@ -438,7 +457,7 @@ GERALDIM: Nó… bão demais, sô.
 [Caio filma tudo no celular (tela no POV, 100% de bateria). O Rai ri… e olha pro pulso. **A fitinha do Bonfim se solta sozinha** e cai no chão do ônibus. A música para.]
 RAI: …Gente. A fitinha caiu.
 CAIO: E daí, mano?
-RAI: Quando a fitinha cai sozinha… é porque os três pedidos foram atendidos. A gente nunca se separou. O Bruno voltou. E a gente… chegou na Europa.
+RAI: Quando a fitinha cai sozinha… é porque os três pedidos foram atendidos. A gente nunca se separou. O Luis voltou. E a gente… chegou na Europa.
 [Silêncio total. Batida de coração.]
 GERALDIM: [baixinho] …Então agora… nós pode morrer, sô.
 [O ônibus para. As portas abrem. O motorista vira devagar: máscara laranja com o número **021**.]
@@ -447,7 +466,7 @@ MOTORISTA: **Bienvenue.**
 BENTO: …Bah.
 [Corte seco. Título: **ROUND 7 — EUROPA**. "Temporada 2"]
 
-**🗳️ O QUE VOCÊ FARIA?** 🔴 *FUGIR DO ÔNIBUS* · 🔵 *CONFIAR NO BRUNO*
+**🗳️ O QUE VOCÊ FARIA?** 🔴 *FUGIR DO ÔNIBUS* · 🔵 *CONFIAR NO LUIS*
 *(o resultado define o primeiro episódio da Temporada 2)*
 
 ---
@@ -455,10 +474,10 @@ BENTO: …Bah.
 ## 5. Por que esse plot twist funciona
 
 1. **Ele explica a regra da série.** O público passa 9 episódios vendo os personagens "morrerem" e voltarem achando que é só piada, e no final descobre que era o **segundo pedido da fitinha**. Tudo faz sentido de trás pra frente, e a pessoa quer rever.
-2. **As pistas estavam lá desde o Ep. 1:** as 17 chamadas do Bruno, o link de número desconhecido, a placa 9→6, os DDDs nos agasalhos, o Cristo Redentor no doce, o guarda assobiando funk, o "mermão", o pega-bandeira e o 021 no punho. Os comentários vão virar caça às pistas.
+2. **As pistas estavam lá desde o Ep. 1:** as 17 chamadas do Luis, o link de número desconhecido, a placa 9→6, os DDDs nos agasalhos, o Cristo Redentor no doce, o guarda assobiando funk, o "mermão", o pega-bandeira e o 021 no punho. Os comentários vão virar caça às pistas.
 3. **Dá uma virada emocional e cômica ao mesmo tempo:** o vilão é o amigo esquecido no posto, uma piada interna que vira motivação real.
-4. **O gancho muda tudo:** a fitinha caiu, então **agora eles podem morrer**. A Temporada 2 sobe as apostas com o mesmo elenco. (Nos bastidores, a regra continua valendo: ninguém morre de vez. Para a Temporada 2, a sugestão é a Sra. Park dar uma fitinha nova, ou o Bruno revelar que "fez um pedido também".)
-5. **Ele abre a franquia:** Round 7 na Europa, e no futuro os outros estados (o Bruno pode virar o 5º do grupo ou o antagonista fixo).
+4. **O gancho muda tudo:** a fitinha caiu, então **agora eles podem morrer**. A Temporada 2 sobe as apostas com o mesmo elenco. (Nos bastidores, a regra continua valendo: ninguém morre de vez. Para a Temporada 2, a sugestão é a Sra. Park dar uma fitinha nova, ou o Luis revelar que "fez um pedido também".)
+5. **Ele abre a franquia:** Round 7 na Europa, e no futuro os outros estados (o Luis pode virar o 5º do grupo ou o antagonista fixo).
 
 ---
 

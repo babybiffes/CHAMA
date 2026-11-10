@@ -67,12 +67,12 @@ Você é Rai, 25 anos, baiano de Itapuã, Salvador. Fale português brasileiro c
 ```
 - **Teste:** `Oxe, véi… isso aqui é barril dobrado! Lá ele!`
 
-### 🕶️ BRUNO — o Carioca (só no Ep. 10; também faz o guarda do "mermão" no Ep. 7 e o motorista)
+### 🕶️ LUIS — o Carioca (só no Ep. 10; também faz o guarda do "mermão" no Ep. 7 e o motorista)
 - **Voz:** **Algieba** *(Smooth)*. Alternativa: Zubenelgenubi *(Casual)*.
 - **Legenda:** azul.
 - **Style instructions:**
 ```
-Você é Bruno, 29 anos, carioca do Méier, Rio de Janeiro. Fale português brasileiro com sotaque carioca bem marcado: "s" chiado ("mermão", "rapaziada", "vocêsh"), ritmo malandro e relaxado, frases que terminam arrastadas. Ele é o vilão revelado no final: voz calma, controlada e fria, com mágoa guardada há seis anos e uma ironia leve, como quem planejou tudo e está se divertindo. No fim, a frieza quebra e aparece a emoção de um amigo que foi esquecido.
+Você é Luis, 29 anos, carioca do Méier, Rio de Janeiro. Fale português brasileiro com sotaque carioca bem marcado: "s" chiado ("mermão", "rapaziada", "vocêsh"), ritmo malandro e relaxado, frases que terminam arrastadas. Ele é o vilão revelado no final: voz calma, controlada e fria, com mágoa guardada há seis anos e uma ironia leve, como quem planejou tudo e está se divertindo. No fim, a frieza quebra e aparece a emoção de um amigo que foi esquecido.
 ```
 - **Teste:** `Coé, rapaziada… demoraram, hein, mermão.`
 
@@ -86,9 +86,9 @@ Só falam coreano. Gere com o texto em hangul exatamente como está.
 | **Boneca gigante** | **Leda** *(Youthful)* | `Boneca gigante cantando uma cantiga infantil coreana. Voz de criança doce, lenta e melodiosa, mas sinistra e arrastada no final, como uma caixinha de música assustadora. Coreano nativo.` |
 | **Sra. Park (199)** | **Gacrux** *(Mature)* | `Senhora coreana de 70 anos, voz doce, carinhosa e um pouco trêmula de avó. Fala coreano nativo, curiosa e encantada com comida.` |
 | **Min-jun (240)** | **Sadachbia** *(Lively)* | `Jovem coreano de 20 anos, animado e escandaloso, fala coreano nativo com muita energia e exclamação.` |
-| **Líder mascarado** | **Algieba** *(Smooth)*, a mesma voz do Bruno | `Fale coreano com voz grave, lenta e ameaçadora, levemente distorcida, como um chefe de jogo mortal. Pronúncia coreana correta, mas com um leve sotaque brasileiro escondido.` |
+| **Líder mascarado** | **Algieba** *(Smooth)*, a mesma voz do Luis | `Fale coreano com voz grave, lenta e ameaçadora, levemente distorcida, como um chefe de jogo mortal. Pronúncia coreana correta, mas com um leve sotaque brasileiro escondido.` |
 
-> Pista para os atentos: o Líder usa a **mesma voz do Bruno**. Quem prestar atenção vai desconfiar antes do final.
+> Pista para os atentos: o Líder usa a **mesma voz do Luis**. Quem prestar atenção vai desconfiar antes do final.
 
 ### 📢 Locutor da enquete (opcional)
 - **Voz:** **Charon** *(Informative)*.
@@ -107,7 +107,7 @@ Cada bloco = **1 personagem em 1 episódio**. Cole o bloco inteiro no AI Studio 
 
 **CAIO** · voz Fenrir
 ```
-#01 [annoyed] Ôrra, meu… o Bruno de novo? Mano, faz seis anos.
+#01 [annoyed] Ôrra, meu… o Luis de novo? Mano, faz seis anos.
 #05 [distracted] Plataforma… seis. Firmeza. É ali, mano.
 #06 [shouting, excited] MANO. TOMADA!
 #08 [extremely fast] Até o aeroporto, meu! O link falou! Foi alguém do grupo que mandou.
@@ -144,7 +144,7 @@ Cada bloco = **1 personagem em 1 episódio**. Cole o bloco inteiro no AI Studio 
 
 <details><summary>Ordem completa da cena (pra edição)</summary>
 
-01. **CAIO:** Ôrra, meu… o Bruno de novo? Mano, faz seis anos.  
+01. **CAIO:** Ôrra, meu… o Luis de novo? Mano, faz seis anos.  
 02. **RAI:** Oxe, bloqueia esse homem, véi. Ele ficou em Registro, deixa ele lá.  
 03. **GERALDIM:** Uai, mas ês num deixou ele, ês esqueceu. É diferente.  
 04. **BENTO:** Bah, foco, tchê! Plataforma nove. EUROPA. Seis anos juntando pila!  
@@ -195,7 +195,7 @@ Cada bloco = **1 personagem em 1 episódio**. Cole o bloco inteiro no AI Studio 
 #04 [whispering] Zero onze… São Paulo. Mano.
 #12 [extremely fast, confident] Relaxa, mano. É termo de uso. Ninguém lê termo de uso. Assina e pronto.
 #16 [amazed, whispering] Ôrra, meu… Isso aí é… dá pra ir pra Europa umas mil vezes.
-#17 [scared, whispering] [medium pause] …Gente. Como o Bruno sabe que a gente não tá bem?
+#17 [scared, whispering] [medium pause] …Gente. Como o Luis sabe que a gente não tá bem?
 ```
 
 **SRA. PARK** · voz Gacrux
@@ -227,7 +227,7 @@ Cada bloco = **1 personagem em 1 episódio**. Cole o bloco inteiro no AI Studio 
 14. **BENTO:** Capaz que eu assino isso!  
 15. **BENTO:** …Bah, onde é que eu assino, tchê?  
 16. **CAIO:** Ôrra, meu… Isso aí é… dá pra ir pra Europa umas mil vezes.  
-17. **CAIO:** …Gente. Como o Bruno sabe que a gente não tá bem?  
+17. **CAIO:** …Gente. Como o Luis sabe que a gente não tá bem?  
 
 </details>
 
@@ -474,7 +474,7 @@ Cada bloco = **1 personagem em 1 episódio**. Cole o bloco inteiro no AI Studio 
 #06 [shouting, shocked] OXE! Ele falou MERMÃO?!
 ```
 
-**GUARDA (BRUNO DISFARÇADO)** · voz Algieba
+**GUARDA (LUIS DISFARÇADO)** · voz Algieba
 ```
 #05 [muttering, annoyed, in Brazilian Portuguese carioca accent] …mermão.
 ```
@@ -490,7 +490,7 @@ Cada bloco = **1 personagem em 1 episódio**. Cole o bloco inteiro no AI Studio 
 02. **BENTO:** Bah, no Sul a gente puxa boi atolado, tchê. Escuta: pé na frente, corpo pra trás, e ninguém solta.  
 03. **GERALDIM:** E se a gente cair?  
 04. **RAI:** Ó, eu não posso morrer, já testei.  
-05. **GUARDA (BRUNO DISFARÇADO):** …mermão.  
+05. **GUARDA (LUIS DISFARÇADO):** …mermão.  
 06. **RAI:** OXE! Ele falou MERMÃO?!  
 07. **CAIO:** Viajou, mano. É coreano, deve ser obrigado sei lá.  
 08. **BENTO:** AGORA, TCHÊ! TODO MUNDO PRA TRÁS!  
@@ -615,7 +615,7 @@ Cada bloco = **1 personagem em 1 episódio**. Cole o bloco inteiro no AI Studio 
 #02 [confident, playful] Distrair é comigo, véi.
 #13 [ashamed, voice breaking] …A gente nunca foi te buscar, véi. Eu pensava nisso todo dia.
 #18 [whispering, scared] …Gente. A fitinha caiu.
-#20 [slow, serious, chilling] Quando a fitinha cai sozinha… é porque os três pedidos foram atendidos. A gente nunca se separou. O Bruno voltou. E a gente… chegou na Europa.
+#20 [slow, serious, chilling] Quando a fitinha cai sozinha… é porque os três pedidos foram atendidos. A gente nunca se separou. O Luis voltou. E a gente… chegou na Europa.
 ```
 
 **GERALDIM** · voz Umbriel
@@ -631,13 +631,13 @@ Cada bloco = **1 personagem em 1 episódio**. Cole o bloco inteiro no AI Studio 
 #04 [deep, slow, menacing] 축하합니다.
 ```
 
-**BRUNO** · voz Algieba
+**LUIS** · voz Algieba
 ```
 #05 [casual, cool, slow] …Coé, rapaziada.
 #07 [bitter, slow, each word separate] Registro. Posto de gasolina. Dois mil e dezenove. Parada de quinze minutos.
 #09 [sarcastic, cool] Seis anos, mermão. Seis anos aprendendo coreano pra organizar isso aqui. O link da passagem? Fui eu. A placa da plataforma? Eu soltei o parafuso.
 #11 [calm, knowing] Quase. Mas vocês não podiam morrer. Né, Rai?
-#12 [softer, slow] O terceiro pedido. Eu tava lá no Bonfim, sentado atrás de você. Senhor do Bonfim… traz o Bruno de volta.
+#12 [softer, slow] O terceiro pedido. Eu tava lá no Bonfim, sentado atrás de você. Senhor do Bonfim… traz o Luis de volta.
 #14 [emotional, warm, then hypnotic] Eu sei. Por isso eu vim buscar vocês. Agora… durmam. A Europa tá esperando.
 ```
 
@@ -647,14 +647,14 @@ Cada bloco = **1 personagem em 1 episódio**. Cole o bloco inteiro no AI Studio 
 #23 [whispering, terrified] …Bah.
 ```
 
-**MOTORISTA (BRUNO)** · voz Algieba
+**MOTORISTA (LUIS)** · voz Algieba
 ```
 #22 [slow, menacing, French] Bienvenue.
 ```
 
 **TODOS** (gere a fala com as 4 vozes, cada uma separada, e sobreponha na edição)
 ```
-#06 [shouting, shocked] BRUNO?!
+#06 [shouting, shocked] LUIS?!
 ```
 
 <details><summary>Ordem completa da cena (pra edição)</summary>
@@ -663,24 +663,24 @@ Cada bloco = **1 personagem em 1 episódio**. Cole o bloco inteiro no AI Studio 
 02. **RAI:** Distrair é comigo, véi.  
 03. **GERALDIM:** Uai… peguei.  
 04. **LÍDER:** 축하합니다.  
-05. **BRUNO:** …Coé, rapaziada.  
-06. **TODOS:** BRUNO?!  
-07. **BRUNO:** Registro. Posto de gasolina. Dois mil e dezenove. Parada de quinze minutos.  
+05. **LUIS:** …Coé, rapaziada.  
+06. **TODOS:** LUIS?!  
+07. **LUIS:** Registro. Posto de gasolina. Dois mil e dezenove. Parada de quinze minutos.  
 08. **GERALDIM:** Uai… ocê tá diferente. Cê tá coreano?  
-09. **BRUNO:** Seis anos, mermão. Seis anos aprendendo coreano pra organizar isso aqui. O link da passagem? Fui eu. A placa da plataforma? Eu soltei o parafuso.  
+09. **LUIS:** Seis anos, mermão. Seis anos aprendendo coreano pra organizar isso aqui. O link da passagem? Fui eu. A placa da plataforma? Eu soltei o parafuso.  
 10. **CAIO:** Mano… cê quase matou a gente!  
-11. **BRUNO:** Quase. Mas vocês não podiam morrer. Né, Rai?  
-12. **BRUNO:** O terceiro pedido. Eu tava lá no Bonfim, sentado atrás de você. Senhor do Bonfim… traz o Bruno de volta.  
+11. **LUIS:** Quase. Mas vocês não podiam morrer. Né, Rai?  
+12. **LUIS:** O terceiro pedido. Eu tava lá no Bonfim, sentado atrás de você. Senhor do Bonfim… traz o Luis de volta.  
 13. **RAI:** …A gente nunca foi te buscar, véi. Eu pensava nisso todo dia.  
-14. **BRUNO:** Eu sei. Por isso eu vim buscar vocês. Agora… durmam. A Europa tá esperando.  
+14. **LUIS:** Eu sei. Por isso eu vim buscar vocês. Agora… durmam. A Europa tá esperando.  
 15. **CAIO:** MANO! PARIS! FOI SONHO, MEU!  
 16. **BENTO:** BAH, TCHÊ!  
 17. **GERALDIM:** Nó… bão demais, sô.  
 18. **RAI:** …Gente. A fitinha caiu.  
 19. **CAIO:** E daí, mano?  
-20. **RAI:** Quando a fitinha cai sozinha… é porque os três pedidos foram atendidos. A gente nunca se separou. O Bruno voltou. E a gente… chegou na Europa.  
+20. **RAI:** Quando a fitinha cai sozinha… é porque os três pedidos foram atendidos. A gente nunca se separou. O Luis voltou. E a gente… chegou na Europa.  
 21. **GERALDIM:** …Então agora… nós pode morrer, sô.  
-22. **MOTORISTA (BRUNO):** Bienvenue.  
+22. **MOTORISTA (LUIS):** Bienvenue.  
 23. **BENTO:** …Bah.  
 
 </details>
