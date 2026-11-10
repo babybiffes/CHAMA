@@ -10,3 +10,8 @@ parte01-3d/audio/*.wav
 !out/parte01-3d/
 out/parte01-3d/*
 !out/parte01-3d/final*.mp4
+assets-dl/
+parte01-v2/audio/*.wav
+!out/parte01-v2/
+out/parte01-v2/*
+!out/parte01-v2/final*.mp4
