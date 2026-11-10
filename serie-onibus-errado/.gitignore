@@ -15,3 +15,7 @@ parte01-v2/audio/*.wav
 !out/parte01-v2/
 out/parte01-v2/*
 !out/parte01-v2/final*.mp4
+parte01-v3/audio/*.wav
+!out/parte01-v3/
+out/parte01-v3/*
+!out/parte01-v3/final*.mp4
