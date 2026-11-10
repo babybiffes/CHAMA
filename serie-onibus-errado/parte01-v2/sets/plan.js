@@ -9,6 +9,8 @@ export function staticObstacles(I_SPECS) {
   for (const [x, z] of [[-3.8, 3.2], [4.4, 8.6], [-3.8, 9.5], [2.6, 0.6]]) OB.push(['lixeira', x, z, 0.28]);
   for (const [x, z] of [[-8.3, 5.1], [8.3, 5.1], [8.3, 12.6]]) OB.push(['planta', x, z, 0.45]);
   OB.push(['banca', 4.2, 4.4, 0.7], ['placa piso', -2.0, 6.3, 0.35], ['cone', -3.3, 1.2, 0.25], ['cone', 3.9, 6.9, 0.25], ['máquina', -8.5, 9.9, 0.6], ['poça', -2.4, 5.6, 0.5]);
+  OB.push(['orelhão', 7.7, 1.3, 0.55], ['pipoca', 3.0, 5.4, 0.6], ['carrinho', -2.2, -1.05, 0.6], ['caixas', -7.6, 1.2, 0.45], ['balde', -1.55, 6.05, 0.3]);
+  for (const z of [6.9, 8.2]) for (let x = -7.6; x <= -4.55; x += 0.3) OB.push(['fila', x, z, 0.12]);
   for (const z of [3.5, 6.5, 9.5, 12.5]) for (const x of [5.8, 6.4, 7.0, 7.6, 8.2, 8.8]) OB.push(['banco', x, z, 0.32]);
   for (const [x, z] of [[-0.55, -0.75], [0.35, -1.0], [1.25, -0.7]]) OB.push(['amigo', x, z, 0.5]);
   I_SPECS.forEach((s) => OB.push(['parado', s[0], s[1], 0.32]));

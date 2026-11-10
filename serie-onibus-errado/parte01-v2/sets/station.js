@@ -215,6 +215,51 @@ export function stationSet(opts = {}) {
     for (let i = 0; i < 4; i++) plane(0.18, 0.25, label('NEWS', 64, 90, { bg: '#F5F5F5', fg: '#222', font: '900 18px UI' }), -0.3 + i * 0.2, 0.75, 0.26, 0, g); }
   for (const [x, z] of [[-3.3, 1.2], [3.9, 6.9]]) { const c = cyl(0.03, 0.18, 0.55, toon(0xE67E22), x, 0.28, z, W, 12); cyl(0.2, 0.2, 0.04, toon(0xE67E22), x, 0.02, z, W, 12); cyl(0.11, 0.13, 0.08, toon(0xffffff), x, 0.28, z, W, 12); }
 
+  // ------------------------------------------------ more life: things a Brazilian rodoviária actually has
+  { // orelhão (public payphone)
+    const g = new THREE.Group(); g.position.set(7.7, 0, 1.3); g.rotation.y = -1.2; W.add(g);
+    cyl(0.05, 0.05, 1.9, toon(0x777777), 0, 0.95, 0, g, 10);
+    const shell = new THREE.Mesh(new THREE.SphereGeometry(0.55, 20, 14, 0, Math.PI * 2, 0, Math.PI / 1.7), toon(0xF2C230)); shell.scale.set(1, 1.15, 0.85); shell.position.set(0, 1.95, 0.05); shell.rotation.x = -0.15; g.add(shell);
+    box(0.32, 0.5, 0.16, toon(0x2E5FA8), 0, 1.45, 0.25, g); box(0.07, 0.2, 0.06, toon(0x111111), 0.12, 1.5, 0.35, g); }
+  { // popcorn cart
+    const g = new THREE.Group(); g.position.set(3.0, 0, 5.4); g.rotation.y = -0.6; W.add(g);
+    box(0.9, 0.8, 0.6, toon(0xC0392B), 0, 0.6, 0, g);
+    box(0.84, 0.6, 0.54, basic(0xFFF4C8, null, { transparent: true, opacity: 0.55 }), 0, 1.3, 0, g);
+    for (let i = 0; i < 30; i++) { const k = new THREE.Mesh(new THREE.SphereGeometry(0.03, 6, 4), toon(0xFFF2B0)); k.position.set(-0.35 + hash(i, 61) * 0.7, 1.05 + hash(i, 62) * 0.15, -0.22 + hash(i, 63) * 0.44); g.add(k); }
+    plane(0.8, 0.2, label('PIPOCA', 256, 64, { bg: '#F2C230', fg: '#C0392B', font: '900 50px Display' }), 0, 1.75, 0.0, 0, g, true);
+    box(0.9, 0.05, 0.6, toon(0xF2C230), 0, 1.62, 0, g);
+    for (const sx of [-0.4, 0.4]) { const wh = cyl(0.14, 0.14, 0.05, toon(0x222222), sx, 0.14, 0.32, g, 14); wh.rotation.x = Math.PI / 2; } }
+  for (const z of [4.8, 5.6]) { // ATMs on the left wall
+    box(0.5, 1.6, 0.6, toon(0x5D6D7E), -8.75, 0.8, z, W); plane(0.4, 0.28, label('24H', 128, 96, { bg: '#1B4F72', font: '900 46px Display' }), -8.49, 1.3, z, Math.PI / 2, W, true);
+    box(0.06, 0.1, 0.3, toon(0x222222), -8.47, 1.0, z, W); }
+  for (const z of [-0.6, 5.5, 11.5]) for (const x of [-4.6, 5.2]) { // extinguishers on the columns
+    cyl(0.07, 0.07, 0.45, toon(0xD0281F), x + (x < 0 ? 0.32 : -0.32), 0.95, z, W, 12); }
+  for (const [x, z] of [[-3.0, 4.2], [3.5, 9.0]]) { // departure TVs hanging from the roof
+    const tv = new THREE.Group(); tv.position.set(x, 4.25, z); W.add(tv);
+    box(1.3, 0.78, 0.1, toon(0x1A1A1A), 0, 0, 0, tv);
+    const t = paintTex(512, 300, (c, w, h) => { c.fillStyle = '#0A1A3A'; c.fillRect(0, 0, w, h); c.fillStyle = '#FFD24A'; c.font = '800 34px UI'; c.fillText('PARTIDAS', 20, 44); c.fillStyle = '#fff'; c.font = '700 28px UI'; ['22:10 SÃO PAULO     8', '22:25 CURITIBA    10', '22:40 EUROPA EXP.  9', '22:55 B. HORIZONTE 7'].forEach((r, i) => c.fillText(r, 20, 100 + i * 50)); });
+    plane(1.2, 0.68, t, 0, 0, 0.055, 0, tv, true); plane(1.2, 0.68, t, 0, 0, -0.055, Math.PI, tv, true);
+    box(0.03, 1.2, 0.03, toon(0x333333), -0.4, 0.95, 0, tv); box(0.03, 1.2, 0.03, toon(0x333333), 0.4, 0.95, 0, tv); }
+  { // banner across the hall
+    plane(5.0, 0.7, label('BOA VIAGEM!', 1024, 144, { bg: '#16A085', fg: '#FFF7E0', font: '900 110px Display' }), 0.3, 5.0, 12.5, 0, W, true);
+    plane(5.0, 0.7, label('BOA VIAGEM!', 1024, 144, { bg: '#16A085', fg: '#FFF7E0', font: '900 110px Display' }), 0.3, 5.0, 12.49, Math.PI, W, true); }
+  { // ads on the right wall above the benches
+    const ads = [['CHIP\nPRÉ-PAGO', '#E67E22'], ['GUARANÁ\nGELADO', '#27AE60'], ['FARMÁCIA\n24H', '#2E86C1']];
+    ads.forEach(([txt, bg], i) => plane(2.0, 1.1, label(txt, 512, 280, { bg, font: '900 80px Display', pad: 0.8 }), 9.03, 2.55, 4.0 + i * 3.2, -Math.PI / 2, W, true)); }
+  { // queue stanchions with belts at the ticket windows
+    for (const z of [6.9, 8.2]) { for (let x = -7.6; x <= -4.55; x += 0.6) { cyl(0.025, 0.025, 0.95, toon(0xB0B6BE), x, 0.48, z, W, 8); cyl(0.12, 0.12, 0.03, toon(0x555555), x, 0.015, z, W, 12); }
+      box(3.05, 0.05, 0.012, toon(0xC0392B), -6.08, 0.88, z, W); } }
+  { // luggage trolley, boxes, mop bucket
+    const g = new THREE.Group(); g.position.set(-2.2, 0, -1.05); g.rotation.y = 0.3; W.add(g);
+    box(0.6, 0.04, 0.9, toon(0x9AA3AD), 0, 0.22, 0, g); box(0.6, 0.9, 0.04, toon(0x9AA3AD), 0, 0.65, -0.43, g);
+    for (const [sx, sz] of [[-0.25, 0.35], [0.25, 0.35], [-0.25, -0.35], [0.25, -0.35]]) { const w = cyl(0.08, 0.08, 0.04, toon(0x222222), sx, 0.08, sz, g, 10); w.rotation.z = Math.PI / 2; }
+    box(0.5, 0.35, 0.3, toon(0x6C3483), 0, 0.42, 0.05, g); box(0.42, 0.28, 0.25, toon(0x16A085), 0.02, 0.73, 0.0, g);
+    for (let i = 0; i < 3; i++) { const b = box(0.5, 0.4, 0.4, toon(0xC8A16E), -7.6 + (i % 2) * 0.1, 0.2 + i * 0.4, 1.2 + (i === 1 ? 0.05 : 0), W); b.rotation.y = i * 0.2; }
+    cyl(0.18, 0.15, 0.3, toon(0xF2C230), -1.55, 0.15, 6.05, W, 14); const mop = box(0.03, 1.3, 0.03, toon(0x8A6A4A), -1.5, 0.75, 6.0, W); mop.rotation.z = 0.25; }
+  { // night sky: smoke-like clouds over the city, like the references
+    const cm = basic(0x2A1E38, null, { fog: false });
+    for (let i = 0; i < 18; i++) { const c = new THREE.Mesh(new THREE.SphereGeometry(3 + hash(i, 71) * 4, 12, 10), cm); c.position.set(-40 + i * 5 + hash(i, 72) * 3, 22 + hash(i, 73) * 8, -48 - hash(i, 74) * 6); c.scale.y = 0.6; W.add(c); } }
+
   // ------------------------------------------------ pigeons (peck, then flee)
   const pigeons = [];
   const pgBody = toon(0x8C93A3), pgNeck = toon(0x5E7A70), pgDark = toon(0x4A4F5A), pgLeg = toon(0xD4655A);

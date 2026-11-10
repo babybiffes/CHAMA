@@ -15,11 +15,11 @@ export function pipeline(R, W, H, { scale = 1 } = {}) {
       tColor: { value: color.texture }, tNormal: { value: normal.texture }, tDepth: { value: depthTex },
       res: { value: new THREE.Vector2(w, h) }, near: { value: 0.05 }, far: { value: 200 },
       k: { value: 0.9 }, aspect: { value: W / H }, ink: { value: 1.0 }, grain: { value: 1.0 }, time: { value: 0 },
-      lineW: { value: 2.8 },
+      lineW: { value: 3.6 }, gY: { value: new THREE.Vector2(0.63, 0.112) }, gCb: { value: new THREE.Vector2(0.57, -0.003) }, gCr: { value: new THREE.Vector2(1.0, 0.013) },
     },
     vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
     fragmentShader: `
-      uniform sampler2D tColor, tNormal, tDepth; uniform vec2 res; uniform float near, far, k, aspect, ink, grain, time, lineW;
+      uniform sampler2D tColor, tNormal, tDepth; uniform vec2 res, gY, gCb, gCr; uniform float near, far, k, aspect, ink, grain, time, lineW;
       varying vec2 vUv;
       float lin(float d){ float z = d * 2.0 - 1.0; return (2.0 * near * far) / (far + near - z * (far - near)); }
       float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
@@ -43,16 +43,23 @@ export function pipeline(R, W, H, { scale = 1 } = {}) {
           dEdge = max(dEdge, abs(dn - dc) / max(dc, 0.3));
           nEdge = max(nEdge, length(texture2D(tNormal, uv + wob + o).rgb - nc));
         }
-        float line = max(smoothstep(0.015, 0.045, dEdge), smoothstep(0.18, 0.4, nEdge)) * ink;
-        line *= smoothstep(160.0, 40.0, dc) * 0.85 + 0.15;          // far lines thin out
+        float line = max(smoothstep(0.012, 0.035, dEdge), smoothstep(0.15, 0.35, nEdge)) * ink;
+        line *= smoothstep(120.0, 30.0, dc) * 0.8 + 0.2;          // far lines thin out
         vec4 c = texture2D(tColor, uv);
-        // paper: fine grain + soft blotches, multiplied
-        float g = hash(floor(vUv * res * 0.5) + floor(time * 12.0)) * 0.06 + vnoise(vUv * vec2(6.0, 10.0)) * 0.07;
-        c.rgb *= 1.0 - grain * (g - 0.05);
-        c.rgb = mix(c.rgb, vec3(0.06, 0.045, 0.05), line * 0.92);
         gl_FragColor = c;
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
+        // grade to the references' measured look (YCbCr mean/std transfer): lower contrast, lifted blacks, softer highlights, muted chroma
+        vec3 col = gl_FragColor.rgb;
+        float Y = dot(col, vec3(0.299, 0.587, 0.114)), Cb = dot(col, vec3(-0.1687, -0.3313, 0.5)), Cr = dot(col, vec3(0.5, -0.4187, -0.0813));
+        Y = Y * gY.x + gY.y; Cb = Cb * gCb.x + gCb.y; Cr = Cr * gCr.x + gCr.y;
+        col = vec3(Y + 1.402 * Cr, Y - 0.344136 * Cb - 0.714136 * Cr, Y + 1.772 * Cb);
+        // painted paper: fine grain + soft blotches (multiply)
+        float g = hash(floor(vUv * res * 0.5) + floor(time * 12.0)) * 0.05 + vnoise(vUv * vec2(5.0, 9.0)) * 0.08 + vnoise(vUv * vec2(40.0, 70.0)) * 0.04;
+        col *= 1.0 - grain * (g - 0.06);
+        // ink on top, dark warm brown-black like the references' lines
+        col = mix(col, vec3(0.075, 0.058, 0.05), line);
+        gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
       }`,
     depthTest: false, depthWrite: false,
   });

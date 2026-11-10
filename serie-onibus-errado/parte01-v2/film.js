@@ -299,7 +299,7 @@ M.film({
     S.pov.update(t, cp);
     S.P.render(S.st.scene, cam, t, { k: 0.95 });
     ctx.drawImage(GL.R.domElement, 0, 0);
-    vignette(ctx, 0.45);
+    vignette(ctx, 0.28);
     badge(ctx, t);
     subtitles(ctx, t);
   },
