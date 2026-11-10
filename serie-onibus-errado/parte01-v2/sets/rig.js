@@ -25,6 +25,8 @@ export function paintTex(w, h, fn, repeat) {
   if (repeat) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(...repeat); }
   return t;
 }
+const BLOB = (() => { const cv = document.createElement('canvas'); cv.width = cv.height = 128; const c = cv.getContext('2d'); const g = c.createRadialGradient(64, 64, 4, 64, 64, 62); g.addColorStop(0, 'rgba(0,0,0,0.55)'); g.addColorStop(1, 'rgba(0,0,0,0)'); c.fillStyle = g; c.fillRect(0, 0, 128, 128);
+  const t = new THREE.CanvasTexture(cv); return new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }); })();
 const geo = {
   cap: (r, l) => new THREE.CapsuleGeometry(r, l, 6, 14),
   sph: (r, w = 20, h = 14) => new THREE.SphereGeometry(r, w, h),
@@ -105,15 +107,22 @@ function makeHead(o) {
   const g = new THREE.Group(), skin = toon(o.skin);
   const R = 0.118;
   const head = new THREE.Mesh(geo.sph(R, 28, 20), skin); head.scale.set(1, 1.1, 1.02); g.add(head);
-  for (const sx of [-1, 1]) { const e = new THREE.Mesh(geo.sph(0.028, 10, 8), skin); e.position.set(sx * R * 0.98, -0.005, 0); e.scale.set(0.5, 1, 0.8); g.add(e); }
-  const nose = new THREE.Mesh(geo.sph(0.022, 12, 10), skin); nose.position.set(0, -0.012, R * 0.98); nose.scale.set(0.9, 1, 1.1); g.add(nose);
+  for (const sx of [-1, 1]) { const e = new THREE.Mesh(geo.sph(0.03, 14, 10), skin); e.position.set(sx * R * 0.97, -0.005, -0.005); e.scale.set(0.45, 1, 0.75); g.add(e);
+    const inner = new THREE.Mesh(new THREE.TorusGeometry(0.015, 0.004, 6, 12, Math.PI * 1.3), toon(0xC08060)); inner.position.set(sx * (R * 0.97 + 0.012), -0.005, -0.004); inner.rotation.set(0, sx * Math.PI / 2, 0.6); g.add(inner); }
+  const nose = new THREE.Mesh(geo.sph(0.021, 14, 12), skin); nose.position.set(0, -0.016, R * 0.97); nose.scale.set(0.95, 1.05, 1.15); g.add(nose);
+  const bridge = new THREE.Mesh(geo.cap(0.011, 0.03), skin); bridge.position.set(0, 0.008, R * 0.95); bridge.rotation.x = -0.35; g.add(bridge);
+  const chin = new THREE.Mesh(geo.sph(0.04, 14, 10), skin); chin.position.set(0, -0.085, R * 0.62); chin.scale.set(1.3, 0.8, 1); g.add(chin);
   const eyes = [], pupils = [], brows = [];
   for (const sx of [-1, 1]) {
-    const eye = new THREE.Mesh(geo.sph(0.03, 16, 12), toon(0xffffff)); eye.position.set(sx * 0.043, 0.022, R * 0.86); eye.scale.set(1, 1.15, 0.55); g.add(eye); eyes.push(eye);
+    const eye = new THREE.Mesh(geo.sph(0.028, 18, 14), toon(0xffffff)); eye.position.set(sx * 0.043, 0.022, R * 0.86); eye.scale.set(1, 1.1, 0.55); g.add(eye);
+    // upper eyelid: a skin shell that rotates down over the eye to blink
+    const lidP = new THREE.Group(); lidP.position.copy(eye.position); g.add(lidP);
+    const lid = new THREE.Mesh(new THREE.SphereGeometry(0.0305, 18, 10, 0, Math.PI * 2, 0, Math.PI / 2), skin); lid.scale.set(1, 1.1, 0.62); lidP.add(lid); eyes.push(lidP);
     const pup = new THREE.Mesh(geo.sph(0.0145, 12, 10), basic(0x111111)); pup.position.set(sx * 0.043, 0.022, R * 0.86 + 0.016); g.add(pup); pupils.push(pup);
     const brow = new THREE.Mesh(geo.box(0.046, 0.011, 0.012), toon(o.brow ?? 0x2A1A10)); brow.position.set(sx * 0.043, 0.07, R * 0.9); g.add(brow); brows.push(brow);
   }
   const mouth = new THREE.Mesh(geo.sph(0.026, 16, 10), basic(0x4A1212)); mouth.position.set(0, -0.058, R * 0.9); mouth.scale.set(1, 0.22, 0.4); g.add(mouth);
+  const lip = new THREE.Mesh(geo.cap(0.006, 0.04), toon(0xB0605A)); lip.rotation.z = Math.PI / 2; lip.position.set(0, -0.049, R * 0.93); g.add(lip);
   const hairM = toon(o.hair ?? 0x2B1B12);
   if (o.hairStyle === 'afro') {
     for (let i = 0; i < 16; i++) { const a = (i / 16) * Math.PI * 2; const s = new THREE.Mesh(geo.sph(0.05, 10, 8), hairM); s.position.set(Math.cos(a) * 0.09, 0.075 + Math.sin(i * 1.7) * 0.012, Math.sin(a) * 0.09 - 0.015); g.add(s); }
@@ -141,7 +150,8 @@ function makeHead(o) {
 
   function face(p) {
     const blink = Math.max(p.blink || 0, p.sleepy ? 0.5 : 0);
-    eyes.forEach((e) => { e.scale.y = 1.15 * (1 - 0.9 * blink); });
+    // lid closed = rotated down to cover the eye; half-open when sleepy
+    eyes.forEach((lp) => { const open = p.scared ? -1.25 : p.angry ? -0.55 : -0.85; lp.rotation.x = open + (1.5 - open) * blink; });
     pupils.forEach((pp, i) => { pp.visible = blink < 0.6; pp.position.x = (i ? 0.043 : -0.043) + (p.lookX || 0) * 0.008; pp.position.y = 0.022 + (p.lookY || 0) * 0.007; pp.scale.setScalar(p.scared ? 0.7 : 1); });
     brows.forEach((b, i) => { const sx = i ? 1 : -1; b.position.y = 0.07 + (p.scared ? 0.012 : 0) + (p.browUp || 0) * 0.01; b.rotation.z = p.angry ? sx * 0.35 : p.scared ? -sx * 0.3 : 0; });
     const talk = p.talk || 0, chew = (p.chew || 0) * (1 - Math.min(1, talk * 3));
@@ -160,6 +170,7 @@ export function person(spec) {
   const root = SkeletonUtils.clone(src.scene);
   root.traverse((o) => { if (o.isSkinnedMesh) o.visible = false; if (o.isMesh) o.frustumCulled = false; });
   const wrap = new THREE.Group(); wrap.add(root); wrap.scale.setScalar(spec.scale ?? 1);
+  const blob = new THREE.Mesh(new THREE.CircleGeometry(0.34, 24), BLOB); blob.rotation.x = -Math.PI / 2; blob.position.y = 0.011; blob.renderOrder = 1; wrap.add(blob);
   root.updateMatrixWorld(true);
   const skin = toon(spec.skin);
   const shirt = spec.shirtMap ? toon(0xffffff, spec.shirtMap) : toon(spec.shirt ?? 0x777777);
@@ -172,15 +183,30 @@ export function person(spec) {
   limb(root, 'Spine2', 'Neck', tr * 0.95, shirt, { lenScale: 0.8 });
   if (spec.belly) { const b = new THREE.Mesh(geo.sph(tr * 1.12, 18, 14), shirt); onBone(root, 'Spine1', b, [0, 0.0, 0.045]); }
   limb(root, 'Neck', 'Head', 0.045, skin);
+  { const c = new THREE.Mesh(new THREE.TorusGeometry(0.06, 0.016, 8, 20), shirt); c.rotation.x = Math.PI / 2; onBone(root, 'Neck', c, [0, 0.0, 0.005]); }
+  { const b = new THREE.Mesh(new THREE.TorusGeometry(tr * 0.97, 0.018, 8, 26), toon(spec.belt ?? 0x2A1A10)); b.rotation.x = Math.PI / 2; onBone(root, 'Spine', b, [0, -0.02, 0]); }
   for (const s of ['Left', 'Right']) {
     limb(root, s + 'Shoulder', s + 'Arm', 0.06, shirt);
     limb(root, s + 'Arm', s + 'ForeArm', 0.052, spec.sleeve === 'none' ? skin : shirt);
     limb(root, s + 'ForeArm', s + 'Hand', 0.044, spec.sleeve === 'long' ? shirt : skin);
-    limb(root, s + 'Hand', s + 'HandMiddle1', 0.042, skin, { lenScale: 1.6 });
-    limb(root, s + 'HandThumb1', s + 'HandThumb2', 0.018, skin, { lenScale: 2.0 });
+    if (spec.fingers) {
+      limb(root, s + 'Hand', s + 'HandMiddle1', 0.034, skin, { lenScale: 1.05 });
+      limb(root, s + 'Hand', s + 'HandIndex1', 0.03, skin, { lenScale: 1.0 }); limb(root, s + 'Hand', s + 'HandPinky1', 0.028, skin, { lenScale: 1.0 });
+      for (const fn of ['Thumb', 'Index', 'Middle', 'Ring', 'Pinky']) for (let k = 1; k <= 3; k++) {
+        const r0 = fn === 'Thumb' ? 0.0125 : fn === 'Pinky' ? 0.0095 : 0.0108;
+        if (B(root, s + 'Hand' + fn + (k + 1))) limb(root, s + 'Hand' + fn + k, s + 'Hand' + fn + (k + 1), r0 * (1 - k * 0.08), skin, { lenScale: k === 3 ? 1.25 : 1.05 });
+      }
+    } else {
+      limb(root, s + 'Hand', s + 'HandMiddle1', 0.042, skin, { lenScale: 1.6 });
+      limb(root, s + 'HandThumb1', s + 'HandThumb2', 0.018, skin, { lenScale: 2.0 });
+    }
     limb(root, s + 'UpLeg', s + 'Leg', spec.thighR ?? 0.075, pants);
     limb(root, s + 'Leg', s + 'Foot', spec.shinR ?? 0.06, spec.boots ? shoes : pants);
-    limb(root, s + 'Foot', s + 'ToeBase', 0.055, shoes, { lenScale: 1.35 });
+    { const fb = B(root, s + 'Foot'), tb = B(root, s + 'ToeBase'), v = tb.position.clone(), ws = fb.getWorldScale(new THREE.Vector3()).x, L = v.length() * ws;
+      const shoe = new THREE.Group(); fb.add(shoe); shoe.scale.setScalar(1 / ws); shoe.position.copy(v.clone().multiplyScalar(0.55));
+      shoe.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), v.clone().normalize());
+      const up = new THREE.Mesh(new THREE.CapsuleGeometry(0.048, L * 1.05, 6, 14), shoes); up.rotation.x = Math.PI / 2; up.scale.set(1.05, 1, 0.8); shoe.add(up);
+      const sole = new THREE.Mesh(geo.box(0.1, 0.022, L * 1.25 + 0.1), toon(spec.sole ?? 0xEDEDED)); sole.position.set(0, -0.04, 0.0); shoe.add(sole); }
   }
   // head
   const H = makeHead({ skin: spec.skin, ...(spec.head || {}) });
@@ -210,6 +236,7 @@ export function person(spec) {
   if (P.backpack) { const b = new THREE.Mesh(geo.box(0.28, 0.36, 0.14), toon(P.backpack)); onBone(root, 'Spine1', b, [0, 0.05, -tr - 0.06]); }
   if (P.patch) { const p = new THREE.Mesh(new THREE.PlaneGeometry(0.11, 0.07), basic(0xffffff, P.patch)); onBone(root, 'Spine2', p, [0.06, 0.02, tr + 0.01]); }
 
+  root.traverse((o) => { if (o.isMesh && o.material !== BLOB) { o.castShadow = true; } });
   // animation: one mixer, clips by name; weights set each frame (pure: setTime from absolute t)
   const mixer = new THREE.AnimationMixer(root);
   const actions = {};
@@ -255,11 +282,11 @@ export function person(spec) {
 // the cast in costume
 export function cast(who, opts = {}) {
   texInit();
-  if (who === 'bento') return person({ skin: 0xEDBB91, shirt: 0xF2EEE6, pants: 0x8C8A86, shoes: 0x4A2C18, boots: true, sleeve: 'long', torsoR: 0.17, belly: true, thighR: 0.1, shinR: 0.08,
+  if (who === 'bento') return person({ fingers: true, sole: 0x3A2414, skin: 0xEDBB91, shirt: 0xF2EEE6, pants: 0x8C8A86, shoes: 0x4A2C18, boots: true, sleeve: 'long', torsoR: 0.17, belly: true, thighR: 0.1, shinR: 0.08,
     head: { hair: 0x2B1B12, mustache: true, hat: 'beret' }, props: { cuia: true, thermos: true, neckerchief: true }, scale: 1.0 });
-  if (who === 'geraldim') return person({ skin: 0xD69A62, shirtMap: TEX.plaid, pants: 0x2E4A7A, shoes: 0x3A2A1A, sleeve: 'long', torsoR: 0.17, belly: true,
+  if (who === 'geraldim') return person({ fingers: true, sole: 0x2A1A10, skin: 0xD69A62, shirtMap: TEX.plaid, pants: 0x2E4A7A, shoes: 0x3A2A1A, sleeve: 'long', torsoR: 0.17, belly: true,
     head: { hair: 0x2A1A10, hat: 'straw', cheeks: true }, props: { bag: true, heldBall: true }, scale: 0.93 });
-  if (who === 'rai') return person({ model: 'Michelle', skin: 0x6B3E26, shirtMap: TEX.tropical, pants: 0x2A2A2E, shoes: 0xFFE14C, sleeve: 'none', torsoR: 0.13,
+  if (who === 'rai') return person({ fingers: true, sole: 0xFFFFFF, model: 'Michelle', skin: 0x6B3E26, shirtMap: TEX.tropical, pants: 0x2A2A2E, shoes: 0xFFE14C, sleeve: 'none', torsoR: 0.13,
     head: { hair: 0x1C120C, hairStyle: 'afro', sunglasses: true, brow: 0x140c08 }, props: { fitinha: true, chain: true }, scale: 1.1 });
   if (who === 'caio') return person({ skin: 0xE8B48A, shirtMap: TEX.stripes, pants: 0x1E1E24, sleeve: 'short', head: { hat: 'cap' } });
   return null;

@@ -2,6 +2,8 @@
 // Build once; update(t) sets every moving thing from t (simulations are precomputed at build time).
 import * as THREE from 'three';
 import { toon, basic, paintTex, extra, cast } from './rig.js';
+import { staticObstacles, makeGrid, planRoute, schedule } from './plan.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
 const hash = (i, s = 5) => { const x = Math.sin(i * 127.1 + s * 311.7) * 43758.5453; return x - Math.floor(x); };
 const box = (w, h, d, mat, x, y, z, parent) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); parent.add(m); return m; };
@@ -19,14 +21,20 @@ const plane = (w, h, tex, x, y, z, ry, parent, emissive = false) => {
   const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), emissive ? basic(0xffffff, tex) : toon(0xffffff, tex)); m.position.set(x, y, z); m.rotation.y = ry; parent.add(m); return m;
 };
 
-export function stationSet() {
+export function stationSet(opts = {}) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x1C1630);
   scene.fog = new THREE.Fog(0x2A2238, 26, 70);
-  scene.add(new THREE.HemisphereLight(0xFFE9D0, 0x3A2E3A, 1.45));
-  const key = new THREE.DirectionalLight(0xFFF2E0, 1.1); key.position.set(-3, 8, 6); scene.add(key);
-  const warm = new THREE.PointLight(0xFFC27A, 22, 16, 1.4); warm.position.set(-5, 4, 4); scene.add(warm);
-  const warm2 = new THREE.PointLight(0xFFC27A, 18, 16, 1.4); warm2.position.set(5, 4, 7); scene.add(warm2);
+  // light falls from the ceiling lamps: a soft fill, one top-down key that casts the shadows, and a pool of light under each lamp row
+  scene.add(new THREE.HemisphereLight(0xFFEBD6, 0x2A2230, 0.5));
+  scene.add(new THREE.AmbientLight(0xFFF0E0, 0.18));
+  const key = new THREE.DirectionalLight(0xFFF3E2, 2.3); key.position.set(1.5, 14, 6); key.target.position.set(0.5, 0, 4); scene.add(key); scene.add(key.target);
+  key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -0.0006; key.shadow.normalBias = 0.02;
+  Object.assign(key.shadow.camera, { left: -10, right: 10, top: 12, bottom: -12, near: 2, far: 30 }); key.shadow.camera.updateProjectionMatrix();
+  for (const [x, z] of [[-4, 2], [3.5, 2], [-4, 8], [3.5, 8], [-4, 14], [3.5, 14], [0.3, -0.6]]) {
+    const sp = new THREE.SpotLight(0xFFEFD2, 20, 10, 0.95, 0.65, 1.5); sp.position.set(x, 4.6, z); sp.target.position.set(x, 0, z); scene.add(sp); scene.add(sp.target);
+  }
+  const busGlow = new THREE.PointLight(0xFFE9B0, 6, 7, 1.6); busGlow.position.set(6.75, 1.2, -1.5); scene.add(busGlow);
   const W = new THREE.Group(); scene.add(W);
 
   // ------------------------------------------------ floor, platform edge, bays
@@ -36,13 +44,13 @@ export function stationSet() {
     c.strokeStyle = '#8E8475'; c.lineWidth = 3; for (let i = 0; i <= 4; i++) { c.beginPath(); c.moveTo(i * 128, 0); c.lineTo(i * 128, h); c.stroke(); c.beginPath(); c.moveTo(0, i * 128); c.lineTo(w, i * 128); c.stroke(); }
     for (let i = 0; i < 40; i++) { c.fillStyle = `rgba(80,60,50,${0.05 + hash(i) * 0.08})`; c.beginPath(); c.ellipse(hash(i, 2) * w, hash(i, 3) * h, 8 + hash(i, 4) * 30, 5 + hash(i, 6) * 14, hash(i, 7) * 3, 0, 7); c.fill(); }
   }, [18, 14]);
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(36, 28), toon(0xffffff, tiles)); floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0, 6); W.add(floor);
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(36, 28), toon(0xffffff, tiles)); floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0, 6); floor.receiveShadow = true; W.add(floor);
   box(36, 0.02, 0.18, toon(0xF2C230), 0, 0.01, -1.55, W);
   const tactile = paintTex(256, 64, (c, w, h) => { c.fillStyle = '#E8B820'; c.fillRect(0, 0, w, h); c.fillStyle = '#B68D10'; for (let x = 8; x < w; x += 16) for (let y = 8; y < h; y += 16) { c.beginPath(); c.arc(x, y, 4, 0, 7); c.fill(); } }, [40, 1]);
   box(36, 0.02, 0.4, toon(0xffffff, tactile), 0, 0.012, -1.85, W);
   box(36, 0.3, 0.12, toon(0x8A8378), 0, -0.14, -2.05, W);                    // curb face
   const asphalt = paintTex(256, 256, (c, w, h) => { c.fillStyle = '#3A3640'; c.fillRect(0, 0, w, h); for (let i = 0; i < 300; i++) { c.fillStyle = `rgba(255,255,255,${hash(i) * 0.05})`; c.fillRect(hash(i, 2) * w, hash(i, 3) * h, 2, 2); } }, [10, 6]);
-  const road = new THREE.Mesh(new THREE.PlaneGeometry(60, 26), toon(0xffffff, asphalt)); road.rotation.x = -Math.PI / 2; road.position.set(0, -0.28, -15); W.add(road);
+  const road = new THREE.Mesh(new THREE.PlaneGeometry(60, 26), toon(0xffffff, asphalt)); road.rotation.x = -Math.PI / 2; road.position.set(0, -0.28, -15); road.receiveShadow = true; W.add(road);
   for (const x of [-9.3, -3, 3.6, 9.9]) box(0.12, 0.01, 10, basic(0xEDEDED), x, -0.27, -7.5, W);
   for (const [x, n] of [[-6.15, '8'], [0.3, '9'], [6.75, '10']]) { const t = label(n, 128, 128, { bg: '#3A3640', fg: '#EDEDED', font: '900 100px Display' }); const p = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 1.2), basic(0xffffff, t)); p.rotation.x = -Math.PI / 2; p.position.set(x, -0.265, -3.6); W.add(p); }
 
@@ -133,19 +141,55 @@ export function stationSet() {
   }
 
   // ------------------------------------------------ buses (parked + one arriving with suspension)
-  function makeBus(color, dest, destColor = '#FFB000') {
-    const g = new THREE.Group();
-    box(2.55, 3.1, 11, toon(color), 0, 1.85, -5.5, g);
-    box(2.45, 1.2, 0.08, basic(0x0C1A22), 0, 2.4, 0.03, g);
-    plane(2.0, 0.32, label(dest, 640, 100, { bg: '#111', fg: destColor, font: '900 70px UI' }), 0, 3.15, 0.06, 0, g, true);
-    for (const sx of [-0.9, 0.9]) { const hl = box(0.38, 0.18, 0.05, basic(0xFFF6CC), sx, 0.95, 0.04, g); hl.userData.light = true; }
-    box(2.6, 0.3, 0.2, toon(0x333333), 0, 0.45, 0.02, g);
-    for (const z of [-1.5, -8.5]) for (const sx of [-1.25, 1.25]) { const wh = cyl(0.52, 0.52, 0.35, toon(0x1A1A1A), sx, 0.52, z, g, 18); wh.rotation.z = Math.PI / 2; }
-    for (let i = 0; i < 6; i++) for (const sx of [-1.29, 1.29]) { const w = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 0.9), toon(0x7FB8C9)); w.position.set(sx, 2.3, -1.8 - i * 1.6); w.rotation.y = sx > 0 ? Math.PI / 2 : -Math.PI / 2; g.add(w); }
+  // a coach: front at local z=0, body to z=-11.6, wheels in real arches, framed glass, doors, mirrors, lights, roof AC
+  function makeBus(color, dest, destColor = '#FFB000', livery = '#F2C230') {
+    const g = new THREE.Group(), paint = toon(color), dark = toon(0x16181C), glass = toon(0x1C3A4A), chrome = toon(0xC9CED6);
+    const Wd = 2.55, half = Wd / 2, L = 11.6;
+    const upper = new THREE.Mesh(new RoundedBoxGeometry(Wd, 2.35, L, 4, 0.16), paint); upper.position.set(0, 2.2, -L / 2); g.add(upper);
+    // lower skirt between the wheel arches (front, middle, rear) — wheels sit in the gaps
+    for (const [z0, z1] of [[-0.05, -0.85], [-2.25, -8.05], [-9.45, -11.55]]) { const sk = new THREE.Mesh(new RoundedBoxGeometry(Wd, 0.72, z0 - z1, 2, 0.06), paint); sk.position.set(0, 0.69, (z0 + z1) / 2); g.add(sk); }
+    for (const zc of [-1.55, -8.75]) { const top = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, Wd - 0.02, 24, 1, false, 0, Math.PI), dark); top.rotation.set(0, 0, Math.PI / 2); top.rotateX(Math.PI / 2); top.position.set(0, 0.6, zc); top.scale.set(1, 1, 1); g.add(top); }
+    // livery stripes along both sides
+    const liv = paintTex(1024, 128, (c, w, h) => { c.fillStyle = livery; c.fillRect(0, 30, w, 26); c.fillStyle = '#ffffff'; c.fillRect(0, 62, w, 10); c.fillStyle = '#fff'; c.font = '900 52px Display'; c.fillText('VIAÇÃO', 40, 118); });
+    for (const sx of [-1, 1]) { const st = new THREE.Mesh(new THREE.PlaneGeometry(L - 0.5, 1.2), new THREE.MeshToonMaterial({ map: liv, transparent: true, color: 0xffffff })); st.position.set(sx * (half + 0.004), 1.25, -L / 2); st.rotation.y = sx * Math.PI / 2; g.add(st); }
+    // side window band with pillars
+    const win = paintTex(1024, 128, (c, w, h) => { c.fillStyle = '#101418'; c.fillRect(0, 0, w, h); for (let x = 0; x < w; x += 128) { const gr = c.createLinearGradient(x, 0, x + 120, h); gr.addColorStop(0, '#2C5468'); gr.addColorStop(0.5, '#1C3A4A'); gr.addColorStop(1, '#3E7088'); c.fillStyle = gr; c.fillRect(x + 8, 10, 112, h - 20); c.fillStyle = 'rgba(255,255,255,.12)'; c.fillRect(x + 20, 16, 14, h - 32); } });
+    for (const sx of [-1, 1]) { const w = new THREE.Mesh(new THREE.PlaneGeometry(L - 2.2, 1.05), toon(0xffffff, win)); w.position.set(sx * (half + 0.006), 2.45, -L / 2 - 0.7); w.rotation.y = sx * Math.PI / 2; g.add(w); }
+    // passenger door (vehicle's right side = -x) with glass
+    { const d = new THREE.Mesh(new THREE.PlaneGeometry(0.95, 2.3), toon(0xffffff, paintTex(128, 320, (c, w, h) => { c.fillStyle = '#16181C'; c.fillRect(0, 0, w, h); c.fillStyle = '#2C5468'; c.fillRect(8, 8, 52, h - 16); c.fillRect(68, 8, 52, h - 16); }))); d.position.set(-(half + 0.008), 1.6, -0.45); d.rotation.y = -Math.PI / 2; g.add(d); }
+    // front: windshield (split), frame, wipers, destination sign, grille, lights, bumper, plate
+    const ws = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 1.45), toon(0xffffff, paintTex(256, 160, (c, w, h) => { const gr = c.createLinearGradient(0, 0, w, h); gr.addColorStop(0, '#3E7088'); gr.addColorStop(0.6, '#1C3A4A'); gr.addColorStop(1, '#2C5468'); c.fillStyle = gr; c.fillRect(0, 0, w, h); c.fillStyle = 'rgba(255,255,255,.18)'; c.beginPath(); c.moveTo(30, 0); c.lineTo(70, 0); c.lineTo(20, h); c.lineTo(-20, h); c.fill(); })));
+    ws.position.set(0, 2.35, 0.012); g.add(ws);
+    box(0.06, 1.45, 0.03, dark, 0, 2.35, 0.02, g); box(2.34, 0.06, 0.03, dark, 0, 3.08, 0.02, g); box(2.34, 0.06, 0.03, dark, 0, 1.62, 0.02, g);
+    for (const sx of [-0.55, 0.55]) { const wp = box(0.75, 0.025, 0.025, dark, sx, 1.7, 0.04, g); wp.rotation.z = sx > 0 ? 0.35 : -0.35; }
+    box(2.0, 0.34, 0.06, dark, 0, 3.28, 0.02, g);
+    plane(1.9, 0.28, label(dest, 640, 96, { bg: '#0A0A0A', fg: destColor, font: '900 66px UI' }), 0, 3.28, 0.055, 0, g, true);
+    box(1.3, 0.38, 0.04, dark, 0, 1.05, 0.02, g);
+    for (let i = 0; i < 5; i++) box(1.2, 0.03, 0.02, toon(0x3A3D44), 0, 0.92 + i * 0.065, 0.045, g);
+    for (const sx of [-1, 1]) {
+      const hl = new THREE.Mesh(new RoundedBoxGeometry(0.42, 0.2, 0.06, 2, 0.04), basic(0xFFF6CC)); hl.position.set(sx * 0.95, 1.0, 0.03); g.add(hl);
+      const ind = new THREE.Mesh(new RoundedBoxGeometry(0.16, 0.12, 0.05, 2, 0.03), basic(0xFFA020)); ind.position.set(sx * 1.08, 0.78, 0.03); g.add(ind);
+      // mirror on an arm, ahead of the windshield
+      const arm = box(0.04, 0.04, 0.5, dark, sx * (half - 0.05), 3.0, 0.25, g); arm.rotation.x = 0.3;
+      const mir = new THREE.Mesh(new RoundedBoxGeometry(0.16, 0.42, 0.08, 2, 0.03), dark); mir.position.set(sx * (half - 0.05), 2.68, 0.46); g.add(mir);
+    }
+    const bump = new THREE.Mesh(new RoundedBoxGeometry(2.6, 0.32, 0.22, 2, 0.08), toon(0x2A2C30)); bump.position.set(0, 0.5, 0.03); g.add(bump);
+    plane(0.52, 0.16, label('BRA 2E19', 256, 80, { bg: '#F5F5F5', fg: '#111', font: '900 44px UI' }), 0, 0.5, 0.15, 0, g, true);
+    // roof air-conditioning unit
+    const ac = new THREE.Mesh(new RoundedBoxGeometry(1.8, 0.28, 3.2, 2, 0.08), toon(0xD8DCE0)); ac.position.set(0, 3.5, -4.2); g.add(ac);
+    // wheels: tyre, rim, hub nuts
+    for (const zc of [-1.55, -8.75]) for (const sx of [-1, 1]) {
+      const wg = new THREE.Group(); wg.position.set(sx * (half - 0.16), 0.52, zc); g.add(wg);
+      const tyre = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.52, 0.32, 24), toon(0x141414)); tyre.rotation.z = Math.PI / 2; wg.add(tyre);
+      const rim = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 0.33, 20), chrome); rim.rotation.z = Math.PI / 2; wg.add(rim);
+      const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.35, 12), toon(0x888888)); hub.rotation.z = Math.PI / 2; wg.add(hub);
+      g.userData.wheels = (g.userData.wheels || []).concat(wg);
+    }
+    g.traverse((o) => { if (o.isMesh) o.castShadow = true; });
     W.add(g); return g;
   }
-  const bus8 = makeBus(0x2D5DA8, 'SÃO PAULO'); bus8.position.set(-6.15, -0.28, -3.0);
-  const bus10 = makeBus(0xC93A3A, 'CURITIBA'); // arriving into bay 10, rolling in from behind (along +z)
+  const bus8 = makeBus(0x2D5DA8, 'SÃO PAULO', '#FFB000', '#F2F2F2'); bus8.position.set(-6.15, -0.28, -3.0);
+  const bus10 = makeBus(0xC93A3A, 'CURITIBA', '#FFB000', '#F2C230'); // arriving into bay 10, rolling in from behind (along +z)
   // far wall + skyline
   box(60, 3, 0.4, toon(0x6A5E70), 0, 1.2, -24, W);
   const winTex = paintTex(256, 512, (c, w, h) => { c.fillStyle = '#2A1D40'; c.fillRect(0, 0, w, h); for (let y = 16; y < h; y += 44) for (let x = 14; x < w; x += 50) { c.fillStyle = hash(x * 3 + y) > 0.5 ? '#FFC86B' : '#1A1230'; c.fillRect(x, y, 30, 26); } });
@@ -159,9 +203,10 @@ export function stationSet() {
     const kind = hash(i, 53);
     const m = kind < 0.6 ? new THREE.Mesh(new THREE.PlaneGeometry(0.1 + hash(i, 54) * 0.12, 0.08 + hash(i, 55) * 0.1), basic(litterCols[i % 5], null, { side: THREE.DoubleSide }))
       : new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.05, 6), toon(0xEEE6D8));
-    m.position.set(x, 0.006, z); m.rotation.set(kind < 0.6 ? -Math.PI / 2 : Math.PI / 2, 0, hash(i, 56) * 6); W.add(m);
+    m.position.set(x, kind < 0.6 ? 0.004 : 0.009, z); m.rotation.set(kind < 0.6 ? -Math.PI / 2 : Math.PI / 2, 0, hash(i, 56) * 6);
+    if (kind < 0.6) { m.material.polygonOffset = true; m.material.polygonOffsetFactor = -1; m.material.polygonOffsetUnits = -2; } W.add(m);
   }
-  const puddle = new THREE.Mesh(new THREE.CircleGeometry(0.7, 24), basic(0x7A8FA0, null, { transparent: true, opacity: 0.35 })); puddle.rotation.x = -Math.PI / 2; puddle.scale.set(1.4, 0.8, 1); puddle.position.set(-2.4, 0.007, 5.6); W.add(puddle);
+  const puddle = new THREE.Mesh(new THREE.CircleGeometry(0.7, 24), basic(0x7A8FA0, null, { transparent: true, opacity: 0.35 })); puddle.rotation.x = -Math.PI / 2; puddle.scale.set(1.4, 0.8, 1); puddle.position.set(-2.4, 0.003, 5.6); puddle.material.polygonOffset = true; puddle.material.polygonOffsetFactor = -1; puddle.material.polygonOffsetUnits = -2; puddle.material.depthWrite = false; W.add(puddle);
   { const g = new THREE.Group(); g.position.set(-2.0, 0, 6.3); g.rotation.y = 0.5; W.add(g);
     const signT = label('CUIDADO\nPISO\nMOLHADO', 128, 200, { bg: '#F2C230', fg: '#111', font: '900 30px Display' });
     for (const sx of [-1, 1]) { const p = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 0.6), toon(0xffffff, signT)); p.position.set(0, 0.3, sx * 0.08); p.rotation.set(sx * 0.25, sx > 0 ? 0 : Math.PI, 0); g.add(p); } }
@@ -172,16 +217,28 @@ export function stationSet() {
 
   // ------------------------------------------------ pigeons (peck, then flee)
   const pigeons = [];
+  const pgBody = toon(0x8C93A3), pgNeck = toon(0x5E7A70), pgDark = toon(0x4A4F5A), pgLeg = toon(0xD4655A);
   for (let i = 0; i < 7; i++) {
-    const g = new THREE.Group();
-    const body = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 10), toon(0x8A8F9C)); body.scale.set(0.8, 0.75, 1.3); g.add(body);
-    const head = new THREE.Mesh(new THREE.SphereGeometry(0.05, 10, 8), toon(0x6E7380)); head.position.set(0, 0.07, 0.11); g.add(head);
-    const beak = new THREE.Mesh(new THREE.ConeGeometry(0.012, 0.04, 6), toon(0xE0B060)); beak.rotation.x = Math.PI / 2; beak.position.set(0, 0.06, 0.16); g.add(beak);
-    const wings = [-1, 1].map((sx) => { const piv = new THREE.Group(); piv.position.set(sx * 0.06, 0.03, 0); const w = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.012, 0.14), toon(0x9AA0AD)); w.position.x = sx * 0.08; piv.add(w); g.add(piv); return piv; });
-    const p0 = new THREE.Vector3(-0.4 + hash(i, 21) * 1.6, 0.07, 6.6 + hash(i, 22) * 1.4);
-    g.position.copy(p0); g.rotation.y = hash(i, 23) * 6; W.add(g);
+    const g = new THREE.Group(), bodyG = new THREE.Group(); g.add(bodyG);
+    const body = new THREE.Mesh(new THREE.SphereGeometry(0.085, 16, 12), pgBody); body.scale.set(0.82, 0.74, 1.35); bodyG.add(body);
+    const chest = new THREE.Mesh(new THREE.SphereGeometry(0.052, 14, 10), pgNeck); chest.position.set(0, 0.045, 0.075); bodyG.add(chest);
+    const tail = new THREE.Mesh(new THREE.BoxGeometry(0.075, 0.012, 0.11), pgDark); tail.position.set(0, 0.0, -0.15); tail.rotation.x = -0.25; bodyG.add(tail);
+    const headG = new THREE.Group(); headG.position.set(0, 0.09, 0.1); bodyG.add(headG);
+    const head = new THREE.Mesh(new THREE.SphereGeometry(0.036, 14, 10), toon(0x6E7584)); headG.add(head);
+    for (const sx of [-1, 1]) { const e = new THREE.Mesh(new THREE.SphereGeometry(0.008, 8, 6), basic(0xE08030)); e.position.set(sx * 0.026, 0.01, 0.015); headG.add(e); const p = new THREE.Mesh(new THREE.SphereGeometry(0.004, 6, 4), basic(0x111111)); p.position.set(sx * 0.031, 0.01, 0.018); headG.add(p); }
+    const beak = new THREE.Mesh(new THREE.ConeGeometry(0.009, 0.034, 8), toon(0x3A3A3A)); beak.rotation.x = Math.PI / 2; beak.position.set(0, -0.004, 0.045); headG.add(beak);
+    const cere = new THREE.Mesh(new THREE.SphereGeometry(0.007, 6, 4), toon(0xEEEEEE)); cere.position.set(0, 0.004, 0.034); headG.add(cere);
+    // wings: folded along the body when walking, unfold sideways to fly
+    const wings = [-1, 1].map((sx) => { const piv = new THREE.Group(); piv.position.set(sx * 0.055, 0.035, 0.03); bodyG.add(piv);
+      const w = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 8), pgBody); w.scale.set(1.0, 0.08, 0.5); w.position.x = sx * 0.09; piv.add(w);
+      for (const k of [0, 1]) { const bar = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.006, 0.012), pgDark); bar.position.set(sx * (0.07 + k * 0.012), 0.004, -0.02 - k * 0.025); piv.add(bar); }
+      const tip = new THREE.Mesh(new THREE.SphereGeometry(0.06, 10, 6), pgDark); tip.scale.set(1.0, 0.07, 0.45); tip.position.x = sx * 0.2; piv.add(tip); return piv; });
+    const legs = [-1, 1].map((sx) => { const l = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.06, 6), pgLeg); l.position.set(sx * 0.025, -0.075, 0.01); g.add(l); return l; });
+    const p0 = new THREE.Vector3(-0.4 + hash(i, 21) * 1.6, 0.105, 6.6 + hash(i, 22) * 1.4);
+    g.position.copy(p0); W.add(g);
+    g.traverse((o) => { if (o.isMesh) o.castShadow = true; });
     const dir = new THREE.Vector3((hash(i, 24) - 0.5) * 0.7, 0, -1).normalize();
-    pigeons.push({ g, head, wings, p0, dir, t0: 2.55 + i * 0.09 + hash(i, 26) * 0.2, ry: hash(i, 23) * 6, ph: hash(i, 27) * 6 });
+    pigeons.push({ g, bodyG, headG, wings, legs, p0, dir, t0: 1.55 + (p0.z - 6.6) * -0.15 + 0.35 + i * 0.07, ry: hash(i, 23) * 6, ph: hash(i, 27) * 6, wander: 0.25 + hash(i, 28) * 0.25 });
   }
 
   // ------------------------------------------------ the can (kicked at 8.6 s, rolls, bounces off a bin)
@@ -207,20 +264,20 @@ export function stationSet() {
   const walkers = [];
   const W_SPECS = [
     // pts, speed, t0, endYaw, suitcase
-    [[[-8.4, 13.8], [-3.2, 9.6], [-2.0, 2.0], [-5.9, -0.9]], 1.1, -2, Math.PI, true],
+    [[[-8.4, 13.8], [-3.2, 9.6], [-2.0, 2.0], [-6.15, -0.1]], 1.1, -2, Math.PI, true],
     [[[8.3, 5.6], [2.6, 4.6], [-3.8, 4.4], [-4.8, 7.6]], 1.2, -6, -Math.PI / 2, false],
-    [[[-6.5, 3.0], [-1.8, 3.4], [6.0, 3.2]], 1.1, -3.7, Math.PI / 2, false],
+    [[[-6.5, 3.0], [-1.8, 3.4], [5.1, 2.6]], 1.1, -3.7, Math.PI / 2, false],
     [[[6.8, 11.5], [3.3, 9.8], [2.9, 3.5], [6.6, -0.2]], 1.0, -1, Math.PI, true],
-    [[[-3.0, -0.6], [-2.2, 6.0], [-1.4, 17.5]], 1.15, 0.5, 0, false],
-    [[[2.4, 18.5], [2.1, 9.0], [1.9, 2.6], [4.6, -0.6]], 1.45, -4, Math.PI, false],
-    [[[-5.0, 17.5], [-4.0, 6.0], [-6.8, -0.4]], 1.05, -6, Math.PI, true],
-    [[[4.5, -1.0], [3.6, 6.0], [3.0, 17.5]], 1.0, 1.0, 0, false],
+    [[[-3.0, -0.6], [-1.0, 4.5], [-1.4, 17.5]], 1.15, 0.5, 0, false],
+    [[[2.4, 18.5], [2.1, 9.0], [1.9, 2.6], [3.95, -0.25]], 1.45, -4, Math.PI, false],
+    [[[-5.0, 17.5], [-4.0, 6.0], [-7.6, 0.25]], 1.05, -6, Math.PI, true],
+    [[[4.5, -1.0], [3.3, 2.6], [2.9, 9.5], [2.6, 17.5]], 1.0, 10.6, 0, false],
     [[[-8.0, 11.2], [-3.6, 11.4], [0.6, 12.8], [1.4, 18]], 1.2, -1, 0, false],
-    [[[8.0, 3.6], [5.0, 1.3], [-1.5, 1.2], [-4.4, -0.4]], 1.05, -7, Math.PI, true],
-    [[[-1.8, 17], [-1.6, 7.0], [-3.4, 3.4]], 1.1, -5, 0.4, false],
-    [[[3.6, 0.6], [4.0, 8.0], [7.0, 9.6]], 0.95, 2, Math.PI / 2, false],
+    [[[8.0, 3.6], [5.0, 1.3], [-1.5, 1.2], [-3.55, -0.2]], 1.05, -7, Math.PI, true],
+    [[[-1.8, 17], [-1.2, 12.4], [-3.0, 13.6]], 1.1, -5, 0.4, false],
+    [[[3.6, 0.6], [4.0, 8.0], [5.55, 8.95]], 0.95, 2, Math.PI / 2, false],
     [[[-6.2, 6.2], [-3.6, 6.6], [1.6, 7.4], [3.9, 9.2]], 1.0, -1, -Math.PI / 2, false],
-    [[[6.2, 12.8], [1.0, 12.2], [-4.0, 12.6], [-6.6, 12.9]], 1.1, -2, -Math.PI / 2, false],
+    [[[5.3, 13.7], [1.0, 12.2], [-4.0, 12.6], [-6.6, 12.9]], 1.1, -2, -Math.PI / 2, false],
   ];
   function makePath(pts) { const seg = []; let L = 0; for (let i = 1; i < pts.length; i++) { const l = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(l); L += l; } return { pts, seg, L }; }
   function pathAt(P, s) { s = Math.max(0, Math.min(P.L, s)); for (let i = 0; i < P.seg.length; i++) { if (s <= P.seg[i] || i === P.seg.length - 1) { const k = P.seg[i] ? s / P.seg[i] : 0; const a = P.pts[i], b = P.pts[i + 1]; return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k]; } s -= P.seg[i]; } return P.pts[P.pts.length - 1]; }
@@ -246,7 +303,7 @@ export function stationSet() {
     const p = extra(i + 1); W.add(p.root);
     let suit = null;
     if (s[4]) { suit = new THREE.Group(); box(0.4, 0.6, 0.22, toon(bagCols[i % 5]), 0, 0.32, 0, suit); for (const sx of [-0.15, 0.15]) { const wh = cyl(0.04, 0.04, 0.03, toon(0x111111), sx, 0.04, 0.08, suit, 10); wh.rotation.z = Math.PI / 2; suit.userData.wheels = (suit.userData.wheels || []).concat(wh); } box(0.02, 0.5, 0.02, toon(0x333333), 0, 0.87, 0.1, suit); W.add(suit); }
-    walkers.push({ p, path: makePath(s[0]), v: s[1], t0: s[2], endYaw: s[3], suit, off: hash(i, 31) * 3 });
+    walkers.push({ p, way: s[0], path: makePath(s[0]), v: s[1], t0: s[2], endYaw: s[3], suit, off: hash(i, 31) * 3 });
   });
   // idle groups: chatting at the benches, queueing at the ticket windows, waiting at the edge
   const idlers = [];
@@ -260,15 +317,23 @@ export function stationSet() {
   // ------------------------------------------------ the three friends at platform 9
   // the kicker: walks past the can and boots it at 8.6 s
   const kicker = extra(55); W.add(kicker.root);
-  const KICK = { path: makePath([[-7.4, 2.2], [-2.45, 0.42], [3.2, 0.95], [4.0, 3.8]]), v: 1.15, t0: 8.6 - Math.hypot(4.95, 1.78) / 1.15, endYaw: 0.2, startYaw: -Math.PI / 2, off: 0.4 };
+  const KICK = { way: [[-7.4, 2.2], [-2.45, 0.42], [-1.95, 0.3]], v: 1.15, t0: 0, endYaw: Math.PI / 2, startYaw: -Math.PI / 2, off: 0.4, fixedTime: true };
+  // ---- plan every route around obstacles, then space the extras out in time
+  { const OB = staticObstacles(I_SPECS), grid = makeGrid(OB);
+    for (const w of walkers) w.path = makePath(planRoute(grid, w.way));
+    const kr1 = planRoute(grid, KICK.way.slice(0, 2)), kr2 = planRoute(grid, KICK.way.slice(1));
+    KICK.path = makePath(kr1.concat(kr2.slice(1)));
+    KICK.t0 = 8.6 - makePath(kr1).L / KICK.v - 0.2;            // reaches the can at 8.6 s
+    if (opts.camAt) schedule([KICK, ...walkers], agentState, opts.camAt); }
   const rai = cast('rai'), ger = cast('geraldim'), ben = cast('bento');
   rai.root.position.set(-0.55, 0, -0.75); ger.root.position.set(0.35, 0, -1.0); ben.root.position.set(1.25, 0, -0.7);
   for (const c of [rai, ger, ben]) W.add(c.root);
-  W.traverse((o) => { if (o.isMesh) o.frustumCulled = false; });
+  W.traverse((o) => { if (o.isMesh) { o.frustumCulled = false; if (o.geometry && o.geometry.type !== 'PlaneGeometry' && o.geometry.type !== 'CircleGeometry') o.castShadow = true; o.receiveShadow = true; } });
+  floor.castShadow = false; road.castShadow = false;
 
   // plate ODE (theta'' = g/l * sin(theta) - c * theta'), integrated once at build time
-  const PLATE = (() => { const t1 = 18.15; let th = 0.07 * (1 - Math.exp(-(t1 - 16.4) * 1.5)) * Math.sin((t1 - 16.4) * 5.0); if (Math.abs(th) < 0.02) th = 0.02; let om = 0; const sim = [];
-    for (let i = 0; i < 4000; i++) { const dt = 1 / 1000; om += (65 * Math.sin(th) - 1.4 * om) * dt; th += om * dt; sim.push(th); } return { t1, sim }; })();
+  const PLATE = (() => { const t1 = 16.8; let th = 0.004 * Math.sin(t1 * 1.2) + 0.006, om = 0; const sim = [];
+    for (let i = 0; i < 4000; i++) { const dt = 1 / 1000; om += (65 * Math.sin(th) - 15 * om) * dt; th += om * dt; sim.push(th); } return { t1, sim }; })();
   // ------------------------------------------------ update: everything from t
   const v = new THREE.Vector3();
   function update(t, o = {}) {
@@ -290,25 +355,34 @@ export function stationSet() {
     // bus 10: cruises in at 5 m/s, brakes uniformly from 5.0 s to a stop at 8.6 s (nose dives), then rocks back
     { const v0 = 5, tb = 5.0, te = 8.6, zs = -3.0, a = v0 / (te - tb), Db = v0 * (te - tb) / 2;
       let z; if (t < tb) z = zs - Db - v0 * (tb - t); else if (t < te) { const k = t - tb; z = zs - Db + v0 * k - 0.5 * a * k * k; } else z = zs;
-      bus10.position.set(6.75, -0.28, z);
+      bus10.position.set(6.75, -0.28, z); (bus10.userData.wheels || []).forEach((wg) => { wg.rotation.x = (z + 40) / 0.52; });
       const after = t - te; bus10.rotation.x = t < tb ? 0 : t < te ? 0.014 * Math.min(1, (t - tb) / 0.4) : 0.014 * Math.exp(-after * 2.4) * Math.cos(after * 6.8); }
-    // pigeons
+    // pigeons: stroll in small loops with the head-thrust walk and pecks; take off when Caio comes close
     for (const P of pigeons) {
       const dt = t - P.t0;
+      const wx = P.p0.x + P.wander * Math.sin(Math.min(t, P.t0) * 0.6 + P.ph), wz = P.p0.z + P.wander * Math.cos(Math.min(t, P.t0) * 0.6 + P.ph) * 0.6;
+      const walkYaw = Math.atan2(Math.cos(t * 0.6 + P.ph) * 0.6, -Math.sin(t * 0.6 + P.ph) * 0.6) * 0 + Math.atan2(0.6 * Math.cos(t * 0.6 + P.ph), -0.6 * 0.6 * Math.sin(t * 0.6 + P.ph));
       if (dt < 0) {
-        const peck = Math.max(0, Math.sin(t * 5 + P.ph)) ** 6;
-        P.g.position.copy(P.p0); P.g.position.x += 0.06 * Math.sin(t * 0.7 + P.ph); P.g.rotation.set(peck * 0.5, P.ry + 0.3 * Math.sin(t * 0.4 + P.ph), 0);
-        P.head.position.set(0, 0.07 - peck * 0.08, 0.11 + peck * 0.04); P.wings.forEach((w, i) => { w.rotation.z = 0; });
+        const step = t * 2.3 + P.ph, thrust = (step % 1) < 0.5 ? (step % 1) * 2 : 1 - ((step % 1) - 0.5) * 2;   // head forward, then body catches up
+        const peck = Math.max(0, Math.sin(t * 1.1 + P.ph * 2)) ** 14;
+        P.g.position.set(wx, P.p0.y + 0.006 * Math.abs(Math.sin(step * Math.PI)), wz); P.g.rotation.set(0, walkYaw, 0);
+        P.bodyG.rotation.set(peck * 0.55, 0, 0.03 * Math.sin(step * Math.PI));
+        P.headG.position.set(0, 0.09 - peck * 0.03, 0.1 + thrust * 0.025);
+        P.wings.forEach((w, i) => { const sx = i ? 1 : -1; w.rotation.set(0, sx * -1.35, 0); });
+        P.legs.forEach((l, i) => { l.rotation.x = 0.4 * Math.sin(step * Math.PI + i * Math.PI); l.scale.y = 1; });
       } else {
-        // take-off: strong first beats, then accelerating flight out under the roof toward the open bays
-        const hor = 1.4 * dt + 1.2 * dt * dt;
-        const x = P.p0.x + P.dir.x * hor, z = P.p0.z + P.dir.z * hor;
-        const y = 0.07 + 4.4 * (1 - Math.exp(-dt * 0.95)) + Math.max(0, -(z + 4.5)) * 0.4;
-        P.g.position.set(x, y, z);
-        P.g.rotation.set(-0.55 * Math.exp(-dt * 1.5) - 0.08, Math.atan2(P.dir.x, P.dir.z), 0.15 * Math.sin(dt * 2 + P.ph));
-        const beat = dt < 1.4 ? 11 : 7, amp = dt < 1.4 ? 1.0 : 0.6 + 0.4 * (Math.sin(dt * 1.7 + P.ph) > 0 ? 1 : 0.2);
-        const flap = Math.sin(dt * 2 * Math.PI * beat + P.ph) * amp; P.wings.forEach((w, i) => { w.rotation.z = (i ? -1 : 1) * flap; });
-        P.head.position.set(0, 0.07, 0.11);
+        // crouch (0.08 s), jump, beat hard while climbing out under the roof toward the open bays
+        const launch = Math.max(0, dt - 0.08);
+        const hor = 1.2 * launch + 1.3 * launch * launch;
+        const x = wx + P.dir.x * hor, z = wz + P.dir.z * hor;
+        const y = P.p0.y - (dt < 0.08 ? dt * 0.4 : 0) + 4.3 * (1 - Math.exp(-launch * 1.05)) + Math.max(0, -(z + 4.5)) * 0.4;
+        P.g.position.set(x, y, z); P.g.rotation.set(0, angLerp(walkYaw, Math.atan2(P.dir.x, P.dir.z), Math.min(1, dt * 6)), 0);
+        P.bodyG.rotation.set(-0.6 * Math.exp(-launch * 1.6) - 0.1, 0, 0.12 * Math.sin(dt * 2 + P.ph));
+        P.headG.position.set(0, 0.095, 0.11);
+        const open = Math.min(1, dt / 0.12), beat = launch < 1.3 ? 10 : 6.5;
+        const flap = Math.sin(launch * 2 * Math.PI * beat + P.ph);
+        P.wings.forEach((w, i) => { const sx = i ? 1 : -1; w.rotation.set(0, sx * -1.35 * (1 - open), sx * (0.25 + 0.95 * flap) * open); });
+        P.legs.forEach((l) => { l.scale.y = Math.max(0.05, 1 - launch * 4); l.rotation.x = -1.2 * Math.min(1, launch * 3); });
       }
     }
     // can: rests until 8.6 s, then follows the precomputed roll
@@ -341,10 +415,9 @@ export function stationSet() {
     clerks.forEach((c, i) => c.pose({ t, offset: i * 1.3, w: { idle: 1 } }));
     // loose plate on 9: creaks while the screw loosens, then (top-heavy) tips over and swings to rest upside down
     const pl = plates['9'];
-    if (t < 16.4) pl.rotation.z = 0.004 * Math.sin(t * 1.2);
-    else if (t < PLATE.t1) pl.rotation.z = 0.07 * (1 - Math.exp(-(t - 16.4) * 1.5)) * Math.sin((t - 16.4) * 5.0);
+    if (t < PLATE.t1) pl.rotation.z = 0.004 * Math.sin(t * 1.2);
     else pl.rotation.z = PLATE.sim[Math.min(PLATE.sim.length - 1, Math.floor((t - PLATE.t1) * 1000))];
     plates['8'].rotation.z = 0.01 * Math.sin(t * 1.1); plates['10'].rotation.z = 0.01 * Math.sin(t * 1.3 + 1) + 0.05 * gust * Math.sin((t - 8.6) * 3);
   }
-  return { scene, update, rai, ger, ben };
+  return { scene, update, rai, ger, ben, debug: { walkers, KICK, agentState, I_SPECS } };
 }

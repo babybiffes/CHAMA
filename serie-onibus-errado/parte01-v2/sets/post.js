@@ -64,6 +64,7 @@ export function pipeline(R, W, H, { scale = 1 } = {}) {
     render(scene3, cam3, t, o = {}) {
       mat.uniforms.near.value = cam3.near; mat.uniforms.far.value = cam3.far;
       mat.uniforms.k.value = o.k ?? 0.9; mat.uniforms.time.value = t;
+      R.shadowMap.autoUpdate = false; R.shadowMap.needsUpdate = true;
       R.setRenderTarget(color); R.setClearColor(0x000000, 1); R.clear(); R.render(scene3, cam3);
       const bg = scene3.background, fog = scene3.fog;
       scene3.overrideMaterial = normalMat; scene3.background = null; scene3.fog = null;

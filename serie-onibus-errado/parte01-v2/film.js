@@ -7,6 +7,7 @@ import { THREE } from './lib/gl.js';
 import { loadModels, toon, paintTex } from './sets/rig.js';
 import { stationSet } from './sets/station.js';
 import { pipeline } from './sets/post.js';
+import { checkCollisions } from './sets/check.js';
 
 const { W, H, E, prog, lerp, springU, SPRING, font, text, rrect, noise1, kf } = M;
 const UI = 'UI', DISPLAY = 'Display';
@@ -14,11 +15,11 @@ const COL = { caio: '#FFFFFF', bento: '#7CFC9A', geraldim: '#FFD54A', rai: '#FF9
 const smooth = (a, b, x) => { const k = Math.max(0, Math.min(1, (x - a) / (b - a))); return k * k * (3 - 2 * k); };
 
 const SUBS = [
-  [1.8, 5.0, 'caio', 'Ôrra, meu… o Bruno de novo? Mano, faz seis anos.'],
+  [1.8, 5.0, 'caio', 'Ôrra, meu… o Luis de novo? Mano, faz seis anos.'],
   [5.6, 8.9, 'rai', 'Oxe, bloqueia esse homem, véi. Ele ficou em Registro, deixa ele lá.'],
   [9.1, 12.3, 'geraldim', 'Uai, mas ês num deixou ele, ês esqueceu. É diferente.'],
   [12.5, 16.0, 'bento', 'Bah, foco, tchê! Plataforma nove. EUROPA. Seis anos juntando pila!'],
-  [18.7, 20.0, 'caio', 'Plataforma… seis.'],
+  [18.5, 20.0, 'caio', 'Firmeza, mano. Bora!'],
 ];
 const subAt = (t) => SUBS.find((s) => t >= s[0] && t < s[1]);
 const talkOf = (who, t) => {
@@ -38,8 +39,8 @@ function camPose(t) {
   const zz = 11 - walked(t), steps = walked(t) / 0.72, moving = 1 - E.inCubic(prog(t, WALK_END - 1.2, WALK_END));
   const bobY = 0.026 * Math.cos(steps * Math.PI * 2) * moving, bobX = 0.016 * Math.sin(steps * Math.PI) * moving;
   // reading the phone (0.8–5.4) pulls the gaze down; then the friends, each speaker, the sign
-  const yaw = kf(t, [[0, 0.04], [5.4, 0.04], [6.0, 0.14], [9.0, 0.14], [9.5, -0.02], [12.2, -0.02], [12.7, -0.18], [15.9, -0.16], [16.6, -0.02], [20, -0.02]], E.inOutSine);
-  const pitch = kf(t, [[0, -0.1], [0.8, -0.1], [1.3, -0.32], [5.2, -0.3], [5.9, -0.1], [15.8, -0.1], [16.8, 0.5], [20, 0.52]], E.inOutSine);
+  const yaw = kf(t, [[0, 0.04], [5.4, 0.04], [6.0, 0.14], [9.0, 0.14], [9.5, -0.02], [12.2, -0.02], [12.7, -0.16], [15.9, -0.14], [16.6, 0.0], [18.2, 0.05], [20, 0.02]], E.inOutSine);
+  const pitch = kf(t, [[0, -0.1], [0.8, -0.1], [1.3, -0.32], [5.2, -0.3], [5.9, -0.08], [13.6, -0.06], [14.2, -0.02], [15.0, -0.07], [20, -0.07]], E.inOutSine);
   const hy = 0.004 * noise1(t * 1.7, 3), hp = 0.004 * noise1(t * 1.3, 8);
   return { pos: [0.3 + bobX, 1.63 + bobY, zz], yaw: yaw + hy + bobX * 0.5, pitch: pitch + hp, roll: 0.011 * Math.sin(steps * Math.PI) * moving + 0.004 * noise1(t, 5), steps, moving };
 }
@@ -67,7 +68,7 @@ function drawPhone(c, w, h, t) {
       c.beginPath(); c.arc(56, y + 46, 22, 0, 7); c.fillStyle = '#25D366'; c.fill();
       c.fillStyle = '#fff'; c.beginPath(); c.arc(56, y + 46, 10, 0, 7); c.fill(); c.fillStyle = '#25D366'; c.beginPath(); c.arc(56, y + 46, 6, 0, 7); c.fill();
       c.fillStyle = '#666'; c.font = '700 20px UI'; c.textAlign = 'left'; c.fillText('WhatsApp  •  agora', 90, y + 40);
-      c.fillStyle = '#111'; c.font = '800 28px UI'; c.fillText('Bruno', 30, y + 88);
+      c.fillStyle = '#111'; c.font = '800 28px UI'; c.fillText('Luis', 30, y + 88);
       c.fillStyle = '#333'; c.font = '700 22px UI'; c.fillText('17 chamadas de voz perdidas', 30, y + 120);
       c.restore();
     }
@@ -77,8 +78,8 @@ function drawPhone(c, w, h, t) {
   c.fillStyle = '#ECE5DD'; c.fillRect(0, 0, w, h);
   c.fillStyle = 'rgba(0,0,0,.035)'; for (let y = 120; y < h; y += 40) for (let x = (y / 40) % 2 * 20; x < w; x += 40) { c.beginPath(); c.arc(x, y, 6, 0, 7); c.fill(); }
   c.fillStyle = '#075E54'; c.fillRect(0, 0, w, 120); status(true);
-  c.beginPath(); c.arc(62, 82, 24, 0, 7); c.fillStyle = '#8FB8D8'; c.fill(); c.fillStyle = '#fff'; c.font = '800 26px UI'; c.textAlign = 'center'; c.fillText('B', 62, 92);
-  c.textAlign = 'left'; c.fillStyle = '#fff'; c.font = '800 28px UI'; c.fillText('Bruno', 100, 80);
+  c.beginPath(); c.arc(62, 82, 24, 0, 7); c.fillStyle = '#8FB8D8'; c.fill(); c.fillStyle = '#fff'; c.font = '800 26px UI'; c.textAlign = 'center'; c.fillText('L', 62, 92);
+  c.textAlign = 'left'; c.fillStyle = '#fff'; c.font = '800 28px UI'; c.fillText('Luis', 100, 80);
   c.font = '600 20px UI'; c.fillStyle = '#CDEBE4'; c.fillText(t > PHONE.typing && t < PHONE.msg ? 'digitando…' : 'online', 100, 106);
   const scroll = (t > PHONE.msg ? smooth(PHONE.msg, PHONE.msg + 0.3, t) : 0) * 70;
   const calls = ['21:58', '22:03', '22:07', '22:12', '22:20', '22:29'];
@@ -120,7 +121,7 @@ function povRig(cam) {
   return {
     update(t, cp) {
       const up = smooth(PHONE.up0, PHONE.up0 + 0.55, t) * (1 - smooth(PHONE.up1, PHONE.up1 + 0.6, t));
-      const away = smooth(15.3, 16.1, t);
+      const away = 0;
       const buzz = (M.bump(t, PHONE.notif + 0.12, 0.14) + M.bump(t, PHONE.notif + 0.5, 0.14)) * Math.sin(t * 260) * 0.0035;
       const walkBob = 0.01 * Math.sin(cp.steps * Math.PI) * cp.moving, walkY = 0.012 * Math.abs(Math.cos(cp.steps * Math.PI)) * cp.moving;
       rig.position.set(lerp(0.17, 0.035, up) + walkBob * (1 - up * 0.6) + buzz, lerp(-0.24, -0.12, up) - walkY * (1 - up * 0.7) - away * 0.3, lerp(-0.36, -0.25, up));
@@ -139,9 +140,10 @@ let S = null;
 async function init() {
   await GL.initGL({ exposure: 1.0 });
   await loadModels();
-  const st = stationSet();
+  const st = stationSet({ camAt: (t) => camPose(t).pos });
   const cam = GL.camera(100, 0.05, 120); st.scene.add(cam);
   S = { st, cam, pov: povRig(cam), P: pipeline(GL.R, W, H) };
+  if (new URLSearchParams(location.search).get('check') !== null || window.CHECK) { const r = checkCollisions(st, (t) => camPose(t).pos); console.error('COLISOES ' + r.length + '\n' + r.join('\n')); }
 }
 const V3 = (x, y, z) => new THREE.Vector3(x, y, z);
 const fwdOf = (ry) => V3(Math.sin(ry), 0, Math.cos(ry));
@@ -155,66 +157,101 @@ function mateArm(t) { const k = ((t - MATE.t0) % MATE.P + MATE.P) % MATE.P; retu
 const PAO = { P: 3.4, t0: 0.5 };
 function paoPhase(t) { return ((t - PAO.t0) % PAO.P + PAO.P) % PAO.P; }
 
+// gesture envelope: eases in/out over 0.35 s
+const env = (t, a, b, e = 0.35) => smooth(a, a + e, t) * (1 - smooth(b - e, b, t));
+// local frame helper: point = chest + r*right + u*up + f*forward (character space, metres)
+const L = (chest, R, U, F, r, u, f) => chest.clone().add(R.clone().multiplyScalar(r)).add(U.clone().multiplyScalar(u)).add(F.clone().multiplyScalar(f));
+// step toward Caio while talking (m), with the walk clip weighted by how fast the step is
+function approach(t, a, b, d) { const k = smooth(a - 0.3, a + 0.35, t) * (1 - smooth(b + 0.15, b + 0.8, t)); const v = Math.abs(smooth(a - 0.3, a + 0.35, t + 0.05) - smooth(a - 0.3, a + 0.35, t - 0.05)) + Math.abs(smooth(b + 0.15, b + 0.8, t + 0.05) - smooth(b + 0.15, b + 0.8, t - 0.05)); return { d: d * k, walk: Math.min(0.8, v * 6) }; }
+
+function raiSpeed(t) { return 0.85 - 0.62 * Math.max(talkW('rai', t), env(t, 10.5, 11.7), env(t, 2.6, 4.5) * 0.6); }
+const RAI_CLK = (() => { const a = []; let acc = 0; for (let i = 0; i <= 2100; i++) { a.push(acc); acc += raiSpeed(i / 100) / 100; } return a; })();
+function raiClock(t) { const i = Math.max(0, Math.min(2099, Math.floor(t * 100))), f = t * 100 - i; return RAI_CLK[i] + (RAI_CLK[i + 1] - RAI_CLK[i]) * f; }
+
 function friends(t, cp) {
   const { rai, ger, ben } = S.st;
   const who = { rai, geraldim: ger, bento: ben };
-  // gaze: averaged over the last 0.45 s so heads glide between targets
-  const gazeYaw = (name, ch) => {
-    let acc = 0; const n = 6;
-    for (let i = 0; i < n; i++) {
-      const tt = t - (i / (n - 1)) * 0.45; const spk = subAt(tt)?.[2]; const p = ch.root.position;
-      let a;
-      if (spk && spk !== name && spk !== 'caio') { const q = who[spk].root.position; a = Math.atan2(q.x - p.x, q.z - p.z) - ch.root.rotation.y; }
-      else a = Math.atan2(cp.pos[0] - p.x, cp.pos[2] - p.z) - ch.root.rotation.y;
-      acc += Math.atan2(Math.sin(a), Math.cos(a));
-    }
-    return Math.max(-1.1, Math.min(1.1, acc / n));
-  };
-  const lookUp = smooth(16.3, 17.0, t), scared = smooth(18.5, 18.8, t);
-  for (const [name, ch] of Object.entries(who)) { const p = ch.root.position; ch.root.rotation.y = Math.atan2(cp.pos[0] - p.x, cp.pos[2] - p.z) * 0.85; }
+  const HOME = { rai: [-0.55, -0.75], geraldim: [0.35, -1.0], bento: [1.25, -0.7] };
+  const STEP = { rai: approach(t, 5.6, 8.9, 0.45), geraldim: approach(t, 9.1, 12.3, 0.38), bento: approach(t, 12.5, 16.0, 0.42) };
+  for (const [name, ch] of Object.entries(who)) {
+    const h = HOME[name], dx = cp.pos[0] - h[0], dz = cp.pos[2] - h[1], dl = Math.hypot(dx, dz);
+    ch.root.position.set(h[0] + dx / dl * STEP[name].d, 0, h[1] + dz / dl * STEP[name].d);
+  }
+  // body faces Caio, turned partly toward whoever talks; gaze averaged over 0.45 s so heads glide
+  const faceYaw = (name, ch, tt) => { const p = ch.root.position; const spk = subAt(tt)?.[2]; const toCam = Math.atan2(cp.pos[0] - p.x, cp.pos[2] - p.z);
+    if (spk && spk !== name && spk !== 'caio') { const q = who[spk].root.position; const toS = Math.atan2(q.x - p.x, q.z - p.z); return [toCam, toS]; } return [toCam, toCam]; };
+  const gaze = (name, ch) => { let acc = 0, body = 0; const n = 6; for (let i = 0; i < n; i++) { const [c, g] = faceYaw(name, ch, t - (i / (n - 1)) * 0.45); body += c + Math.atan2(Math.sin(g - c), Math.cos(g - c)) * 0.35; acc += Math.atan2(Math.sin(g - c), Math.cos(g - c)); } return { body: body / n, head: acc / n }; };
+  const Gz = {}; for (const [name, ch] of Object.entries(who)) { Gz[name] = gaze(name, ch); ch.root.rotation.y = Gz[name].body * 0.92; }
   const blink = (o) => ((t + o) % 3.6 < 0.11 ? 1 : 0);
+  const cheer = env(t, 14.6, 15.6), hype = env(t, 16.2, 20.5, 0.6);
+  const frame = (ch) => { const ry = ch.root.rotation.y; return { F: fwdOf(ry), R: rightOf(ry), U: UP }; };
 
-  // Rai: samba the whole time (he dances when nervous), turns to whoever talks
-  { const tk = talkOf('rai', t); rai.pose({ t, offset: 2.0, w: { samba: 1 }, speed: { samba: 0.85 }, headYaw: gazeYaw('rai', rai) * (1 - lookUp), headPitch: -0.2 * lookUp, face: { talk: tk, blink: blink(0.4), smile: 1 - scared, scared: scared > 0.5 } }); }
-
-  // Bento: chimarrão; stops only to talk
-  { const tk = talkOf('bento', t), tw = talkW('bento', t), free = freeOf('bento', t) * (1 - scared);
-    const arm = mateArm(t) * free, ry = ben.root.rotation.y, f = fwdOf(ry), r = rightOf(ry);
-    ben.pose({ t, offset: 0.2, w: { idle: 1 - 0.55 * tw, agree: 0.55 * tw }, headYaw: gazeYaw('bento', ben) * (1 - lookUp) * (1 - arm * 0.6), headPitch: -0.45 * lookUp + arm * 0.12,
-      face: { talk: tk, blink: blink(2.6), angry: tw > 0.5, scared: scared > 0.5 } });
-    const head = ben.anchor('Head'), chest = ben.anchor('Spine2');
-    const rest = chest.clone().add(f.clone().multiplyScalar(0.24)).add(UP.clone().multiplyScalar(-0.2)).add(r.clone().multiplyScalar(0.14));
-    const sip = head.clone().add(f.clone().multiplyScalar(0.2)).add(UP.clone().multiplyScalar(-0.05)).add(r.clone().multiplyScalar(0.02));
-    const pole = UP.clone().multiplyScalar(-1).add(r.clone().multiplyScalar(0.7)).add(f.clone().multiplyScalar(-0.2));
-    ben.pose({ t, offset: 0.2, w: { idle: 1 - 0.55 * tw, agree: 0.55 * tw }, headYaw: gazeYaw('bento', ben) * (1 - lookUp) * (1 - arm * 0.6), headPitch: -0.45 * lookUp + arm * 0.12,
-      face: { talk: tk, blink: blink(2.6), angry: tw > 0.5, scared: scared > 0.5 },
-      ik: [{ side: 'Right', target: rest.clone().lerp(sip, arm), pole, w: 1 }] });
+  // ---------------- RAI: dances; waves at Caio; when he talks he steps in, slows the samba and talks with his hands
+  { const tk = talkOf('rai', t), tw = talkW('rai', t);
+    const wave = env(t, 2.6, 4.5), oooh = env(t, 10.5, 11.7), block = env(t, 5.9, 6.9), back = env(t, 7.0, 8.0), deixa = env(t, 8.0, 8.9);
+    const samba = 1 - 0.7 * Math.max(tw, oooh, wave * 0.5);
+    rai.pose({ t: raiClock(t), offset: 2.0, w: { samba: 1 }, speed: { samba: 1 } });
+    const chest = rai.anchor('Spine2'), head = rai.anchor('Head'), { F, R, U } = frame(rai);
+    const ikR = [], ikL = [];
+    const poleR = U.clone().multiplyScalar(-1).add(R.clone().multiplyScalar(0.8)), poleL = U.clone().multiplyScalar(-1).add(R.clone().multiplyScalar(-0.8));
+    if (wave > 0) ikR.push([L(chest, R, U, F, 0.32 + 0.09 * Math.sin(t * 17), 0.55, 0.12), wave]);
+    if (block > 0) ikR.push([L(chest, R, U, F, 0.08, 0.18, 0.4 + 0.08 * Math.abs(Math.sin(t * 9))), block]);
+    if (back > 0) ikR.push([L(chest, R, U, F, 0.34, 0.32, -0.08), back]);
+    if (deixa > 0) { ikR.push([L(chest, R, U, F, 0.38, 0.02, 0.3), deixa]); ikL.push([L(chest, R, U, F, -0.12, -0.05, 0.36), deixa * 0.7]); }
+    if (cheer > 0) { ikR.push([L(chest, R, U, F, 0.3, 0.75, 0.1), cheer]); ikL.push([L(chest, R, U, F, -0.12, 0.78, 0.16), cheer]); }
+    if (oooh > 0) ikL.push([head.clone().add(F.clone().multiplyScalar(0.16)).add(U.clone().multiplyScalar(0.0)), oooh]);
+    const pick = (list) => { if (!list.length) return null; let w = 0, v = new THREE.Vector3(); for (const [p, k] of list) { v.add(p.clone().multiplyScalar(k)); w += k; } return { target: v.multiplyScalar(1 / w), w: Math.min(1, w) }; };
+    const pr = pick(ikR), pl = pick(ikL), ik = [];
+    if (pr) ik.push({ side: 'Right', target: pr.target, pole: poleR, w: pr.w });
+    if (pl) ik.push({ side: 'Left', target: pl.target, pole: poleL, w: pl.w });
+    rai.pose({ t: raiClock(t), offset: 2.0, w: { samba: 1 }, speed: { samba: 1 }, headYaw: Gz.rai.head, headPitch: -0.08 * cheer,
+      face: { talk: Math.max(tk, oooh * 0.9), blink: blink(0.4), smile: 1 - oooh, scared: oooh > 0.5 }, ik });
   }
 
-  // Geraldim: pão de queijo; bag in the left hand, right hand to bag -> mouth, chews; stops only to talk
-  { const tk = talkOf('geraldim', t), tw = talkW('geraldim', t), free = freeOf('geraldim', t) * (1 - scared);
-    const k = paoPhase(t), ry = ger.root.rotation.y, f = fwdOf(ry), r = rightOf(ry);
-    ger.pose({ t, offset: 0.9, w: { idle: 1 - 0.55 * tw, agree: 0.55 * tw } });
-    const head = ger.anchor('Head'), belly = ger.anchor('Spine1');
-    const bagPos = belly.clone().add(f.clone().multiplyScalar(0.3)).add(UP.clone().multiplyScalar(-0.12)).add(r.clone().multiplyScalar(-0.1));
-    const rest = belly.clone().add(f.clone().multiplyScalar(0.24)).add(UP.clone().multiplyScalar(-0.2)).add(r.clone().multiplyScalar(0.16));
-    const atBag = bagPos.clone().add(UP.clone().multiplyScalar(0.12)).add(r.clone().multiplyScalar(0.04));
-    const mouth = head.clone().add(f.clone().multiplyScalar(0.19)).add(UP.clone().multiplyScalar(0.02));
-    // phase -> where the right hand goes
+  // ---------------- BENTO: chimarrão (stops only to talk); laughs at Rai; shakes his head at Geraldim; points at the sign, celebrates EUROPA
+  { const tk = talkOf('bento', t), tw = talkW('bento', t), free = freeOf('bento', t) * (1 - cheer);
+    const laugh = env(t, 7.3, 8.8), shake = env(t, 11.0, 12.3), salute = env(t, 3.0, 4.4);
+    const point = env(t, 13.5, 14.6), pump = env(t, 14.6, 15.3), atCaio = env(t, 12.6, 13.5), pila = env(t, 15.3, 16.0);
+    const arm = mateArm(t) * free * (1 - salute), { F, R, U } = frame(ben);
+    const headYaw = Gz.bento.head * (1 - arm * 0.6) + shake * 0.35 * Math.sin(t * 9);
+    const base = { t, offset: 0.2, w: { idle: Math.max(0, 1 - 0.45 * tw - STEP.bento.walk), agree: 0.45 * tw, walk: STEP.bento.walk } };
+    ben.pose(base);
+    const head = ben.anchor('Head'), chest = ben.anchor('Spine2');
+    const rest = L(chest, R, U, F, 0.14, -0.2, 0.24), sip = head.clone().add(F.clone().multiplyScalar(0.2)).add(U.clone().multiplyScalar(-0.05)).add(R.clone().multiplyScalar(0.02));
+    let rT = rest.clone().lerp(sip, arm);
+    rT = rT.lerp(L(chest, R, U, F, 0.26, 0.42, 0.25), salute).lerp(L(chest, R, U, F, 0.3, 0.72, 0.1), Math.max(pump, cheer * 0.0));
+    let lT = L(chest, R, U, F, -0.24, -0.38, 0.05), lW = 0;
+    const lt = [[L(chest, R, U, F, -0.12, 0.2, 0.5), atCaio], [L(chest, R, U, F, -0.12, 0.8, 0.32), point], [L(chest, R, U, F, -0.3, 0.72, 0.1), pump], [L(chest, R, U, F, -0.14, 0.12, 0.36 + 0.03 * Math.sin(t * 14)), pila], [L(chest, R, U, F, -0.05, 0.02, 0.22), laugh * 0.6]];
+    for (const [p, k] of lt) if (k > 0) { lT = lT.lerp(p, k); lW = Math.max(lW, k); }
+    const poleR = U.clone().multiplyScalar(-1).add(R.clone().multiplyScalar(0.7)).add(F.clone().multiplyScalar(-0.2)), poleL = U.clone().multiplyScalar(-1).add(R.clone().multiplyScalar(-0.7)).add(F.clone().multiplyScalar(-0.2));
+    ben.pose({ ...base, headYaw, headPitch: arm * 0.12 - laugh * (0.18 + 0.08 * Math.sin(t * 15)),
+      face: { talk: Math.max(tk, laugh * (0.5 + 0.3 * Math.sin(t * 15))), blink: Math.max(blink(2.6), laugh * 0.75), angry: tw > 0.5 && pump < 0.5, smile: laugh + pump },
+      ik: [{ side: 'Right', target: rT, pole: poleR, w: 1 }, { side: 'Left', target: lT, pole: poleL, w: lW }] });
+    if (laugh > 0) ben.root.position.y = 0.012 * laugh * Math.abs(Math.sin(t * 15));
+  }
+
+  // ---------------- GERALDIM: eats (stops only to talk); finger up "uai", shrug "é diferente"; cheers at EUROPA
+  { const tk = talkOf('geraldim', t), tw = talkW('geraldim', t), free = freeOf('geraldim', t) * (1 - cheer);
+    const finger = env(t, 9.4, 10.7), shrug = env(t, 11.2, 12.3), nod = env(t, 3.2, 4.8);
+    const k = paoPhase(t), { F, R, U } = frame(ger);
+    const base = { t, offset: 0.9, w: { idle: Math.max(0, 1 - 0.45 * tw - STEP.geraldim.walk), agree: 0.45 * tw, walk: STEP.geraldim.walk } };
+    ger.pose(base);
+    const head = ger.anchor('Head'), belly = ger.anchor('Spine1'), chest = ger.anchor('Spine2');
+    const bagPos = L(belly, R, U, F, -0.1, -0.12, 0.3), rest = L(belly, R, U, F, 0.16, -0.2, 0.24), atBag = bagPos.clone().add(U.clone().multiplyScalar(0.12)).add(R.clone().multiplyScalar(0.04));
+    const mouth = head.clone().add(F.clone().multiplyScalar(0.19)).add(U.clone().multiplyScalar(0.02));
     let tgt = rest.clone();
-    if (k < 0.55) tgt = rest.clone().lerp(atBag, smooth(0, 0.55, k));
-    else if (k < 0.8) tgt = atBag.clone();
-    else if (k < 1.35) tgt = atBag.clone().lerp(mouth, smooth(0.8, 1.35, k));
-    else if (k < 1.75) tgt = mouth.clone();
+    if (k < 0.55) tgt = rest.clone().lerp(atBag, smooth(0, 0.55, k)); else if (k < 0.8) tgt = atBag.clone();
+    else if (k < 1.35) tgt = atBag.clone().lerp(mouth, smooth(0.8, 1.35, k)); else if (k < 1.75) tgt = mouth.clone();
     else if (k < 2.3) tgt = mouth.clone().lerp(rest, smooth(1.75, 2.3, k));
     tgt = rest.clone().lerp(tgt, free);
+    tgt = tgt.lerp(L(chest, R, U, F, 0.16 + 0.04 * Math.sin(t * 18), 0.4, 0.3), finger).lerp(L(chest, R, U, F, 0.34, -0.02, 0.32), shrug).lerp(L(chest, R, U, F, 0.28, 0.7, 0.12), cheer);
     const held = free > 0.5 && k > 0.7 && k < 1.55;
     const chew = free * (k > 1.55 ? Math.max(0, Math.sin((k - 1.55) * 2 * Math.PI * 2.6)) * (1 - smooth(3.0, 3.4, k)) : 0);
-    const poleR = UP.clone().multiplyScalar(-1).add(r.clone().multiplyScalar(0.7)).add(f.clone().multiplyScalar(-0.2));
-    const poleL = UP.clone().multiplyScalar(-1).add(r.clone().multiplyScalar(-0.7)).add(f.clone().multiplyScalar(-0.2));
-    ger.pose({ t, offset: 0.9, w: { idle: 1 - 0.55 * tw, agree: 0.55 * tw }, headYaw: gazeYaw('geraldim', ger) * (1 - lookUp), headPitch: -0.45 * lookUp + (k > 1.2 && k < 1.8 ? 0.08 * free : 0),
-      face: { talk: tk, blink: blink(1.7), chew, scared: scared > 0.5 }, held, heldScale: 1,
-      ik: [{ side: 'Right', target: tgt, pole: poleR, w: 1 }, { side: 'Left', target: bagPos, pole: poleL, w: 0.85 }] });
+    const poleR = U.clone().multiplyScalar(-1).add(R.clone().multiplyScalar(0.7)).add(F.clone().multiplyScalar(-0.2)), poleL = U.clone().multiplyScalar(-1).add(R.clone().multiplyScalar(-0.7)).add(F.clone().multiplyScalar(-0.2));
+    ger.pose({ ...base, headYaw: Gz.geraldim.head, headPitch: (k > 1.2 && k < 1.8 ? 0.08 * free : 0) + nod * 0.12 * Math.sin(t * 8) - cheer * 0.1,
+      face: { talk: tk, blink: blink(1.7), chew, smile: cheer + nod * 0.5, browUp: shrug }, held, heldScale: 1,
+      ik: [{ side: 'Right', target: tgt, pole: poleR, w: 1 }, { side: 'Left', target: bagPos.clone().lerp(L(chest, R, U, F, -0.2, 0.5, 0.15), cheer * 0.6), pole: poleL, w: 0.85 }] });
+    if (shrug > 0) ger.root.position.y = 0.0;
   }
 }
 
@@ -244,16 +281,16 @@ HITS.push([PHONE.notif + 0.12, 'vibra', 'sub', { len: 0.15, gain: 0.35 }], [PHON
 HITS.push([PHONE.tap, 'toque tela', 'tick', { gain: 0.2 }], [PHONE.msg, 'mensagem', 'blip', { pitch: 'A6', gain: 0.18 }], [PHONE.lock, 'trava tela', 'click', { gain: 0.2 }]);
 for (let i = 0; i < 7; i++) HITS.push([2.6 + i * 0.1, 'pombo', 'whoosh', { len: 0.25, from: 900, to: 2600, gain: 0.12, pan: (i % 2 ? 0.4 : -0.4) }]);
 HITS.push([0.2, 'ônibus ao longe', 'whoosh', { len: 4.8, from: 90, to: 160, gain: 0.18 }], [5.0, 'ônibus freando', 'whoosh', { len: 3.6, from: 220, to: 120, gain: 0.25 }], [8.5, 'freio a ar', 'whoosh', { len: 0.9, from: 3000, to: 5000, gain: 0.22 }], [8.6, 'ônibus para', 'sub', { len: 0.8 }]);
-HITS.push([8.6, 'chute lata', 'tok', { pitch: 'E5' }]); for (let i = 0; i < 10; i++) HITS.push([8.75 + i * 0.13, 'lata rolando', 'tick', { gain: 0.12 }]);
-for (let c = 0; c < 6; c++) { const ts = MATE.t0 + c * MATE.P + 0.8; if (ts < 20 && freeOf('bento', ts) > 0.5 && ts < 18.5) HITS.push([ts, 'chimarrão', 'boing', { pitch: 'G3', to: 'D5', gain: 0.16 }]); }
-for (let c = 0; c < 7; c++) { const tb = PAO.t0 + c * PAO.P + 1.55; if (tb < 20 && freeOf('geraldim', tb) > 0.5 && tb < 18.5) { HITS.push([tb, 'mordida', 'click', { gain: 0.12 }]); for (let j = 1; j < 5; j++) HITS.push([tb + j * 0.38, 'mastiga', 'tick', { gain: 0.05 }]); } }
-HITS.push([16.4, 'rangido', 'boing', { pitch: 'D3', to: 'A2' }], [17.3, 'rangido 2', 'boing', { pitch: 'C3', to: 'G2', gain: 0.2 }], [18.2, 'placa tomba', 'whoosh', { len: 0.4, from: 500, to: 2600 }], [18.45, 'placa bate', 'thud'], [18.5, 'peso', 'sub', { len: 1.0 }]);
+HITS.push([8.6, 'chute lata', 'tok', { pitch: 'E5' }], [7.4, 'risada', 'boing', { pitch: 'C4', to: 'G4', gain: 0.06 }], [14.65, 'comemora', 'pop', { pitch: 'C5', to: 'G5', gain: 0.1 }]); for (let i = 0; i < 10; i++) HITS.push([8.75 + i * 0.13, 'lata rolando', 'tick', { gain: 0.12 }]);
+for (let c = 0; c < 6; c++) { const ts = MATE.t0 + c * MATE.P + 0.8; if (ts < 20 && freeOf('bento', ts) > 0.5 && !(ts > 14.4 && ts < 15.8)) HITS.push([ts, 'chimarrão', 'boing', { pitch: 'G3', to: 'D5', gain: 0.16 }]); }
+for (let c = 0; c < 7; c++) { const tb = PAO.t0 + c * PAO.P + 1.55; if (tb < 20 && freeOf('geraldim', tb) > 0.5 && !(tb > 14.4 && tb < 15.8)) { HITS.push([tb, 'mordida', 'click', { gain: 0.12 }]); for (let j = 1; j < 5; j++) HITS.push([tb + j * 0.38, 'mastiga', 'tick', { gain: 0.05 }]); } }
+HITS.push([16.85, 'rangido baixinho', 'boing', { pitch: 'D3', to: 'B2', gain: 0.035 }]);
 
 M.film({
   fonts: [font(100, 900, DISPLAY), font(40, 800, UI)],
   hits: HITS,
   samples: 2,
-  init,
+  init: async () => { window.CHECK = true; await init(); window.CHECK = false; },
   draw(ctx, u, t) {
     const cp = camPose(t), cam = S.cam;
     cam.position.set(...cp.pos); cam.rotation.order = 'YXZ'; cam.rotation.set(cp.pitch, cp.yaw, cp.roll);
