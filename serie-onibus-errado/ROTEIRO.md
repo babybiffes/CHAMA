@@ -36,6 +36,19 @@ Acordam na Coreia do Sul, de agasalho verde, num jogo mortal **onde todo mundo f
 
 ---
 
+## Guia de falas (aprendido com os ajustes do autor)
+
+Referência: a revisão da Cena 1 da Parte 01. Toda fala nova segue estas regras:
+
+1. **Fala de gente, não de texto.** Frases curtas, do jeito que se fala na rua, com começo e fim "soltos" ("Nu meu fi…", "…demais, sô.", "…não, cuzão.").
+2. **A gíria abre ou fecha a frase**, nunca fica perdida no meio:
+   - **Geraldim (mineiro):** abre com "Nu meu fi…", "Uai…", "Nó…" e fecha com "sô". Usa "trem" pra tudo e come sílabas ("cês", "ês", "num").
+   - **Rai (baiano):** abre com "Oxe", fecha com "véi", e usa verbo de ordem baiano: "Arroche!", "Relaxe!", "Se plante!", "Ó paí ó".
+   - **Caio (paulista):** "Mano…" no começo e zoeira pesada de amigo no fim ("não, cuzão", "meu", "tá ligado?"). O palavrão leve entre amigos é carinho, não briga.
+   - **Bento (gaúcho):** "Bah", "tchê", e chama o grupo de "moçada" (ou "guris"). Fala de chefe da excursão.
+3. **Exagero pra ficar engraçado, mas reconhecível:** quem é da região tem que ouvir e pensar "é exatamente assim que meu tio fala".
+4. **Nada de fala explicativa.** Se a imagem já mostra, a fala reage (zoa, reclama, se assusta) em vez de descrever.
+
 ## 2. Os personagens
 
 ### 🏙️ CAIO "FARIA LIMA" BORTOLOTTO — o Paulista (Mooca, SP) · Jogador **011** · ⭐ PROTAGONISTA / CÂMERA POV
