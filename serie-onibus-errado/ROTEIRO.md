@@ -47,7 +47,8 @@ Referência: a revisão da Cena 1 da Parte 01. Toda fala nova segue estas regras
    - **Caio (paulista):** "Mano…" no começo e zoeira pesada de amigo no fim ("não, cuzão", "meu", "tá ligado?"). O palavrão leve entre amigos é carinho, não briga.
    - **Bento (gaúcho):** "Bah", "tchê", e chama o grupo de "moçada" (ou "guris"). Fala de chefe da excursão.
 3. **Exagero pra ficar engraçado, mas reconhecível:** quem é da região tem que ouvir e pensar "é exatamente assim que meu tio fala".
-4. **Nada de fala explicativa.** Se a imagem já mostra, a fala reage (zoa, reclama, se assusta) em vez de descrever.
+4. **Conversa de verdade tem ida e volta:** pergunta curta, resposta curta, alguém interrompe, alguém zoa, alguém ri. Ninguém fala dois parágrafos seguidos; uma fala grande vira duas ou três trocas ("Cês viram aquela fumaça?" / "Que fumaça, véi?" / "Aquela ali, uai!").
+5. **Nada de fala explicativa.** Se a imagem já mostra, a fala reage (zoa, reclama, se assusta) em vez de descrever.
 
 ## 2. Os personagens
 
@@ -170,15 +171,20 @@ Os números dos jogadores são os **DDDs** das cidades deles: **011, 053, 031, 0
 ### PARTE 01 — "PLATAFORMA 6" · *[POV do Caio]* · ~100 s
 > Versão atualizada após os testes em vídeo (cenas 1 e 2 já produzidas como teste de 20 s cada).
 
-**CENA 1 — Fundos da rodoviária (0–20 s)** · noite, fundos de um armazém com a porta "DOCA 2" iluminada, caminhão-baú verde, chão rachado com lixo; à esquerda a rua com lojas fechadas, fumaça no céu e um incêndio ao longe.
+**CENA 1 — Fundos da rodoviária (~30 s)** · noite, fundos de um armazém com a porta "DOCA 2" iluminada, caminhão-baú verde, chão rachado com lixo; à esquerda a rua com lojas fechadas, fumaça no céu e um incêndio ao longe.
 [Os 3 amigos de frente para o Caio. Bento toma chimarrão, Geraldim come pão de queijo, Rai não para quieto.]
-BENTO: [aponta com o polegar para a porta] Bah, a entrada da rodoviária é pelos fundos, tchê. Eu sei o caminho.
+BENTO: [aponta a porta com o polegar] Bah, ó… a entrada da rodoviária é pelos fundos, tchê. Eu sei o caminho.
+CAIO: Pelos fundos, Bento? Sério, mano?
+BENTO: [dá de ombros, toma um gole] Confia, guri.
 [A câmera olha para a rua: prédios baixos, fumaça preta, alguém correndo lá longe, sirene distante. Volta para os amigos.]
-GERALDIM: [para de comer e aponta para a fumaça] Nu meu fi… cês viram aquela fumaça? Esse trem tá esquisito demais, sô.
-RAI: [bate no pulso, depois acena para a porta] Oxe, relaxe vu, véi! O ônibus sai dez e quarenta. Arroche!
+GERALDIM: [para de mastigar, aponta] Nu meu fi… cês viram aquela fumaça ali?
+RAI: Que fumaça, véi?
+GERALDIM: Aquela ali, uai! Esse trem tá esquisito demais, sô.
+RAI: [rindo] Oxe, relaxe vu! É churrasco, Geraldim. [olha o pulso] O ônibus sai dez e quarenta… Arroche, arroche!
+BENTO: Bora, moçada!
 [Eles viram e andam até a DOCA 2. O Caio vai atrás.]
-CAIO: Mano… isso aqui não tem cara de rodoviária não, cuzão.
-BENTO: [lá de dentro, se virando] Vem, moçada! É logo ali.
+CAIO: [baixinho] Mano… isso aqui não tem cara de rodoviária não, cuzão.
+BENTO: [lá de dentro, se virando] Ouvi, hein! Vem logo, é ali!
 
 **CENA 2 — A plataforma (20–40 s)** · a rodoviária cheia: pastelaria, bilheteria com fila, orelhão, pipoca, TVs de partidas ("EUROPA EXPRESS — PLAT. 9"), pombos, ônibus chegando.
 [Caio anda pela plataforma. O celular vibra na mão dele: na tela, "WhatsApp — Luis — 17 chamadas de voz perdidas". Ele toca no aviso, abre a conversa, "digitando…", chega a mensagem: "Vocês vão me deixar pra trás de novo?". Ele trava a tela.]
