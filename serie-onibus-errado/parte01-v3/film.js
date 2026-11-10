@@ -13,15 +13,14 @@ const COL = { caio: '#FFFFFF', bento: '#7CFC9A', geraldim: '#FFD54A', rai: '#FF9
 const smooth = (a, b, x) => { const k = Math.max(0, Math.min(1, (x - a) / (b - a))); return k * k * (3 - 2 * k); };
 const env = (t, a, b, e = 0.35) => smooth(a, a + e, t) * (1 - smooth(b - e, b, t));
 
-const SUBS = [
-  [0.4, 3.9, 'bento', 'Bah, a entrada da rodoviária é pelos fundos, tchê. Eu sei o caminho.'],
-  [5.7, 8.9, 'geraldim', 'Nu meu fi… cês viram aquela fumaça? Esse trem tá esquisito demais, sô.'],
-  [9.1, 11.9, 'rai', 'Oxe, relaxe vu, véi! O ônibus sai dez e quarenta. Arroche!'],
-  [15.0, 17.3, 'caio', 'Mano… isso aqui não tem cara de rodoviária não, cuzão.'],
-  [18.4, 20.0, 'bento', 'Vem, moçada! É logo ali.'],
-];
+// the real takes (Google AI Studio) drive the timeline: audio/vo_build.py writes voices.json (start, duration, mouth envelope)
+const VO = await fetch('voices.json').then((r) => r.json());
+const TEXTS = ['Bah, a entrada da rodoviária é pelos fundos, tchê. Eu sei o caminho.', 'Nu meu fi… cês viram aquela fumaça? Esse trem tá esquisito demais, sô.',
+  'Oxe, relaxe vu, véi! O ônibus sai dez e quarenta. Arroche!', 'Mano… isso aqui não tem cara de rodoviária não, cuzão.', 'Vem, moçada! É logo ali.'];
+const SUBS = VO.lines.map((l, i) => [l.start, l.start + l.dur, l.who, TEXTS[i], l]);
 const subAt = (t) => SUBS.find((s) => t >= s[0] && t < s[1]);
-const talkOf = (who, t) => { const s = subAt(t); if (!s || s[2] !== who) return 0; const k = Math.min(prog(t, s[0], s[0] + 0.12), 1 - prog(t, s[1] - 0.15, s[1])); return k * (0.25 + 0.75 * Math.abs(Math.sin(t * 12.5 + noise1(t * 3, 7) * 2))); };
+// mouth = the take's own loudness envelope (100 Hz), so lips move with the real voice
+const talkOf = (who, t) => { const s = subAt(t); if (!s || s[2] !== who) return 0; const e = s[4].env, i = Math.floor((t - s[0]) * 100); return Math.max(0, Math.min(1, (e[i] ?? 0) * 1.15)); };
 const freeOf = (who, t) => { let g = 1; for (const [a, b, w] of SUBS) if (w === who) g = Math.min(g, 1 - smooth(a - 0.6, a - 0.05, t) * (1 - smooth(b + 0.1, b + 0.6, t))); return g; };
 const talkW = (who, t) => 1 - freeOf(who, t);
 
@@ -37,22 +36,23 @@ function walker(P, t0, v, t) {   // distance with 0.5 s acceleration and braking
   return { x, z, yaw: Math.atan2(x1 - x0, z1 - z0), speed, done: tt >= T, moving: tt > 0 && tt < T };
 }
 const ROUTE = {
-  bento: { P: path([[0.8, 3.5], [2.9, 0.7], [3.15, -1.4], [3.15, -3.2], [3.8, -5.6]]), t0: 12.2, v: 1.2 },
-  rai: { P: path([[-0.6, 3.55], [1.9, 1.3], [3.35, -0.5], [3.35, -2.9], [2.4, -5.4]]), t0: 12.75, v: 1.25 },
-  geraldim: { P: path([[0.0, 3.3], [2.45, 1.0], [3.0, -1.2], [3.05, -3.1], [4.6, -4.8]]), t0: 13.35, v: 1.15 },
+  bento: { P: path([[0.8, 3.5], [2.9, 0.7], [3.15, -1.4], [3.15, -3.2], [3.8, -5.6]]), t0: VO.walk, v: 1.2 },
+  rai: { P: path([[-0.6, 3.55], [1.9, 1.3], [3.35, -0.5], [3.35, -2.9], [2.4, -5.4]]), t0: VO.walk + 0.55, v: 1.25 },
+  geraldim: { P: path([[0.0, 3.3], [2.45, 1.0], [3.0, -1.2], [3.05, -3.1], [4.6, -4.8]]), t0: VO.walk + 1.15, v: 1.15 },
 };
 const CAMP = path([[0.05, 5.15], [0.4, 4.7], [2.55, 1.7], [3.2, -0.6], [3.2, -2.6]]);
 function camPose(t) {
-  const w = walker(CAMP, 13.6, 1.15, t);
-  const dist = 13.6 < t ? Math.min(CAMP.L, Math.max(0, (t - 13.6) * 1.15)) : 0;
+  const CW = VO.walk + 1.4;
+  const w = walker(CAMP, CW, 1.15, t);
+  const dist = CW < t ? Math.min(CAMP.L, Math.max(0, (t - CW) * 1.15)) : 0;
   const steps = dist / 0.7, moving = w.speed / 1.15;
   const bobY = 0.024 * Math.cos(steps * Math.PI * 2) * moving, bobX = 0.014 * Math.sin(steps * Math.PI) * moving;
   // looks: speaker drift; the glance left at the street (2.6–5.5); then the friends walking to the door; then the path ahead
   const walkYaw = w.yaw + Math.PI;            // camera looks along -z when yaw = 0 ; path tangent points where we go
-  const pre = kf(t, [[0, -0.03], [2.5, -0.05], [3.25, 1.12], [4.8, 1.18], [5.5, 0.02], [8.9, 0.02], [9.4, 0.22], [11.9, 0.2], [12.4, -0.15], [13.1, -0.32]], E.inOutSine);
-  const k = smooth(13.3, 14.4, t);
+  const L1 = VO.lines; const pre = kf(t, [[0, -0.03], [2.5, -0.05], [3.25, 1.12], [4.8, 1.18], [5.4, 0.02], [L1[1].start + L1[1].dur, 0.02], [L1[2].start + 0.3, 0.2], [VO.walk - 0.2, 0.2], [VO.walk + 0.4, -0.15], [VO.walk + 1.2, -0.32]], E.inOutSine);
+  const k = smooth(CW - 0.3, CW + 0.8, t);
   const yaw = lerp(pre, Math.atan2(-Math.sin(walkYaw), -Math.cos(walkYaw)) * 0 + (-w.yaw + Math.PI) * 0 + Math.atan2(-(at(CAMP, dist + 1.5)[0] - w.x), -(at(CAMP, dist + 1.5)[1] - w.z)), k);
-  const pitch = kf(t, [[0, -0.06], [2.6, -0.06], [3.3, 0.02], [5.4, -0.06], [13, -0.08], [17.6, -0.08], [18.4, -0.02], [20, -0.04]], E.inOutSine);
+  const pitch = kf(t, [[0, -0.06], [2.6, -0.06], [3.3, 0.02], [5.4, -0.06], [VO.walk + 0.8, -0.08], [VO.walk + 5.4, -0.08], [VO.walk + 6.2, -0.02], [VO.total, -0.04]], E.inOutSine);
   return { pos: [w.x + bobX, 1.5 + bobY + 0.006 * Math.sin(t * 1.3), w.z], yaw: yaw + 0.006 * noise1(t * 0.9, 3), pitch: pitch + 0.005 * noise1(t * 1.2, 7), roll: 0.01 * Math.sin(steps * Math.PI) * moving + 0.004 * noise1(t * 0.7, 5), steps, moving };
 }
 
@@ -88,7 +88,7 @@ function friends(t, cp) {
 
   // BENTO: chimarrão; thumbs back toward the door ("pelos fundos"); leads the way; calls them in from inside
   { const w = st.bento, tw = talkW('bento', t), free = freeOf('bento', t) * (1 - w.walkW) * (w.done ? 0 : 1);
-    const thumb = env(t, 1.6, 3.2), call = env(t, 18.5, 20.3);
+    const thumb = env(t, 1.6, 3.2), call = env(t, VO.lines[4].start - 0.1, VO.lines[4].start + 2.6);
     const base = { t, offset: 0.2, w: { idle: Math.max(0, 1 - 0.45 * tw - w.walkW), agree: 0.45 * tw * (1 - w.walkW), walk: w.walkW }, speed: { walk: ROUTE.bento.v / 1.2 } };
     ben.pose(base);
     const { F, R, U } = frame(ben), head = ben.anchor('Head'), chest = ben.anchor('Spine2'), arm = mateArm(t) * free;
@@ -102,7 +102,7 @@ function friends(t, cp) {
   }
   // GERALDIM: pão de queijo; stops to look and point at the smoke over the street
   { const w = st.geraldim, tw = talkW('geraldim', t), free = freeOf('geraldim', t) * (1 - w.walkW) * (w.done ? 0 : 1);
-    const pointSmoke = env(t, 6.2, 7.9), k = paoPhase(t);
+    const pointSmoke = env(t, VO.lines[1].start + 1.3, VO.lines[1].start + 3.3), k = paoPhase(t);
     const base = { t, offset: 0.9, w: { idle: Math.max(0, 1 - 0.45 * tw - w.walkW), agree: 0.45 * tw * (1 - w.walkW), walk: w.walkW }, speed: { walk: ROUTE.geraldim.v / 1.2 } };
     ger.pose(base);
     const { F, R, U } = frame(ger), head = ger.anchor('Head'), belly = ger.anchor('Spine1'), chest = ger.anchor('Spine2');
@@ -110,14 +110,14 @@ function friends(t, cp) {
     const mouth = head.clone().add(F.clone().multiplyScalar(0.19)).add(U.clone().multiplyScalar(0.02));
     let tgt = rest.clone();
     if (k < 0.55) tgt = rest.clone().lerp(atBag, smooth(0, 0.55, k)); else if (k < 0.8) tgt = atBag.clone(); else if (k < 1.35) tgt = atBag.clone().lerp(mouth, smooth(0.8, 1.35, k)); else if (k < 1.75) tgt = mouth.clone(); else if (k < 2.3) tgt = mouth.clone().lerp(rest, smooth(1.75, 2.3, k));
-    tgt = rest.clone().lerp(tgt, free).lerp(L(chest, R, U, F, 0.5, 0.32, 0.25), pointSmoke);
+    tgt = rest.clone().lerp(tgt, free).lerp(L(chest, R, U, F, 0.26, 0.48, 0.42), pointSmoke);
     const chew = free * (k > 1.55 ? Math.max(0, Math.sin((k - 1.55) * 2 * Math.PI * 2.6)) * (1 - smooth(3.0, 3.4, k)) : 0);
     ger.pose({ ...base, headYaw: gazeAt('geraldim', ger) * (1 - pointSmoke) - pointSmoke * 0.9, headPitch: pointSmoke * -0.12,
       face: { talk: talkOf('geraldim', t), blink: blink(1.7), chew, scared: pointSmoke > 0.5 }, held: free > 0.5 && k > 0.7 && k < 1.55,
       ik: [{ side: 'Right', target: tgt, pole: pole(R, F, 1), w: 1 - w.walkW * 0.6 }, { side: 'Left', target: bagPos, pole: pole(R, F, -1), w: 0.85 - w.walkW * 0.4 }] });
   }
   // RAI: restless (weight shifts, small dance steps), taps his wrist "dez e quarenta", waves "bora!" toward the door
-  { const w = st.rai, tw = talkW('rai', t), wrist = env(t, 9.6, 10.7), bora = env(t, 10.8, 11.9), laugh = env(t, 0.6, 1.4);
+  { const w = st.rai, tw = talkW('rai', t), wrist = env(t, VO.lines[2].start + 3.4, VO.lines[2].start + 5.6), bora = env(t, VO.lines[2].start + 6.4, VO.lines[2].start + 8.3), laugh = env(t, 0.6, 1.4);
     const base = { t, offset: 1.6, w: { idle: Math.max(0, 1 - 0.45 * tw - w.walkW), agree: 0.45 * tw * (1 - w.walkW), walk: w.walkW }, speed: { walk: ROUTE.rai.v / 1.2 } };
     rai.pose(base);
     const { F, R, U } = frame(rai), chest = rai.anchor('Spine2'), ik = [];
@@ -148,13 +148,13 @@ function subtitles(ctx, t) {
 
 // ------------------------------------------------------------------ sound (no music): steps, distant sirens, fire, door
 const HITS = [];
-{ let last = -1; for (let t = 13.6; t < 20; t += 0.01) { const d = Math.max(0, (t - 13.6) * 1.15); const n = Math.floor(d / 0.7); if (n !== last) { last = n; HITS.push([t, 'passo', 'tok', { pitch: n % 2 ? 'A2' : 'G2', gain: 0.18 }]); } } }
+{ let last = -1; for (let t = VO.walk + 1.4; t < VO.total; t += 0.01) { const d = Math.max(0, (t - VO.walk - 1.4) * 1.15); const n = Math.floor(d / 0.7); if (n !== last) { last = n; HITS.push([t, 'passo', 'tok', { pitch: n % 2 ? 'A2' : 'G2', gain: 0.18 }]); } } }
 for (const [name, R0] of Object.entries(ROUTE)) for (let i = 0; i < 9; i++) { const tt = R0.t0 + 0.4 + i * 0.6; if (tt < R0.t0 + R0.P.L / R0.v) HITS.push([tt, 'passo ' + name, 'tok', { pitch: 'C3', gain: 0.07, pan: 0.2 }]); }
 HITS.push([2.7, 'sirene longe', 'whoosh', { len: 3.2, from: 700, to: 950, gain: 0.07, pan: -0.6 }], [3.3, 'grito longe', 'whoosh', { len: 0.6, from: 1200, to: 1600, gain: 0.05, pan: -0.7 }]);
-for (let i = 0; i < 24; i++) HITS.push([0.5 + i * 0.8 + (i % 3) * 0.13, 'fogo', 'tick', { gain: 0.03, pan: -0.6 }]);
-for (let c = 0; c < 4; c++) { const ts = MATE.t0 + c * MATE.P + 0.8; if (ts < 12 && freeOf('bento', ts) > 0.5) HITS.push([ts, 'chimarrão', 'boing', { pitch: 'G3', to: 'D5', gain: 0.12 }]); }
-for (let c = 0; c < 4; c++) { const tb = PAO.t0 + c * PAO.P + 1.55; if (tb < 12 && freeOf('geraldim', tb) > 0.5) HITS.push([tb, 'mordida', 'click', { gain: 0.1 }]); }
-HITS.push([17.7, 'porta', 'boing', { pitch: 'E2', to: 'C2', gain: 0.12 }], [18.2, 'dentro', 'sub', { len: 0.8, gain: 0.3 }]);
+for (let i = 0; i < 36; i++) HITS.push([0.5 + i * 0.8 + (i % 3) * 0.13, 'fogo', 'tick', { gain: 0.03, pan: -0.6 }]);
+for (let c = 0; c < 6; c++) { const ts = MATE.t0 + c * MATE.P + 0.8; if (ts < VO.walk && freeOf('bento', ts) > 0.5) HITS.push([ts, 'chimarrão', 'boing', { pitch: 'G3', to: 'D5', gain: 0.12 }]); }
+for (let c = 0; c < 7; c++) { const tb = PAO.t0 + c * PAO.P + 1.55; if (tb < VO.walk && freeOf('geraldim', tb) > 0.5) HITS.push([tb, 'mordida', 'click', { gain: 0.1 }]); }
+HITS.push([VO.walk + 6.9, 'porta', 'boing', { pitch: 'E2', to: 'C2', gain: 0.12 }], [VO.walk + 7.4, 'dentro', 'sub', { len: 0.8, gain: 0.3 }]);
 
 M.film({
   fonts: [font(100, 900, DISPLAY), font(40, 800, UI)],

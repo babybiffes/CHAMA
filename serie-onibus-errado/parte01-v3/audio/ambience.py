@@ -6,7 +6,7 @@
 from pathlib import Path
 import numpy as np, soundfile as sf
 from scipy import signal
-SR, DUR = 48000, 20.0
+SR, DUR = 48000, 30.5
 n = int(SR * DUR); rng = np.random.default_rng(7); t = np.arange(n) / SR
 b, a = signal.butter(2, [180 / (SR / 2), 1400 / (SR / 2)], 'band')
 crowd = signal.lfilter(b, a, rng.standard_normal((2, n)), axis=1)
