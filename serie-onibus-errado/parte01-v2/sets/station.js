@@ -180,7 +180,7 @@ export function stationSet() {
     const wings = [-1, 1].map((sx) => { const piv = new THREE.Group(); piv.position.set(sx * 0.06, 0.03, 0); const w = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.012, 0.14), toon(0x9AA0AD)); w.position.x = sx * 0.08; piv.add(w); g.add(piv); return piv; });
     const p0 = new THREE.Vector3(-0.4 + hash(i, 21) * 1.6, 0.07, 6.6 + hash(i, 22) * 1.4);
     g.position.copy(p0); g.rotation.y = hash(i, 23) * 6; W.add(g);
-    const dir = new THREE.Vector3(hash(i, 24) - 0.3, 0, -(0.6 + hash(i, 25))).normalize();
+    const dir = new THREE.Vector3((hash(i, 24) - 0.5) * 0.7, 0, -1).normalize();
     pigeons.push({ g, head, wings, p0, dir, t0: 2.55 + i * 0.09 + hash(i, 26) * 0.2, ry: hash(i, 23) * 6, ph: hash(i, 27) * 6 });
   }
 
@@ -202,21 +202,51 @@ export function stationSet() {
   const flyer = new THREE.Mesh(new THREE.PlaneGeometry(0.21, 0.3), basic(0xffffff, label('PROMO\nEUROPA', 128, 180, { bg: '#FFF7E0', fg: '#C0392B', font: '900 34px Display' }), { side: THREE.DoubleSide })); W.add(flyer);
 
   // ------------------------------------------------ the crowd
-  // walkers: always moving along a straight line at their own speed (walk clip speed-matched)
+  // walkers: each follows a real path (enters, turns, stops at a counter/platform or leaves behind the camera).
+  // Nobody wraps or pops: before t0 they stand idle at the start, after arriving they stand idle at the end.
   const walkers = [];
   const W_SPECS = [
-    // [x0, z0, dirx, dirz, speed, suitcase]
-    [-7.5, 8.2, 1, 0, 1.15, true], [7.5, 5.2, -1, 0, 1.25, false], [-6.5, 2.0, 1, 0.05, 1.1, false], [6.8, 10.8, -1, 0, 1.0, true],
-    [-2.6, -0.8, 0.15, 1, 1.05, false], [2.9, 14.0, -0.1, -1, 1.2, false], [-5.0, 13.5, 0.4, -1, 1.1, true], [4.5, -1.0, -0.2, 1, 0.95, false],
-    [-8.0, 11.2, 1, 0, 1.3, false], [8.0, 3.6, -1, -0.05, 1.05, true], [-1.8, 16.0, 0, -1, 1.15, false], [3.6, 1.0, 0.1, 1, 1.0, false],
-    [-6.0, 6.0, 1, 0.1, 0.9, false], [6.0, 12.6, -1, 0, 1.1, false],
+    // pts, speed, t0, endYaw, suitcase
+    [[[-8.4, 13.8], [-3.2, 9.6], [-2.0, 2.0], [-5.9, -0.9]], 1.1, -2, Math.PI, true],
+    [[[8.3, 5.6], [2.6, 4.6], [-3.8, 4.4], [-4.8, 7.6]], 1.2, -6, -Math.PI / 2, false],
+    [[[-6.5, 3.0], [-1.8, 3.4], [6.0, 3.2]], 1.1, -3.7, Math.PI / 2, false],
+    [[[6.8, 11.5], [3.3, 9.8], [2.9, 3.5], [6.6, -0.2]], 1.0, -1, Math.PI, true],
+    [[[-3.0, -0.6], [-2.2, 6.0], [-1.4, 17.5]], 1.15, 0.5, 0, false],
+    [[[2.4, 18.5], [2.1, 9.0], [1.9, 2.6], [4.6, -0.6]], 1.45, -4, Math.PI, false],
+    [[[-5.0, 17.5], [-4.0, 6.0], [-6.8, -0.4]], 1.05, -6, Math.PI, true],
+    [[[4.5, -1.0], [3.6, 6.0], [3.0, 17.5]], 1.0, 1.0, 0, false],
+    [[[-8.0, 11.2], [-3.6, 11.4], [0.6, 12.8], [1.4, 18]], 1.2, -1, 0, false],
+    [[[8.0, 3.6], [5.0, 1.3], [-1.5, 1.2], [-4.4, -0.4]], 1.05, -7, Math.PI, true],
+    [[[-1.8, 17], [-1.6, 7.0], [-3.4, 3.4]], 1.1, -5, 0.4, false],
+    [[[3.6, 0.6], [4.0, 8.0], [7.0, 9.6]], 0.95, 2, Math.PI / 2, false],
+    [[[-6.2, 6.2], [-3.6, 6.6], [1.6, 7.4], [3.9, 9.2]], 1.0, -1, -Math.PI / 2, false],
+    [[[6.2, 12.8], [1.0, 12.2], [-4.0, 12.6], [-6.6, 12.9]], 1.1, -2, -Math.PI / 2, false],
   ];
+  function makePath(pts) { const seg = []; let L = 0; for (let i = 1; i < pts.length; i++) { const l = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(l); L += l; } return { pts, seg, L }; }
+  function pathAt(P, s) { s = Math.max(0, Math.min(P.L, s)); for (let i = 0; i < P.seg.length; i++) { if (s <= P.seg[i] || i === P.seg.length - 1) { const k = P.seg[i] ? s / P.seg[i] : 0; const a = P.pts[i], b = P.pts[i + 1]; return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k]; } s -= P.seg[i]; } return P.pts[P.pts.length - 1]; }
+  const smooth = (a, b, x) => { const k = Math.max(0, Math.min(1, (x - a) / (b - a))); return k * k * (3 - 2 * k); };
+  const angLerp = (a, b, k) => { let d = ((b - a + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI; return a + d * k; };
+  function agentState(A, t) {
+    const P = A.path, ta = A.t0 + P.L / A.v;
+    // ease in/out of walking so feet plant: s(t) accelerates over 0.4 s and brakes over 0.5 s
+    const tt = Math.max(A.t0, Math.min(ta + 0.45, t));
+    let s = (tt - A.t0) * A.v; const acc = 0.4, dec = 0.5;
+    if (tt - A.t0 < acc) s = A.v * (tt - A.t0) ** 2 / (2 * acc);
+    else s = A.v * (tt - A.t0 - acc / 2);
+    s = Math.min(P.L, s);
+    const [x, z] = pathAt(P, s);
+    const [x1, z1] = pathAt(P, s + 0.35), [x0, z0] = pathAt(P, s - 0.35);
+    let yaw = Math.atan2(x1 - x0, z1 - z0);
+    if (t < A.t0) yaw = A.startYaw ?? yaw;
+    if (t > ta) yaw = angLerp(yaw, A.endYaw, smooth(ta, ta + 0.9, t));
+    const walkW = smooth(A.t0 - 0.1, A.t0 + 0.4, t) * (1 - smooth(ta - 0.3, ta + 0.35, t));
+    return { x, z, yaw, walkW };
+  }
   W_SPECS.forEach((s, i) => {
     const p = extra(i + 1); W.add(p.root);
-    const d = new THREE.Vector3(s[2], 0, s[3]).normalize();
     let suit = null;
-    if (s[5]) { suit = new THREE.Group(); const c = box(0.4, 0.6, 0.22, toon(bagCols[i % 5]), 0, 0.3, 0, suit); for (const sx of [-0.15, 0.15]) cyl(0.04, 0.04, 0.03, toon(0x111111), sx, 0.02, 0.06, suit, 10).rotation.z = Math.PI / 2; box(0.02, 0.5, 0.02, toon(0x333333), 0, 0.85, 0.1, suit); W.add(suit); }
-    walkers.push({ p, x0: s[0], z0: s[1], d, v: s[4], suit, off: hash(i, 31) * 3 });
+    if (s[4]) { suit = new THREE.Group(); box(0.4, 0.6, 0.22, toon(bagCols[i % 5]), 0, 0.32, 0, suit); for (const sx of [-0.15, 0.15]) { const wh = cyl(0.04, 0.04, 0.03, toon(0x111111), sx, 0.04, 0.08, suit, 10); wh.rotation.z = Math.PI / 2; suit.userData.wheels = (suit.userData.wheels || []).concat(wh); } box(0.02, 0.5, 0.02, toon(0x333333), 0, 0.87, 0.1, suit); W.add(suit); }
+    walkers.push({ p, path: makePath(s[0]), v: s[1], t0: s[2], endYaw: s[3], suit, off: hash(i, 31) * 3 });
   });
   // idle groups: chatting at the benches, queueing at the ticket windows, waiting at the edge
   const idlers = [];
@@ -230,11 +260,15 @@ export function stationSet() {
   // ------------------------------------------------ the three friends at platform 9
   // the kicker: walks past the can and boots it at 8.6 s
   const kicker = extra(55); W.add(kicker.root);
+  const KICK = { path: makePath([[-7.4, 2.2], [-2.45, 0.42], [3.2, 0.95], [4.0, 3.8]]), v: 1.15, t0: 8.6 - Math.hypot(4.95, 1.78) / 1.15, endYaw: 0.2, startYaw: -Math.PI / 2, off: 0.4 };
   const rai = cast('rai'), ger = cast('geraldim'), ben = cast('bento');
   rai.root.position.set(-0.55, 0, -0.75); ger.root.position.set(0.35, 0, -1.0); ben.root.position.set(1.25, 0, -0.7);
   for (const c of [rai, ger, ben]) W.add(c.root);
   W.traverse((o) => { if (o.isMesh) o.frustumCulled = false; });
 
+  // plate ODE (theta'' = g/l * sin(theta) - c * theta'), integrated once at build time
+  const PLATE = (() => { const t1 = 18.15; let th = 0.07 * (1 - Math.exp(-(t1 - 16.4) * 1.5)) * Math.sin((t1 - 16.4) * 5.0); if (Math.abs(th) < 0.02) th = 0.02; let om = 0; const sim = [];
+    for (let i = 0; i < 4000; i++) { const dt = 1 / 1000; om += (65 * Math.sin(th) - 1.4 * om) * dt; th += om * dt; sim.push(th); } return { t1, sim }; })();
   // ------------------------------------------------ update: everything from t
   const v = new THREE.Vector3();
   function update(t, o = {}) {
@@ -253,10 +287,11 @@ export function stationSet() {
       rows.forEach((r, i) => { if (i === 2 && Math.floor(t * 2) % 2) return; c.fillStyle = i === 2 ? '#FFE070' : '#FFB000'; c.fillText(`${r[0]}  ${r[1].padEnd(18, ' ')} ${r[2]}`, 30, 190 + i * 62); });
       boardTex.needsUpdate = true; }
     hM.rotation.z = -t * 0.05; hH.rotation.z = -1.2;
-    // bus 10 rolls in from behind the platform (constant deceleration), then the suspension settles
-    { const ts = 4.0, te = 8.6, D = 14; const tau = Math.min(1, Math.max(0, (t - ts) / (te - ts)));
-      const s = D * (1 - (1 - tau) ** 2); bus10.position.set(6.75, -0.28, -16 + s - 1);
-      const after = Math.max(0, t - te); bus10.rotation.x = t > te ? -0.025 * Math.exp(-after * 2.6) * Math.cos(after * 7.5) : 0.008 * tau; }
+    // bus 10: cruises in at 5 m/s, brakes uniformly from 5.0 s to a stop at 8.6 s (nose dives), then rocks back
+    { const v0 = 5, tb = 5.0, te = 8.6, zs = -3.0, a = v0 / (te - tb), Db = v0 * (te - tb) / 2;
+      let z; if (t < tb) z = zs - Db - v0 * (tb - t); else if (t < te) { const k = t - tb; z = zs - Db + v0 * k - 0.5 * a * k * k; } else z = zs;
+      bus10.position.set(6.75, -0.28, z);
+      const after = t - te; bus10.rotation.x = t < tb ? 0 : t < te ? 0.014 * Math.min(1, (t - tb) / 0.4) : 0.014 * Math.exp(-after * 2.4) * Math.cos(after * 6.8); }
     // pigeons
     for (const P of pigeons) {
       const dt = t - P.t0;
@@ -265,13 +300,16 @@ export function stationSet() {
         P.g.position.copy(P.p0); P.g.position.x += 0.06 * Math.sin(t * 0.7 + P.ph); P.g.rotation.set(peck * 0.5, P.ry + 0.3 * Math.sin(t * 0.4 + P.ph), 0);
         P.head.position.set(0, 0.07 - peck * 0.08, 0.11 + peck * 0.04); P.wings.forEach((w, i) => { w.rotation.z = 0; });
       } else {
-        // take-off: hop, then climbing flight with drag (closed form)
-        const lift = 2.6 * dt + 0.9 * dt * dt, fwd = 3.2 * (1 - Math.exp(-dt * 1.6)) / 1.6 * 1.6;
-        v.copy(P.dir).multiplyScalar(fwd); P.g.position.set(P.p0.x + v.x, P.p0.y + Math.min(lift, 7), P.p0.z + v.z);
-        P.g.rotation.set(-0.5, Math.atan2(P.dir.x, P.dir.z), 0);
-        const flap = Math.sin(dt * 2 * Math.PI * 9 + P.ph) * 0.9; P.wings.forEach((w, i) => { w.rotation.z = (i ? -1 : 1) * flap; });
+        // take-off: strong first beats, then accelerating flight out under the roof toward the open bays
+        const hor = 1.4 * dt + 1.2 * dt * dt;
+        const x = P.p0.x + P.dir.x * hor, z = P.p0.z + P.dir.z * hor;
+        const y = 0.07 + 4.4 * (1 - Math.exp(-dt * 0.95)) + Math.max(0, -(z + 4.5)) * 0.4;
+        P.g.position.set(x, y, z);
+        P.g.rotation.set(-0.55 * Math.exp(-dt * 1.5) - 0.08, Math.atan2(P.dir.x, P.dir.z), 0.15 * Math.sin(dt * 2 + P.ph));
+        const beat = dt < 1.4 ? 11 : 7, amp = dt < 1.4 ? 1.0 : 0.6 + 0.4 * (Math.sin(dt * 1.7 + P.ph) > 0 ? 1 : 0.2);
+        const flap = Math.sin(dt * 2 * Math.PI * beat + P.ph) * amp; P.wings.forEach((w, i) => { w.rotation.z = (i ? -1 : 1) * flap; });
+        P.head.position.set(0, 0.07, 0.11);
       }
-      P.g.visible = P.g.position.y < 5.6;
     }
     // can: rests until 8.6 s, then follows the precomputed roll
     { const i = Math.min(canSim.length - 1, Math.max(0, Math.floor((t - 8.6) * 240)));
@@ -282,27 +320,30 @@ export function stationSet() {
       const y = 0.005 + (dt > 0 ? Math.max(0, 1.6 * dt * Math.exp(-dt * 0.9)) : 0);
       flyer.position.set(5.2 + dt * 0.7 + 0.15 * Math.sin(dt * 4), y, -1.2 + dt * 0.9);
       flyer.rotation.set(-Math.PI / 2 + (dt > 0 ? 1.2 * Math.sin(dt * 5.5) * Math.exp(-dt * 0.3) : 0), dt * 1.3, 0.6 * Math.sin(dt * 3.7)); }
-    // walkers (and their suitcases, wheels turning)
+    // walkers (and their rolling suitcases: towed behind, wheels turning with the distance)
     for (const w of walkers) {
-      const s = w.v * (t + 20);                                 // already mid-walk at t=0
-      const span = 18, d = ((s + w.off * 4) % span);
-      const x = w.x0 + w.d.x * d, z = w.z0 + w.d.z * d;
-      w.p.root.position.set(x, 0, z); w.p.root.rotation.y = Math.atan2(w.d.x, w.d.z);
-      w.p.pose({ t, offset: w.off, w: { walk: 1 }, speed: { walk: w.v / 1.2 }, face: { blink: (t + w.off) % 4 < 0.12 ? 1 : 0 } });
-      if (w.suit) { w.suit.position.set(x - w.d.x * 0.55 + w.d.z * 0.28, 0, z - w.d.z * 0.55 - w.d.x * 0.28); w.suit.rotation.set(0, Math.atan2(w.d.x, w.d.z), 0); w.suit.rotateX(-0.55); w.suit.rotateZ(0.04 * Math.sin(t * 7 + w.off)); }
+      const st = agentState(w, t);
+      w.p.root.position.set(st.x, 0, st.z); w.p.root.rotation.y = st.yaw;
+      w.p.pose({ t, offset: w.off, w: { walk: st.walkW, idle: 1 - st.walkW }, speed: { walk: w.v / 1.2 }, face: { blink: (t + w.off) % 4 < 0.12 ? 1 : 0 } });
+      if (w.suit) {
+        const fx = Math.sin(st.yaw), fz = Math.cos(st.yaw);
+        w.suit.position.set(st.x - fx * 0.55 + fz * 0.28, 0, st.z - fz * 0.55 - fx * 0.28);
+        w.suit.rotation.set(0, st.yaw, 0); w.suit.rotateX(-0.55 * st.walkW - 0.02); w.suit.rotateZ(0.035 * Math.sin(t * 7 + w.off) * st.walkW);
+        const dist = Math.max(0, Math.min(w.path.L, (t - w.t0) * w.v)); (w.suit.userData.wheels || []).forEach((wh) => { wh.rotation.x = dist / 0.04; });
+      }
     }
     for (const I of idlers) {
       const wt = I.clip === 'idle' ? { idle: 1 } : { idle: 0.45, [I.clip]: 0.55 };
       I.p.pose({ t, offset: I.off, w: wt, face: { blink: (t + I.off) % 3.7 < 0.12 ? 1 : 0, talk: I.clip === 'agree' ? 0.4 * Math.abs(Math.sin(t * 9 + I.off)) : 0 } });
     }
-    { const x = -2.2 - 0.3 + 1.15 * (t - 8.6), z = 0.42; kicker.root.position.set(x, 0, z); kicker.root.visible = x > -8.6; kicker.root.rotation.y = Math.PI / 2;
-      kicker.pose({ t, offset: 0.2, w: { walk: 1 }, speed: { walk: 1.15 / 1.2 } }); }
+    { const st = agentState(KICK, t); kicker.root.position.set(st.x, 0, st.z); kicker.root.rotation.y = st.yaw;
+      kicker.pose({ t, offset: KICK.off, w: { walk: st.walkW, idle: 1 - st.walkW }, speed: { walk: KICK.v / 1.2 }, face: { blink: (t % 3.3) < 0.1 ? 1 : 0 } }); }
     clerks.forEach((c, i) => c.pose({ t, offset: i * 1.3, w: { idle: 1 } }));
-    // loose plate on 9 (creak swing from 16.4 s, flips 9 -> 6 at 18.2 s), others hang still
+    // loose plate on 9: creaks while the screw loosens, then (top-heavy) tips over and swings to rest upside down
     const pl = plates['9'];
-    const swing = t > 16.4 && t < 18.2 ? 0.22 * Math.exp(-(t - 16.4) * 0.7) * Math.sin((t - 16.4) * 4.2) : 0;
-    const flip = t < 18.2 ? 0 : Math.PI * (1 + Math.exp(-(t - 18.2) * 5.5) * Math.cos((t - 18.2) * 14) * -1) ;
-    pl.rotation.z = swing + flip;
+    if (t < 16.4) pl.rotation.z = 0.004 * Math.sin(t * 1.2);
+    else if (t < PLATE.t1) pl.rotation.z = 0.07 * (1 - Math.exp(-(t - 16.4) * 1.5)) * Math.sin((t - 16.4) * 5.0);
+    else pl.rotation.z = PLATE.sim[Math.min(PLATE.sim.length - 1, Math.floor((t - PLATE.t1) * 1000))];
     plates['8'].rotation.z = 0.01 * Math.sin(t * 1.1); plates['10'].rotation.z = 0.01 * Math.sin(t * 1.3 + 1) + 0.05 * gust * Math.sin((t - 8.6) * 3);
   }
   return { scene, update, rai, ger, ben };

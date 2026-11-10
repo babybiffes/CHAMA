@@ -55,6 +55,31 @@ export async function loadModels() {
   MODELS.Michelle.clips = { samba: MODELS.Michelle.animations.find((a) => a.name === 'SambaDance') };
 }
 
+// ---------------------------------------------------------------- two-bone IK (any rig orientation)
+const _a = new THREE.Vector3(), _b = new THREE.Vector3(), _c = new THREE.Vector3(), _qw = new THREE.Quaternion(), _pq = new THREE.Quaternion(), _qd = new THREE.Quaternion();
+function rotateToward(bone, from, to) {
+  if (from.lengthSq() < 1e-9 || to.lengthSq() < 1e-9) return;
+  _qd.setFromUnitVectors(from.clone().normalize(), to.clone().normalize());
+  bone.getWorldQuaternion(_qw); _qw.premultiply(_qd);
+  bone.parent.getWorldQuaternion(_pq); bone.quaternion.copy(_pq.invert().multiply(_qw));
+  bone.updateMatrixWorld(true);
+}
+export function twoBoneIK(upper, lower, end, target, pole, w = 1) {
+  const q1 = upper.quaternion.clone(), q2 = lower.quaternion.clone();
+  upper.getWorldPosition(_a); lower.getWorldPosition(_b); end.getWorldPosition(_c);
+  const l1 = _a.distanceTo(_b), l2 = _b.distanceTo(_c);
+  const d = target.clone().sub(_a); const dist = Math.min(l1 + l2 - 1e-3, Math.max(Math.abs(l1 - l2) + 1e-3, d.length()));
+  const dn = d.normalize();
+  const cosA = Math.min(1, Math.max(-1, (l1 * l1 + dist * dist - l2 * l2) / (2 * l1 * dist))), A = Math.acos(cosA);
+  const bend = pole.clone().sub(dn.clone().multiplyScalar(pole.dot(dn))).normalize();
+  const elbow = _a.clone().add(dn.clone().multiplyScalar(Math.cos(A) * l1)).add(bend.multiplyScalar(Math.sin(A) * l1));
+  rotateToward(upper, _b.clone().sub(_a), elbow.clone().sub(_a));
+  lower.getWorldPosition(_b); end.getWorldPosition(_c);
+  const goal = _a.clone().add(dn.clone().multiplyScalar(dist));
+  rotateToward(lower, _c.clone().sub(_b), goal.sub(_b));
+  if (w < 1) { upper.quaternion.slerpQuaternions(q1, upper.quaternion.clone(), w); lower.quaternion.slerpQuaternions(q2, lower.quaternion.clone(), w); upper.updateMatrixWorld(true); }
+}
+
 const B = (root, n) => root.getObjectByName('mixamorig' + n) || root.getObjectByName('mixamorig:' + n);
 
 // a rigid limb piece from bone a toward child bone b, sized in metres
@@ -119,8 +144,9 @@ function makeHead(o) {
     eyes.forEach((e) => { e.scale.y = 1.15 * (1 - 0.9 * blink); });
     pupils.forEach((pp, i) => { pp.visible = blink < 0.6; pp.position.x = (i ? 0.043 : -0.043) + (p.lookX || 0) * 0.008; pp.position.y = 0.022 + (p.lookY || 0) * 0.007; pp.scale.setScalar(p.scared ? 0.7 : 1); });
     brows.forEach((b, i) => { const sx = i ? 1 : -1; b.position.y = 0.07 + (p.scared ? 0.012 : 0) + (p.browUp || 0) * 0.01; b.rotation.z = p.angry ? sx * 0.35 : p.scared ? -sx * 0.3 : 0; });
-    const talk = p.talk || 0;
-    mouth.scale.set(1 + (p.smile || 0) * 0.4, 0.22 + 0.8 * talk + (p.scared ? 0.3 : 0), 0.4);
+    const talk = p.talk || 0, chew = (p.chew || 0) * (1 - Math.min(1, talk * 3));
+    mouth.scale.set(1 + (p.smile || 0) * 0.4 - chew * 0.25, 0.22 + 0.8 * talk + (p.scared ? 0.3 : 0) + chew * 0.35, 0.4 + chew * 0.15);
+    mouth.position.y = -0.058 - chew * 0.006;
   }
   return { g, face };
 }
@@ -169,6 +195,8 @@ export function person(spec) {
     const s = new THREE.Mesh(geo.cyl(0.005, 0.005, 0.18, 8), toon(0xC9CED6)); s.position.set(0.02, 0.12, 0); s.rotation.z = -0.25; g.add(s);
     { const hb = B(root, 'RightHand'), mid = B(root, 'RightHandMiddle1').position.clone(); hb.add(g); g.scale.setScalar(100); g.position.copy(mid.multiplyScalar(1.2)); }
   }
+  let held = null;
+  if (P.heldBall) { held = new THREE.Mesh(geo.sph(0.03, 12, 10), toon(0xF2C14E)); const hb = B(root, 'RightHand'), mid = B(root, 'RightHandMiddle1').position.clone(); hb.add(held); held.scale.setScalar(100); held.position.copy(mid.multiplyScalar(1.3)); held.visible = false; }
   if (P.thermos) { const t = new THREE.Mesh(geo.cyl(0.045, 0.045, 0.26), toon(0xB8BEC6)); onBone(root, 'Spine1', t, [0.2, 0.0, 0.02]).rotation.z = 0.2; }
   if (P.bag) {
     const g = new THREE.Group(); g.add(new THREE.Mesh(geo.box(0.15, 0.18, 0.09), toon(0xD9B98A)));
@@ -191,7 +219,7 @@ export function person(spec) {
     if (n.endsWith('_add')) a.blendMode = THREE.AdditiveAnimationBlending;
     a.play(); a.setEffectiveWeight(0); actions[n] = a;
   }
-  const bones = { head: B(root, 'Head'), neck: B(root, 'Neck'), spine2: B(root, 'Spine2'), hips: B(root, 'Hips'),
+  const bones = { rHand: B(root, 'RightHand'), lHand: B(root, 'LeftHand'), lFore: B(root, 'LeftForeArm'), head: B(root, 'Head'), neck: B(root, 'Neck'), spine2: B(root, 'Spine2'), hips: B(root, 'Hips'),
     rArm: B(root, 'RightArm'), rFore: B(root, 'RightForeArm'), lArm: B(root, 'LeftArm') };
   const q = new THREE.Quaternion(), e = new THREE.Euler();
 
@@ -208,8 +236,20 @@ export function person(spec) {
       bones.neck.quaternion.multiply(q); bones.head.quaternion.multiply(q);
     }
     H.face(p.face || {});
+    // arm IK on top (drink, eat, reach): targets in world space
+    if (p.ik) {
+      wrap.updateMatrixWorld(true);
+      for (const k of p.ik) if (k.w > 0.001) {
+        const side = k.side === 'Left' ? 'l' : 'r';
+        twoBoneIK(side === 'l' ? bones.lArm : bones.rArm, side === 'l' ? bones.lFore : bones.rFore, side === 'l' ? bones.lHand : bones.rHand, k.target, k.pole, k.w);
+      }
+    }
+    if (held) { held.visible = !!p.held; held.scale.setScalar(100 * (p.heldScale ?? 1)); }
   }
-  return { root: wrap, skel: root, pose, bones, actions };
+  // world-space anchors for the IK targets
+  const _v = new THREE.Vector3();
+  function anchor(name) { wrap.updateMatrixWorld(true); return B(root, name).getWorldPosition(new THREE.Vector3()); }
+  return { root: wrap, skel: root, pose, bones, actions, anchor };
 }
 
 // the cast in costume
@@ -218,7 +258,7 @@ export function cast(who, opts = {}) {
   if (who === 'bento') return person({ skin: 0xEDBB91, shirt: 0xF2EEE6, pants: 0x8C8A86, shoes: 0x4A2C18, boots: true, sleeve: 'long', torsoR: 0.17, belly: true, thighR: 0.1, shinR: 0.08,
     head: { hair: 0x2B1B12, mustache: true, hat: 'beret' }, props: { cuia: true, thermos: true, neckerchief: true }, scale: 1.0 });
   if (who === 'geraldim') return person({ skin: 0xD69A62, shirtMap: TEX.plaid, pants: 0x2E4A7A, shoes: 0x3A2A1A, sleeve: 'long', torsoR: 0.17, belly: true,
-    head: { hair: 0x2A1A10, hat: 'straw', cheeks: true }, props: { bag: true }, scale: 0.93 });
+    head: { hair: 0x2A1A10, hat: 'straw', cheeks: true }, props: { bag: true, heldBall: true }, scale: 0.93 });
   if (who === 'rai') return person({ model: 'Michelle', skin: 0x6B3E26, shirtMap: TEX.tropical, pants: 0x2A2A2E, shoes: 0xFFE14C, sleeve: 'none', torsoR: 0.13,
     head: { hair: 0x1C120C, hairStyle: 'afro', sunglasses: true, brow: 0x140c08 }, props: { fitinha: true, chain: true }, scale: 1.1 });
   if (who === 'caio') return person({ skin: 0xE8B48A, shirtMap: TEX.stripes, pants: 0x1E1E24, sleeve: 'short', head: { hat: 'cap' } });
