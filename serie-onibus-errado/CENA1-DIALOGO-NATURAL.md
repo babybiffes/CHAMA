@@ -1,84 +1,102 @@
-# 🎙️ Parte 01 · Cena 1 — diálogo natural (Google AI Studio, modo de 2 vozes)
+# 🎙️ Parte 01 · Cena 1 — conversa natural + passo a passo no AI Studio (Playground)
 
-**Por que mudou:** antes eram 5 falas soltas, cada um falando sozinho. Numa conversa de verdade um responde o outro, interrompe e ri. Por isso a cena agora tem trocas curtas, e o melhor jeito de gerar é no **modo Multi-speaker** do AI Studio: ele gera os dois falando **juntos numa mesma conversa**, com o tempo de resposta e a entonação de quem está respondendo alguém.
+## O diálogo (versão final da cena 1)
 
-**Como gerar cada bloco:**
-1. Em **Generate speech**, escolha **Multi-speaker**.
-2. Em **Speaker 1** e **Speaker 2**, escreva os nomes **exatamente** como aparecem no texto (ex.: `Bento` e `Caio`) e escolha a voz de cada um.
-3. Cole o **Style** no campo de instruções e o **Texto** (com os nomes antes de cada fala) na caixa de texto.
-4. Gere 3 ou 4 vezes e fique com a mais natural.
-
-São 4 arquivos de áudio no total (A, B, C e D). Me mande nessa ordem.
-
----
-
-## Bloco A — Bento + Caio (o caminho pelos fundos)
-**Speaker 1:** `Bento` · voz **Algenib** — **Speaker 2:** `Caio` · voz **Fenrir**
-**Style:**
 ```
-Dois amigos conversando de noite na rua, atrás de um armazém, num papo rápido e descontraído, como áudio gravado no celular, sem voz de locutor.
-Bento é gaúcho de Bagé, 30 anos: voz grave e rouca, confiante, sotaque da fronteira com o "e" final fechado ("fundos, tchê", "guri"), "Bah" curto, melodia que sobe no meio e cai no fim. Fala como o guia da turma, meio convencido.
-Caio é paulistano da Mooca, 27 anos: fala rápida e emendada, "mano" bem paulista, "não" e "ão" bem nasais. Ele estranha a ideia e responde quase rindo, desconfiado.
-O "Confia, guri." sai curto e tranquilo, depois de um gole de chimarrão, encerrando o assunto.
+BENTO:    Bah, ó… a entrada é pelos fundos, tchê.
+CAIO:     Pelos fundos? Cê tá de brincadeira, né, mano?
+BENTO:    Confia, guri. Eu sei o caminho.
+CAIO:     Sabe nada…
+          (câmera olha a rua — fumaça, sirene)
+GERALDIM: Nu meu fi… cês viram aquela fumaça ali?
+RAI:      Hã? Que fumaça, véi?
+GERALDIM: Ali, ó! Atrás dos prédio. Esse trem tá esquisito demais, sô.
+RAI:      Oxe, é churrasco, Geraldim! Relaxe vu.
+GERALDIM: Churrasco, uai? A essa hora?
+RAI:      Ó a hora, véi… o ônibus sai dez e quarenta. Arroche, arroche!
+BENTO:    Bora, moçada, bora!
+          (eles andam até a DOCA 2)
+CAIO:     Mano… isso aqui não tem cara de rodoviária não, cuzão.
+BENTO:    Ouvi, hein! Vem logo, é ali!
 ```
-**Texto:**
-```
-Bento: Bah, ó… a entrada da rodoviária é pelos fundos, tchê. Eu sei o caminho.
-Caio: Pelos fundos, Bento? Sério, mano?
-Bento: Confia, guri.
-```
+
+O que deixa a conversa real: **respostas curtas** ("Sabe nada…", "Hã?"), **pergunta respondida com outra pergunta** ("Churrasco, uai? A essa hora?"), **muletas de fala** ("ó", "hã", "né"), **zoeira** e **ninguém fala muito de uma vez**.
 
 ---
 
-## Bloco B — Geraldim + Rai (a fumaça)
-**Speaker 1:** `Geraldim` · voz **Umbriel** — **Speaker 2:** `Rai` · voz **Puck**
-**Style:**
+## Passo 1 — Criar a voz de cada personagem (uma vez só)
+
+Na tela do Playground, toque em **"Create new voice"** e crie as 4 vozes abaixo, uma por vez. Cole a descrição, gere a amostra, ouça e salve com o nome do personagem. Assim os 4 têm sempre a **mesma voz** em todos os episódios.
+
+**Bento** (salve como "Bento")
 ```
-Dois amigos conversando de noite na rua, num papo natural de amigos, como áudio de celular, sem voz de locutor.
-Geraldim é mineiro de Sabará, 28 anos: fala baixinho e devagar, com a boca meio cheia de pão de queijo, comendo sílabas ("Nu meu fi" sai quase "numêfi"), "uai" e "sô" bem mineiros, frase que sobe no fim. Está desconfiado e meio assustado, mas calmo.
-Rai é baiano de Salvador, 25 anos: voz alegre e solta, vogais abertas, ritmo cantado, "Oxe" esticado, "véi" arrastado. Primeiro pergunta "Que fumaça, véi?" sem dar muita bola; depois ri do medo do amigo, zoa ("É churrasco, Geraldim") e apressa a turma com "Arroche, arroche!" batendo palma.
-As falas respondem uma à outra rápido, como conversa de verdade.
+Homem gaúcho de 30 anos, de Bagé, na fronteira do Rio Grande do Sul. Voz grave, um pouco rouca, firme e confiante, de quem gosta de mandar na turma. Sotaque gaúcho da campanha bem natural: o "e" final fechado ("tchê", "guri"), "s" seco, melodia que sobe no meio da frase e desce no fim, leve jeito castelhano. Fala como gente de verdade, sem voz de locutor.
 ```
-**Texto:**
+Frase de teste: `Bah, ó… a entrada é pelos fundos, tchê. Confia, guri.`
+
+**Geraldim** (salve como "Geraldim")
 ```
+Homem mineiro de 28 anos, de Sabará, interior de Minas. Voz mansa, baixa e calma, de gente simples e desconfiada. Sotaque mineiro forte e natural: emenda as palavras e come sílabas ("cês", "num", "Nu meu fi" sai quase "numêfi"), vogais fechadinhas, frase que termina subindo. "Uai" e "sô" bem naturais. Fala devagar, às vezes de boca cheia.
+```
+Frase de teste: `Nu meu fi… esse trem tá esquisito demais, sô.`
+
+**Rai** (salve como "Rai")
+```
+Rapaz baiano de 25 anos, de Itapuã, Salvador. Voz alegre, solta e risonha, de quem zoa todo mundo. Sotaque soteropolitano natural: vogais bem abertas, ritmo cantado que acelera e freia, "Oxe" esticado, "véi" arrastado no fim das frases. Fala rindo, sem voz de locutor.
+```
+Frase de teste: `Oxe, relaxe vu, véi! Arroche, arroche!`
+
+**Caio** (salve como "Caio")
+```
+Rapaz paulistano de 27 anos, da Mooca, São Paulo. Voz jovem e rápida, meio ansiosa. Sotaque paulistano natural: fala emendada, "mano" e "meu" bem paulistas, "não" e "ão" nasais, melodia levemente cantada da Mooca. Zoa os amigos com intimidade. Voz próxima, como quem fala do seu lado, sem voz de locutor.
+```
+Frase de teste: `Mano… cê tá de brincadeira, né, meu?`
+
+> Se não gostar da amostra, gere de novo ou acrescente na descrição "carregue mais no sotaque".
+
+---
+
+## Passo 2 — Gerar a conversa
+
+Volte ao Playground e toque em **"Create new dialog"**.
+
+1. **Adicione os personagens (speakers)** e escolha para cada um a voz que você criou no Passo 1. O nome do speaker tem que ser **igual** ao que está no texto: `Bento`, `Caio`, `Geraldim`, `Rai`.
+2. **Descrição da cena / estilo** (se o campo existir, cole isto):
+```
+Quatro amigos de regiões diferentes do Brasil conversando de noite atrás de um armazém, perto da rodoviária, antes de uma viagem. Papo de rua, rápido, natural e cheio de zoeira, como um áudio gravado no celular no meio do grupo. Um responde o outro sem pausa longa, às vezes quase em cima da fala do outro. Ninguém fala como locutor. O lugar é meio sinistro, então o Geraldim fica desconfiado, o Rai ri de tudo, o Bento é o guia confiante e o Caio reclama.
+```
+3. **Cole o texto da conversa** no formato `Nome: fala`, um por linha:
+
+```
+Bento: Bah, ó… a entrada é pelos fundos, tchê.
+Caio: Pelos fundos? Cê tá de brincadeira, né, mano?
+Bento: Confia, guri. Eu sei o caminho.
+Caio: Sabe nada…
 Geraldim: Nu meu fi… cês viram aquela fumaça ali?
-Rai: Que fumaça, véi?
-Geraldim: Aquela ali, uai! Esse trem tá esquisito demais, sô.
-Rai: Oxe, relaxe vu! É churrasco, Geraldim. O ônibus sai dez e quarenta… Arroche, arroche!
-```
-
----
-
-## Bloco C — Bento sozinho (puxando a turma)
-**Modo:** Single-speaker · voz **Algenib**
-**Style:**
-```
-Gaúcho de Bagé, 30 anos, chamando os amigos pra ir embora, animado e mandão, alto mas sem gritar, como chefe de excursão. Sotaque da fronteira natural, "moçada" bem aberto. Fala de rua, nada de locutor.
-```
-**Texto:**
-```
-Bora, moçada!
-```
-
----
-
-## Bloco D — Caio + Bento (a zoeira no final)
-**Speaker 1:** `Caio` · voz **Fenrir** — **Speaker 2:** `Bento` · voz **Algenib**
-**Style:**
-```
-Dois amigos num lugar escuro e esquisito, como áudio de celular, sem voz de locutor.
-Caio, paulistano da Mooca, vem andando atrás e reclama baixinho, meio rindo de nervoso: "Mano… isso aqui não tem cara de rodoviária não, cuzão." O "cuzão" é zoeira de amigo, com intimidade, dito quase cochichando.
-Bento, gaúcho de Bagé, está um pouco à frente, lá dentro do depósito, e escuta: responde alto, virando pra trás, rindo e mandão, com a voz ecoando um pouco: "Ouvi, hein! Vem logo, é ali!"
-A resposta do Bento vem logo em seguida, quase em cima da fala do Caio.
-```
-**Texto:**
-```
+Rai: Hã? Que fumaça, véi?
+Geraldim: Ali, ó! Atrás dos prédio. Esse trem tá esquisito demais, sô.
+Rai: Oxe, é churrasco, Geraldim! Relaxe vu.
+Geraldim: Churrasco, uai? A essa hora?
+Rai: Ó a hora, véi… o ônibus sai dez e quarenta. Arroche, arroche!
+Bento: Bora, moçada, bora!
 Caio: Mano… isso aqui não tem cara de rodoviária não, cuzão.
 Bento: Ouvi, hein! Vem logo, é ali!
 ```
+4. **Gere**, ouça, gere de novo se precisar, e **baixe** o áudio.
 
----
+### Se o "Create new dialog" aceitar só 2 personagens por vez
+Gere em 4 partes, cada uma com 2 speakers, e me mande os arquivos nesta ordem:
 
-### Se quiser ainda mais natural
-- **Risadas e respiros:** dá pra escrever `(risos)` ou `(suspira)` dentro do texto, ex.: `Rai: (risos) Oxe, relaxe vu!`. Se o modelo ler a palavra em voz alta, apague e descreva no Style ("o Rai fala rindo").
-- **Fala por cima:** no vídeo eu posso sobrepor um pouquinho o fim de uma fala com o começo da outra, como acontece numa conversa real.
+| Parte | Speakers | Linhas |
+|---|---|---|
+| **A** | Bento + Caio | "Bah, ó…" até "Sabe nada…" |
+| **B** | Geraldim + Rai | "Nu meu fi…" até "Arroche, arroche!" |
+| **C** | Bento sozinho | "Bora, moçada, bora!" |
+| **D** | Caio + Bento | "Mano… isso aqui…" e "Ouvi, hein!…" |
+
+> Pode me mandar **um arquivo só com a conversa inteira** ou as partes A–D. Eu cuido do resto: corto, encaixo cada fala no momento certo do vídeo (a câmera olha a rua entre "Sabe nada…" e "Nu meu fi…", e o grupo começa a andar depois de "Bora, moçada, bora!"), e as bocas mexem pelo volume real de cada voz.
+
+### Dicas
+- **Risada:** no texto, escreva `(rindo)` antes da fala, ex.: `Rai: (rindo) Oxe, é churrasco, Geraldim!`. Se o modelo ler a palavra em voz alta, tire e coloque na descrição da cena ("o Rai fala rindo").
+- **Ritmo:** se ficar devagar, acrescente na descrição "falam rápido, um em cima do outro".
+- **Sotaque fraco:** acrescente "carreguem mais nos sotaques regionais".

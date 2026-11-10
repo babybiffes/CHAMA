@@ -171,20 +171,23 @@ Os números dos jogadores são os **DDDs** das cidades deles: **011, 053, 031, 0
 ### PARTE 01 — "PLATAFORMA 6" · *[POV do Caio]* · ~100 s
 > Versão atualizada após os testes em vídeo (cenas 1 e 2 já produzidas como teste de 20 s cada).
 
-**CENA 1 — Fundos da rodoviária (~30 s)** · noite, fundos de um armazém com a porta "DOCA 2" iluminada, caminhão-baú verde, chão rachado com lixo; à esquerda a rua com lojas fechadas, fumaça no céu e um incêndio ao longe.
+**CENA 1 — Fundos da rodoviária (~35 s)** · noite, fundos de um armazém com a porta "DOCA 2" iluminada, caminhão-baú verde, chão rachado com lixo; à esquerda a rua com lojas fechadas, fumaça no céu e um incêndio ao longe.
 [Os 3 amigos de frente para o Caio. Bento toma chimarrão, Geraldim come pão de queijo, Rai não para quieto.]
-BENTO: [aponta a porta com o polegar] Bah, ó… a entrada da rodoviária é pelos fundos, tchê. Eu sei o caminho.
-CAIO: Pelos fundos, Bento? Sério, mano?
-BENTO: [dá de ombros, toma um gole] Confia, guri.
+BENTO: [aponta a porta com o polegar] Bah, ó… a entrada é pelos fundos, tchê.
+CAIO: Pelos fundos? Cê tá de brincadeira, né, mano?
+BENTO: [toma um gole] Confia, guri. Eu sei o caminho.
+CAIO: Sabe nada…
 [A câmera olha para a rua: prédios baixos, fumaça preta, alguém correndo lá longe, sirene distante. Volta para os amigos.]
-GERALDIM: [para de mastigar, aponta] Nu meu fi… cês viram aquela fumaça ali?
-RAI: Que fumaça, véi?
-GERALDIM: Aquela ali, uai! Esse trem tá esquisito demais, sô.
-RAI: [rindo] Oxe, relaxe vu! É churrasco, Geraldim. [olha o pulso] O ônibus sai dez e quarenta… Arroche, arroche!
-BENTO: Bora, moçada!
+GERALDIM: [de boca cheia, para de mastigar] Nu meu fi… cês viram aquela fumaça ali?
+RAI: Hã? Que fumaça, véi?
+GERALDIM: [aponta] Ali, ó! Atrás dos prédio. Esse trem tá esquisito demais, sô.
+RAI: [rindo] Oxe, é churrasco, Geraldim! Relaxe vu.
+GERALDIM: Churrasco, uai? A essa hora?
+RAI: [olha o pulso] Ó a hora, véi… o ônibus sai dez e quarenta. Arroche, arroche!
+BENTO: Bora, moçada, bora!
 [Eles viram e andam até a DOCA 2. O Caio vai atrás.]
 CAIO: [baixinho] Mano… isso aqui não tem cara de rodoviária não, cuzão.
-BENTO: [lá de dentro, se virando] Ouvi, hein! Vem logo, é ali!
+BENTO: [lá de dentro, se virando, rindo] Ouvi, hein! Vem logo, é ali!
 
 **CENA 2 — A plataforma (20–40 s)** · a rodoviária cheia: pastelaria, bilheteria com fila, orelhão, pipoca, TVs de partidas ("EUROPA EXPRESS — PLAT. 9"), pombos, ônibus chegando.
 [Caio anda pela plataforma. O celular vibra na mão dele: na tela, "WhatsApp — Luis — 17 chamadas de voz perdidas". Ele toca no aviso, abre a conversa, "digitando…", chega a mensagem: "Vocês vão me deixar pra trás de novo?". Ele trava a tela.]
