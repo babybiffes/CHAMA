@@ -161,11 +161,11 @@ Os números dos jogadores são os **DDDs** das cidades deles: **011, 053, 031, 0
 [Os 3 amigos de frente para o Caio. Bento toma chimarrão, Geraldim come pão de queijo, Rai não para quieto.]
 BENTO: [aponta com o polegar para a porta] Bah, a entrada da rodoviária é pelos fundos, tchê. Eu sei o caminho.
 [A câmera olha para a rua: prédios baixos, fumaça preta, alguém correndo lá longe, sirene distante. Volta para os amigos.]
-GERALDIM: [para de comer e aponta para a fumaça] Uai, sô… cês viram aquela fumaça? Esse trem tá esquisito demais.
-RAI: [bate no pulso, depois acena para a porta] Oxe, relaxe, véi! O ônibus sai dez e quarenta. Bora!
+GERALDIM: [para de comer e aponta para a fumaça] Nu meu fi… cês viram aquela fumaça? Esse trem tá esquisito demais, sô.
+RAI: [bate no pulso, depois acena para a porta] Oxe, relaxe vu, véi! O ônibus sai dez e quarenta. Arroche!
 [Eles viram e andam até a DOCA 2. O Caio vai atrás.]
-CAIO: Mano… isso aqui não tem cara de rodoviária.
-BENTO: [lá de dentro, se virando] Vem, guris! É logo ali.
+CAIO: Mano… isso aqui não tem cara de rodoviária não, cuzão.
+BENTO: [lá de dentro, se virando] Vem, moçada! É logo ali.
 
 **CENA 2 — A plataforma (20–40 s)** · a rodoviária cheia: pastelaria, bilheteria com fila, orelhão, pipoca, TVs de partidas ("EUROPA EXPRESS — PLAT. 9"), pombos, ônibus chegando.
 [Caio anda pela plataforma. O celular vibra na mão dele: na tela, "WhatsApp — Luis — 17 chamadas de voz perdidas". Ele toca no aviso, abre a conversa, "digitando…", chega a mensagem: "Vocês vão me deixar pra trás de novo?". Ele trava a tela.]

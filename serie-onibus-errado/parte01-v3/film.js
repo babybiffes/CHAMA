@@ -15,10 +15,10 @@ const env = (t, a, b, e = 0.35) => smooth(a, a + e, t) * (1 - smooth(b - e, b, t
 
 const SUBS = [
   [0.4, 3.9, 'bento', 'Bah, a entrada da rodoviária é pelos fundos, tchê. Eu sei o caminho.'],
-  [5.7, 8.9, 'geraldim', 'Uai, sô… cês viram aquela fumaça? Esse trem tá esquisito demais.'],
-  [9.1, 11.9, 'rai', 'Oxe, relaxe, véi! O ônibus sai dez e quarenta. Bora!'],
-  [15.0, 17.3, 'caio', 'Mano… isso aqui não tem cara de rodoviária.'],
-  [18.4, 20.0, 'bento', 'Vem, guris! É logo ali.'],
+  [5.7, 8.9, 'geraldim', 'Nu meu fi… cês viram aquela fumaça? Esse trem tá esquisito demais, sô.'],
+  [9.1, 11.9, 'rai', 'Oxe, relaxe vu, véi! O ônibus sai dez e quarenta. Arroche!'],
+  [15.0, 17.3, 'caio', 'Mano… isso aqui não tem cara de rodoviária não, cuzão.'],
+  [18.4, 20.0, 'bento', 'Vem, moçada! É logo ali.'],
 ];
 const subAt = (t) => SUBS.find((s) => t >= s[0] && t < s[1]);
 const talkOf = (who, t) => { const s = subAt(t); if (!s || s[2] !== who) return 0; const k = Math.min(prog(t, s[0], s[0] + 0.12), 1 - prog(t, s[1] - 0.15, s[1])); return k * (0.25 + 0.75 * Math.abs(Math.sin(t * 12.5 + noise1(t * 3, 7) * 2))); };
