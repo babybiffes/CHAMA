@@ -85,3 +85,43 @@ Gere em 4 partes, cada uma com 2 speakers, e me mande os arquivos nesta ordem:
 - **Risada:** no texto, escreva `(rindo)` antes da fala, ex.: `Rai: (rindo) Oxe, é churrasco, Geraldim!`. Se o modelo ler a palavra em voz alta, tire e coloque na descrição da cena ("o Rai fala rindo").
 - **Ritmo:** se ficar devagar, acrescente na descrição "falam rápido, um em cima do outro".
 - **Sotaque fraco:** acrescente "carreguem mais nos sotaques regionais".
+
+---
+
+## ⚙️ Configuração na tela nova do AI Studio (Speaker settings + blocos de fala)
+
+### 1. Escolher a voz de cada personagem (Speaker settings → filtros)
+Em todos: **Language = Portuguese (Brazil)** (se houver; senão Portuguese), **Gender = Male**, **Use case = Podcast** ou **Storyteller** (vozes de conversa; evite *Commercial Voiceover*, *Call Center*, *Tech Support*, que soam como locutor/atendente).
+
+| Personagem | Pitch | Style (filtro) | O que procurar ao ouvir |
+|---|---|---|---|
+| **Bento** (gaúcho) | **Medium** | Confident / Casual | animado, sorridente, firme |
+| **Geraldim** (mineiro) | **High** | Calm / Casual | fino, manso, devagar |
+| **Rai** (baiano) | **Medium** (ou High) | Casual | solto, alegre, com riso na voz |
+| **Caio** (paulista) | **Medium** | Casual / Direct | rápido, jovem, meio nervoso |
+
+Ouça 3 ou 4 opções de cada (▶) e anote o nome da voz escolhida. Use **sempre a mesma** pra cada personagem em todos os episódios.
+
+### 2. Montar o diálogo (um bloco por fala)
+Cada bloco tem **Speaker**, **Style** e **+ Expression** (digite `<` no texto pra ver as tags, ex.: `<laugh>`, `<gasp>`).
+
+| # | Speaker | Style | Texto (com tags) |
+|---|---|---|---|
+| 1 | Bento | Confident | Bah, ó… a entrada é pelos fundos, tchê. |
+| 2 | Caio | Casual | Pelos fundos? Cê tá de brincadeira, né, mano? |
+| 3 | Bento | Casual | Confia, guri. Eu sei o caminho. |
+| 4 | Caio | Casual | Sabe nada… |
+| 5 | Geraldim | Calm | Nu meu fi… cês viram aquela fumaça ali? |
+| 6 | Rai | Casual | Hã? Que fumaça, véi? |
+| 7 | Geraldim | Calm | Ali, ó! Atrás dos prédio. Esse trem tá esquisito demais, sô. |
+| 8 | Rai | Casual | `<laugh>` Oxe, é churrasco, Geraldim! Relaxe vu. |
+| 9 | Geraldim | Calm | Churrasco, uai? A essa hora? |
+| 10 | Rai | Casual | Ó a hora, véi… o ônibus sai dez e quarenta. Arroche, arroche! |
+| 11 | Bento | Confident | Bora, moçada, bora! |
+| 12 | Caio | Casual | Mano… isso aqui não tem cara de rodoviária não, cuzão. |
+| 13 | Bento | Casual | `<laugh>` Ouvi, hein! Vem logo, é ali! |
+
+- **Se o seletor de Speaker deixar adicionar mais de 2**, crie os 4 e faça a cena inteira num diálogo só (melhor resultado).
+- **Se só aceitar 2**, faça 4 diálogos: **A** (blocos 1–4: Bento + Caio), **B** (5–10: Geraldim + Rai), **C** (11: Bento), **D** (12–13: Caio + Bento).
+- **Se o Style aceitar texto livre**, cole a descrição do personagem que está mais acima neste arquivo — é o que mais ajuda no sotaque.
+- O tom (voz mais fina do Geraldim, afinada leve do Rai, Bento mais leve) **eu ajusto na edição**, então não precisa achar a voz perfeita no tom.
