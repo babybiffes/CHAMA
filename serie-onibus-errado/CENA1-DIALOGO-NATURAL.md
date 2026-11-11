@@ -28,12 +28,14 @@ O que deixa a conversa real: **respostas curtas** ("Sabe nada…", "Hã?"), **pe
 
 Tudo é feito no **"Create new dialog"**, usando as vozes prontas do AI Studio. O sotaque e o jeito de cada um vêm da **descrição da cena**. Use sempre a mesma voz para cada personagem em todos os episódios:
 
-| Personagem | Voz pronta | Alternativa |
+| Personagem | Voz pronta | Ajuste que eu faço na edição |
 |---|---|---|
-| Bento (gaúcho) | **Algenib** (grave, rouca) | Alnilam |
-| Geraldim (mineiro) | **Umbriel** (calma) | Achird |
-| Rai (baiano) | **Puck** (animada) | Sadachbia |
-| Caio (paulista) | **Fenrir** (agitada) | Zubenelgenubi |
+| Bento (gaúcho) | **Sadachbia** (animada, mais leve que a Algenib) | +2,5 tons e 7% mais rápido |
+| Geraldim (mineiro) | **Achird** (amigável, mais leve) | voz **bem fina**: +4 a +6 tons |
+| Rai (baiano) | **Puck** (a mesma) | afinada leve: +1,5 tom |
+| Caio (paulista) | **Fenrir** (a mesma) | — |
+
+> O "afinar" eu faço aqui na edição, depois que você me manda o áudio: subo o tom de cada um sem mudar a velocidade da fala. Você só gera com as vozes da tabela.
 
 ## Passo 2 — Gerar a conversa
 
@@ -43,9 +45,9 @@ Volte ao Playground e toque em **"Create new dialog"**.
 2. **Descrição da cena / estilo** — aqui vai o sotaque de cada um (cole tudo):
 ```
 Quatro amigos de regiões diferentes do Brasil conversando de noite atrás de um armazém, perto da rodoviária, antes de uma viagem. Papo de rua, rápido, natural e cheio de zoeira, como um áudio gravado no celular no meio do grupo. Um responde o outro sem pausa longa, às vezes quase em cima da fala do outro. Ninguém fala como locutor.
-Bento: gaúcho de Bagé, 30 anos, voz grave e rouca, confiante, sotaque da fronteira com o "e" final fechado ("tchê", "guri"), "Bah" curto, melodia que sobe no meio e cai no fim. É o guia da turma.
+Bento: gaúcho de Bagé, 30 anos, voz média e animada, sempre meio sorrindo, empolgado com a viagem, sotaque da fronteira com o "e" final fechado ("tchê", "guri"), "Bah" curto e alegre, melodia que sobe no meio e cai no fim. É o guia da turma.
 Caio: paulistano da Mooca, 27 anos, fala rápida e emendada, "mano" bem paulista, "não" nasal. Reclama e zoa os amigos com intimidade; o "cuzão" é brincadeira.
-Geraldim: mineiro de Sabará, 28 anos, fala mansa, baixa e devagar, de boca cheia de pão de queijo, comendo sílabas ("Nu meu fi" quase "numêfi"), "uai" e "sô", frase que sobe no fim. Desconfiado.
+Geraldim: mineiro de Sabará, 28 anos, voz fina e aguda, meio esganiçada, fala mansa e devagar, de boca cheia de pão de queijo, comendo sílabas ("Nu meu fi" quase "numêfi"), "uai" e "sô", frase que sobe no fim. Desconfiado.
 Rai: baiano de Salvador, 25 anos, voz alegre e risonha, vogais abertas, ritmo cantado, "Oxe" esticado e "véi" arrastado. Ri de tudo e apressa a turma.
 ```
 3. **Cole o texto da conversa** no formato `Nome: fala`, um por linha:
