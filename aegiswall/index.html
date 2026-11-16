@@ -1,220 +1,129 @@
 <!doctype html>
-<html lang="pt-BR" data-tema="escuro">
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AegisWall — Operação</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--BUILD:HEAD-->
+<title>AegisWall</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="icon" type="image/svg+xml" href="logo.svg">
-<link rel="stylesheet" href="css/estilo.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="css/style.css">
+<!--/BUILD:HEAD-->
 </head>
 <body>
+<!--BUILD:BODY-->
 
-<!-- Ícones: um único sprite embutido, sem requisições extras -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<!-- Icon sprite: one inline set, no extra requests -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
-    <!-- Logo AegisWall: escudo formado por uma grade 3×3 de telas -->
     <symbol id="logo" viewBox="0 0 34 33">
-      <rect x="0" y="0" width="10" height="10" style="fill:var(--destaque)"/><rect x="12" y="0" width="10" height="10" style="fill:var(--destaque)"/><rect x="24" y="0" width="10" height="10" style="fill:var(--logo-neutro)"/>
-      <rect x="0" y="11" width="10" height="10" style="fill:var(--destaque)"/><rect x="12" y="11" width="10" height="10" style="fill:var(--logo-neutro)"/><rect x="24" y="11" width="10" height="10" style="fill:var(--logo-neutro)"/>
-      <path d="M0 22h10v8.530L0 27z" style="fill:var(--logo-neutro)"/><path d="M12 22h10v9.240L17 33l-5-1.760z" style="fill:var(--logo-neutro)"/><path d="M24 22h10v5l-10 3.530z" style="fill:var(--logo-neutro)"/>
+      <rect x="0" y="0" width="10" height="10" class="lg-a"/><rect x="12" y="0" width="10" height="10" class="lg-a"/><rect x="24" y="0" width="10" height="10" class="lg-n"/>
+      <rect x="0" y="11" width="10" height="10" class="lg-a"/><rect x="12" y="11" width="10" height="10" class="lg-n"/><rect x="24" y="11" width="10" height="10" class="lg-n"/>
+      <path d="M0 22h10v8.53L0 27z" class="lg-n"/><path d="M12 22h10v9.24L17 33l-5-1.76z" class="lg-n"/><path d="M24 22h10v5l-10 3.53z" class="lg-n"/>
     </symbol>
     <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="m16 10 5-3v10l-5-3"/></symbol>
-    <symbol id="i-mosaico" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18"/></symbol>
-    <symbol id="i-web" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.500 2.600 3.800 5.600 3.800 9s-1.300 6.400-3.800 9c-2.500-2.600-3.800-5.600-3.800-9S9.500 5.600 12 3z"/></symbol>
-    <symbol id="i-youtube" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="m10.500 9.500 4.500 2.500-4.500 2.500z"/></symbol>
+    <symbol id="i-mosaic" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 12h18M12 3v18"/></symbol>
+    <symbol id="i-web" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.600 12 3z"/></symbol>
+    <symbol id="i-youtube" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="m10.5 9.5 4.5 2.5-4.5 2.5z"/></symbol>
     <symbol id="i-app" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></symbol>
-    <symbol id="i-busca" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.500"/><path d="m16 16 4.500 4.500"/></symbol>
-    <symbol id="i-mais" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-    <symbol id="i-menos" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
-    <symbol id="i-desfazer" viewBox="0 0 24 24"><path d="M8 5 4 9l4 4"/><path d="M4 9h9.500a5.500 5.500 0 0 1 0 11H10"/></symbol>
-    <symbol id="i-refazer" viewBox="0 0 24 24"><path d="m16 5 4 4-4 4"/><path d="M20 9h-9.500a5.500 5.500 0 0 0 0 11H14"/></symbol>
-    <symbol id="i-fixar" viewBox="0 0 24 24"><path d="M9 3h6l-1 6 3 3v2H7v-2l3-3z"/><path d="M12 14v7"/></symbol>
-    <symbol id="i-lixeira" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
-    <symbol id="i-painel-esq" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></symbol>
-    <symbol id="i-painel-dir" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M8 5 4 9l4 4"/><path d="M4 9h9.5a5.5 5.5 0 0 1 0 11H10"/></symbol>
+    <symbol id="i-redo" viewBox="0 0 24 24"><path d="m16 5 4 4-4 4"/><path d="M20 9h-9.5a5.5 5.500 0 0 0 0 11H14"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
     <symbol id="i-layouts" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M10 10v10"/></symbol>
     <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
-    <symbol id="i-alerta" viewBox="0 0 24 24"><path d="M12 4 2.500 20h19z"/><path d="M12 10v5M12 17.500v.5"/></symbol>
-    <symbol id="i-ok" viewBox="0 0 24 24"><path d="m5 12.500 4.500 4.500L19 7.500"/></symbol>
-    <symbol id="i-seta" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
-    <symbol id="i-usuario" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.500"/><path d="M5 20a7 7 0 0 1 14 0"/></symbol>
-    <symbol id="i-atualizar" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.300-5.600"/><path d="M20 4v5h-5"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 2.5 20h19z"/><path d="M12 10v5M12 17.5v.5"/></symbol>
+    <symbol id="i-ok" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.500v.5"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="m10 6 6 6-6 6"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></symbol>
+    <symbol id="i-wall" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="12" rx="1.5"/><path d="M8.800 5v12M15.200 5v12M2.500 11h19M8 20.500h8"/></symbol>
+    <symbol id="i-audio" viewBox="0 0 24 24"><path d="M4 9.500v5h3.500l4.500 4v-13l-4.500 4z"/><path d="M15.500 9a4.200 4.200 0 0 1 0 6M18 6.500a8 8 0 0 1 0 11"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.500v5h3.500l4.500 4v-13l-4.500 4z"/><path d="m16 9.500 5 5M21 9.500l-5 5"/></symbol>
+    <symbol id="i-system" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9.500 3v3M14.500 3v3M9.500 18v3M14.500 18v3M3 9.500h3M3 14.500h3M18 9.500h3M18 14.500h3"/><rect x="9.500" y="9.500" width="5" height="5"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="17" r="2"/></symbol>
+    <symbol id="i-orbit" viewBox="0 0 24 24"><path d="m12 3 8 4.500v9L12 21l-8-4.500v-9z"/><path d="M4 7.500 12 12l8-4.500M12 12v9"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M5 4.500v13l3.500-3 2.300 5 2.200-1-2.300-5H15z"/><path d="M15.500 4.500h4v4" /></symbol>
+    <symbol id="i-front" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="12" rx="1.500"/><path d="M12 2.500v3M12 18.500v3"/></symbol>
+    <symbol id="i-fit" viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><rect x="8.500" y="9" width="7" height="6" rx="1"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 4 9 4.500-9 4.500-9-4.500z"/><path d="m3 13 9 4.500 9-4.500"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.500 10.500 12 15l4.500-4.500M5 20h14"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V5M7.500 9.500 12 5l4.500 4.500M5 20h14"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8.500-8.500M16 7l3 3M13.500 9.500l2 2"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.500v13l11-6.500z"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6.500" y="6.500" width="11" height="11" rx="1.500"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8.500 5.500v13M15.500 5.500v13"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.700 0l3-3a4 4 0 0 0-5.700-5.700l-1 1"/><path d="M14 10a4 4 0 0 0-5.700 0l-3 3a4 4 0 0 0 5.700 5.700l1-1"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 10 3 2.500-3 2.500M12.500 15H17"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="6.500" rx="7.500" ry="3"/><path d="M4.500 6.500v11c0 1.700 3.400 3 7.500 3s7.500-1.300 7.500-3v-11M4.500 12c0 1.700 3.400 3 7.500 3s7.500-1.300 7.500-3"/></symbol>
+    <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 3.500v8"/><path d="M7 6.500a7.500 7.500 0 1 0 10 0"/></symbol>
+    <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V5M6.500 10.500 12 5l5.500 5.500"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6.500 13.500 12 19l5.500-5.500"/></symbol>
+    <symbol id="i-panel-l" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></symbol>
+    <symbol id="i-panel-r" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6.500h12M8 12h12M8 17.500h12M4 6.500h.5M4 12h.5M4 17.500h.5"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 2.500v3M12 18.500v3M2.500 12h3M18.500 12h3"/></symbol>
   </defs>
 </svg>
 
-<!-- ============ LOGIN ============ -->
-<div id="tela-login" class="login">
-  <form id="form-login" class="login-cartao" autocomplete="off" novalidate>
-    <div class="marca">
+<!-- ============ ENTRY ============ -->
+<div id="login" class="login">
+  <form id="login-form" class="login-card" autocomplete="off" novalidate>
+    <div class="brand">
       <svg class="logo" aria-hidden="true"><use href="#logo"/></svg>
-      <div>
-        <strong>AegisWall</strong>
-        <span>Controle de videowall</span>
-      </div>
+      <div><strong id="login-product">AegisWall</strong><span id="login-tagline"></span></div>
     </div>
-
-    <label class="campo">
-      <span>Usuário</span>
-      <input id="login-usuario" name="usuario" type="text" autocomplete="username" spellcheck="false" required>
-    </label>
-    <label class="campo">
-      <span>Senha</span>
-      <input id="login-senha" name="senha" type="password" autocomplete="current-password" required>
-    </label>
-
-    <p id="login-erro" class="login-erro" role="alert" hidden></p>
-    <button id="login-entrar" class="btn btn-primario btn-largo" type="submit">Entrar</button>
-
-    <p class="login-demo">
-      <span class="selo selo-demo">Demonstração</span>
-      Acesso de referência: <code>admin</code> / <code>admin</code>. A autenticação real é definida na instalação.
-    </p>
+    <label class="field"><span id="login-user-label"></span>
+      <input id="login-user" name="user" type="text" autocomplete="username" spellcheck="false" autocapitalize="none" required></label>
+    <label class="field"><span id="login-pass-label"></span>
+      <input id="login-pass" name="pass" type="password" autocomplete="current-password" required></label>
+    <p id="login-error" class="field-error" role="alert" hidden></p>
+    <button id="login-submit" class="btn btn-primary btn-wide" type="submit"></button>
+    <div id="login-demo" class="login-demo"></div>
+    <div id="login-license" class="login-license"></div>
   </form>
 </div>
 
-<!-- ============ APLICAÇÃO ============ -->
+<!-- ============ APPLICATION ============ -->
 <div id="app" class="app" hidden>
-
-  <header class="topo">
-    <div class="topo-id">
-      <svg class="logo logo-p" aria-hidden="true"><use href="#logo"/></svg>
-      <strong>AegisWall</strong>
-    </div>
-
-    <nav class="abas" aria-label="Áreas do painel">
-      <button class="aba ativa" data-area="operacao" type="button">Operação</button>
-      <button class="aba" data-area="config" type="button">Configurações</button>
-    </nav>
-
-    <span id="chip-conexao" class="chip chip-demo" title="Nenhum comando chega a telas físicas neste modo">
-      <span class="ponto"></span><span id="chip-conexao-texto">Demonstração · fontes simuladas</span>
-    </span>
-
-    <div class="topo-espaco"></div>
-
-    <div id="acoes-edicao" class="topo-acoes">
-      <button id="btn-desfazer" class="btn-icone" type="button" title="Desfazer (Ctrl+Z)" aria-label="Desfazer"><svg class="ic"><use href="#i-desfazer"/></svg></button>
-      <button id="btn-refazer" class="btn-icone" type="button" title="Refazer (Ctrl+Y)" aria-label="Refazer"><svg class="ic"><use href="#i-refazer"/></svg></button>
-      <span class="divisor"></span>
-      <span id="pendencias" class="pendencias" aria-live="polite"></span>
-      <button id="btn-descartar" class="btn" type="button">Descartar</button>
-      <button id="btn-aplicar" class="btn btn-primario" type="button">Aplicar</button>
-      <span class="divisor"></span>
-      <button id="btn-layouts" class="btn" type="button" aria-haspopup="true"><svg class="ic"><use href="#i-layouts"/></svg>Layouts<svg class="ic ic-p"><use href="#i-seta"/></svg></button>
-    </div>
-
-    <button id="btn-usuario" class="btn btn-fantasma" type="button" aria-haspopup="true"><svg class="ic"><use href="#i-usuario"/></svg><span id="nome-usuario"></span></button>
-  </header>
-
-  <!-- ---------- Operação ---------- -->
-  <main id="visao-operacao" class="operacao">
-
-    <aside id="lateral" class="lateral" aria-label="Fontes">
-      <div class="lateral-cabeca">
-        <h2>Fontes</h2>
-        <span id="fontes-contagem" class="discreto"></span>
-      </div>
-      <label class="busca">
-        <svg class="ic"><use href="#i-busca"/></svg>
-        <input id="busca-fontes" type="search" placeholder="Buscar fonte" aria-label="Buscar fonte" spellcheck="false">
-      </label>
-      <div id="categorias" class="categorias" role="tablist" aria-label="Categorias"></div>
-      <div id="lista-fontes" class="lista-fontes" tabindex="0" aria-label="Catálogo de fontes">
-        <div id="lista-espaco"><div id="lista-janela"></div></div>
-      </div>
-      <p class="lateral-dica">Arraste para um monitor ou use <b>+</b> para adicionar.</p>
-    </aside>
-
-    <section class="centro">
-      <div class="barra-grade">
-        <button id="btn-lateral" class="btn-icone" type="button" title="Mostrar ou recolher fontes" aria-label="Mostrar ou recolher fontes"><svg class="ic"><use href="#i-painel-esq"/></svg></button>
-
-        <div class="grade-config" role="group" aria-label="Grade de monitores">
-          <span class="rotulo-campo">Colunas</span>
-          <div class="passo">
-            <button type="button" data-passo="cols" data-d="-1" aria-label="Diminuir colunas"><svg class="ic"><use href="#i-menos"/></svg></button>
-            <input id="in-cols" type="number" min="1" step="1" inputmode="numeric" aria-label="Colunas">
-            <button type="button" data-passo="cols" data-d="1" aria-label="Aumentar colunas"><svg class="ic"><use href="#i-mais"/></svg></button>
-          </div>
-          <span class="vezes">×</span>
-          <span class="rotulo-campo">Linhas</span>
-          <div class="passo">
-            <button type="button" data-passo="linhas" data-d="-1" aria-label="Diminuir linhas"><svg class="ic"><use href="#i-menos"/></svg></button>
-            <input id="in-linhas" type="number" min="1" step="1" inputmode="numeric" aria-label="Linhas">
-            <button type="button" data-passo="linhas" data-d="1" aria-label="Aumentar linhas"><svg class="ic"><use href="#i-mais"/></svg></button>
-          </div>
-          <span id="grade-total" class="grade-total" aria-live="polite"></span>
-        </div>
-        <button id="btn-dividir" class="btn" type="button" aria-haspopup="true" title="Dividir monitores em quadrantes"><svg class="ic"><use href="#i-mosaico"/></svg><span>Dividir</span></button>
-
-        <div class="topo-espaco"></div>
-
-        <div class="segmento" role="group" aria-label="Composição exibida">
-          <button id="ver-edicao" class="ativa" type="button" title="Composição em edição (rascunho)">Em edição</button>
-          <button id="ver-confirmado" type="button" title="Composição confirmada nas telas físicas">No ar</button>
-        </div>
-        <button id="btn-encaixe" class="btn btn-alternar" type="button" aria-pressed="true" title="Encaixe em bordas de monitores e conteúdos (segure Alt para ignorar)">Encaixe</button>
-        <button id="btn-painel" class="btn-icone" type="button" title="Mostrar ou recolher propriedades" aria-label="Mostrar ou recolher propriedades"><svg class="ic"><use href="#i-painel-dir"/></svg></button>
-      </div>
-
-      <div id="aviso-fora" class="aviso-fora" hidden></div>
-
-      <div id="palco" class="palco">
-        <div id="mundo" class="mundo">
-          <div id="grade-fundo" class="grade-fundo"></div>
-          <div id="itens" class="itens"></div>
-          <div id="grade-linhas" class="grade-linhas" aria-hidden="true"></div>
-          <div id="alvo-solte" class="alvo-solte" hidden></div>
-          <div id="guia-v" class="guia guia-v" hidden></div>
-          <div id="guia-h" class="guia guia-h" hidden></div>
-          <div id="selecao" class="selecao" hidden>
-            <i class="alca" data-d="nw"></i><i class="alca" data-d="n"></i><i class="alca" data-d="ne"></i>
-            <i class="alca" data-d="w"></i><i class="alca" data-d="e"></i>
-            <i class="alca" data-d="sw"></i><i class="alca" data-d="s"></i><i class="alca" data-d="se"></i>
-            <span id="medida" class="medida" hidden></span>
-          </div>
-        </div>
-        <span id="selo-visao" class="selo-visao"></span>
-        <p id="palco-vazio" class="palco-vazio" hidden>Arraste uma fonte para um monitor<br>ou use <b>+</b> na lista ao lado.</p>
-      </div>
-
-      <footer id="rodape" class="rodape"></footer>
-    </section>
-
-    <aside id="painel" class="painel" aria-label="Propriedades">
-      <div id="props"></div>
-      <div id="bloco-previa" class="bloco" hidden>
-        <h3>Prévia <span class="selo selo-demo">simulada</span></h3>
-        <div class="previa-quadro">
-          <canvas id="previa-canvas" width="256" height="144"></canvas>
-          <span id="previa-vazia" class="previa-vazia">Sem imagem carregada</span>
-        </div>
-        <p id="previa-estado" class="discreto"></p>
-        <div class="linha-botoes">
-          <button id="previa-miniatura" class="btn" type="button"><svg class="ic"><use href="#i-atualizar"/></svg>Miniatura</button>
-          <button id="previa-movimento" class="btn btn-alternar" type="button" aria-pressed="false">Em movimento</button>
-        </div>
-        <label class="campo-linha">
-          <span>Qualidade</span>
-          <select id="previa-qualidade">
-            <option value="baixa">Baixa · 2 quadros/s</option>
-            <option value="media">Média · 5 quadros/s</option>
-            <option value="alta">Alta · 10 quadros/s</option>
-          </select>
-        </label>
-      </div>
-      <div id="props-fim"></div>
-    </aside>
-  </main>
-
-  <!-- ---------- Configurações (carregada sob demanda) ---------- -->
-  <main id="visao-config" class="config" hidden></main>
+  <header id="header" class="header"></header>
+  <nav id="rail" class="rail" aria-label="Workspaces"></nav>
+  <div id="views" class="views">
+    <main id="ws-wall" class="ws ws-wall" data-ws="wall"></main>
+    <main id="ws-audio" class="ws ws-page" data-ws="audio" hidden></main>
+    <main id="ws-system" class="ws ws-page" data-ws="system" hidden></main>
+    <main id="ws-settings" class="ws ws-page" data-ws="settings" hidden></main>
+  </div>
 </div>
 
-<div id="pop" class="pop" hidden></div>
-<div id="avisos" class="avisos" aria-live="polite"></div>
+<div id="popover" class="popover" hidden></div>
+<div id="dialogs"></div>
+<div id="toasts" class="toasts" aria-live="polite"></div>
+<!--/BUILD:BODY-->
 
-<script src="js/integracao-demo.js"></script>
+<!--BUILD:SCRIPTS-->
+<script src="vendor/three.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/services-demo.js"></script>
+<script src="js/services-ops.js"></script>
+<script src="js/wall-model.js"></script>
+<script src="js/compositor.js"></script>
+<script src="js/stage.js"></script>
+<script src="js/wall-ui.js"></script>
+<script src="js/wall-inspector.js"></script>
+<script src="js/audio-ui.js"></script>
+<script src="js/system-ui.js"></script>
+<script src="js/licensing-ui.js"></script>
+<script src="js/settings-ui.js"></script>
 <script src="js/app.js"></script>
+<!--/BUILD:SCRIPTS-->
 </body>
 </html>
