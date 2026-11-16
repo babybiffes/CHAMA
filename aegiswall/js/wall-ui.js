@@ -114,6 +114,7 @@
     if (!U.ready) return;
     // The camera reframes so the wall stays centred in the area the panels leave free.
     const dockH = el.dock.offsetHeight + 24, shelfH = U.shelfOpen ? el.shelf.offsetHeight + 8 : 0;
+    el.stage.parentElement.style.setProperty('--shelf-h', shelfH ? shelfH + 4 + 'px' : '0px');   // side panels make room for the shelf
     stage.setInsets({
       left: !small && U.libOpen ? el.library.offsetWidth + 20 : 0,
       right: !small && U.inspOpen ? el.inspector.offsetWidth + 20 : 0,
@@ -356,8 +357,9 @@
       const q = stage.wallQuad(), a = gridFx.after;
       let h = '<polygon class="fx-grid-frame" points="' + pts(q) + '"/>';
       const lerp = (p, r, f) => ({ x: p.x + (r.x - p.x) * f, y: p.y + (r.y - p.y) * f });
-      for (let k = 1; k < a.cols; k++) { const p = lerp(q[0], q[1], k / a.cols), r = lerp(q[3], q[2], k / a.cols); h += '<line x1="' + p.x + '" y1="' + p.y + '" x2="' + r.x + '" y2="' + r.y + '"/>'; }
-      for (let r0 = 1; r0 < a.rows; r0++) { const p = lerp(q[0], q[3], r0 / a.rows), r = lerp(q[1], q[2], r0 / a.rows); h += '<line x1="' + p.x + '" y1="' + p.y + '" x2="' + r.x + '" y2="' + r.y + '"/>'; }
+      const seamLine = (axis, n) => { const [p, r] = stage.seam(axis, n); return '<line x1="' + p.x.toFixed(1) + '" y1="' + p.y.toFixed(1) + '" x2="' + r.x.toFixed(1) + '" y2="' + r.y.toFixed(1) + '"/>'; };
+      for (let k = 1; k < stage.cols; k++) h += seamLine('col', k);
+      for (let r0 = 1; r0 < stage.rows; r0++) h += seamLine('row', r0);
       const top = lerp(q[0], q[1], 0.5), ty = Math.max(free.y0 + 34, top.y - 16);
       const label = a.cols + ' × ' + a.rows + ' = ' + AW.plural(a.cols * a.rows, 'monitor', 'monitors');
       h += '<g transform="translate(' + top.x.toFixed(1) + ',' + ty.toFixed(1) + ')"><rect class="fx-grid-chip" x="' + (-label.length * 4.1 - 12) + '" y="-15" width="' + (label.length * 8.2 + 24) + '" height="26" rx="13"/><text class="fx-grid-text" text-anchor="middle" y="3">' + esc(label) + '</text></g>';

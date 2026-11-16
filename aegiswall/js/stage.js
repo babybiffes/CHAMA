@@ -43,6 +43,8 @@
       return [S.projectLocal(x0, y0), S.projectLocal(x1, y0), S.projectLocal(x1, y1), S.projectLocal(x0, y1)];
     },
     tileRect(key) { const [r, k] = key.split(',').map(Number); return { x: k * MW, y: r * MH, w: MW, h: MH }; },
+    // A seam between monitors as two stage-pixel points (follows the perspective exactly).
+    seam(axis, i) { return axis === 'col' ? [S.projectLocal(i * PX, 0), S.projectLocal(i * PX, S.rows * PY)] : [S.projectLocal(0, i * PY), S.projectLocal(S.cols * PX, i * PY)]; },
     // Outer wall bounds (including bezels) as a quad.
     wallQuad() { const w = S.cols * PX, h = S.rows * PY; return [S.projectLocal(0, 0), S.projectLocal(w, 0), S.projectLocal(w, h), S.projectLocal(0, h)]; },
   });

@@ -301,7 +301,7 @@
       else if (a === 'pick') { I.shelfSel = I.shelfSel === id ? null : id; I.renderShelf(); U.layoutPanels(); }
       else if (a === 'save') {
         const name = await AW.promptText({ title: t('Save layout'), label: t('Layout name'), value: t('Layout {n}', { n: W.layouts.list().length + 1 }), validate: (v) => nameTaken(v) });
-        if (name) { const entry = W.layouts.save(name); I.shelfSel = entry.id; AW.toast('ok', t('Layout "{name}" saved on this browser.', { name })); }
+        if (name) { const entry = W.layouts.save(name); I.shelfSel = entry.id; I.renderShelf(); U.layoutPanels(); AW.toast('ok', t('Layout "{name}" saved on this browser.', { name })); }
       } else if (a === 'load' && l) load(id);
       else if (a === 'rename' && l) { const name = await AW.promptText({ title: t('Rename layout'), label: t('Layout name'), value: l.name, validate: (v) => nameTaken(v, id) }); if (name) W.layouts.rename(id, name); }
       else if (a === 'update' && l) { if (await AW.confirm({ title: t('Update layout?'), message: t('"{name}" will be replaced by the current draft.', { name: l.name }), confirmLabel: t('Update') })) { W.layouts.overwrite(id); AW.toast('ok', t('Layout "{name}" updated.', { name: l.name })); } }

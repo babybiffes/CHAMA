@@ -66,21 +66,27 @@
   };
   function readCfg() {
     const c = AW.store.get('ctl.config', null);
-    if (c && c.data) { for (const k in CFG_DEFAULT) c.data[k] = Object.assign({}, CFG_DEFAULT[k], c.data[k]); return c; }
-    return { version: 1, updatedAt: Date.now(), updatedBy: 'factory', data: clone(CFG_DEFAULT) };
+    const out = c && c.data ? c : { version: 1, updatedAt: Date.now(), updatedBy: 'factory', data: clone(CFG_DEFAULT) };
+    out.sv = out.sv || {};       // per-section versions: a save in one category never invalidates a draft in another
+    for (const k in CFG_DEFAULT) { out.data[k] = Object.assign({}, CFG_DEFAULT[k], out.data[k]); out.sv[k] = out.sv[k] || 1; }
+    return out;
   }
-  function writeCfg(c, by) { c.version++; c.updatedAt = Date.now(); c.updatedBy = by || (AW.session ? AW.session.user : 'system'); AW.store.set('ctl.config', c); AW.bus.emit('config', c); return c; }
+  function writeCfg(c, by, sections) {
+    c.version++; (sections || Object.keys(CFG_DEFAULT)).forEach((k) => { c.sv[k]++; });
+    c.updatedAt = Date.now(); c.updatedBy = by || (AW.session ? AW.session.user : 'system'); AW.store.set('ctl.config', c); AW.bus.emit('config', c); return c;
+  }
   svc.config = {
     DEFAULTS: CFG_DEFAULT, INTERVALS,
     get: () => clone(readCfg()),
     section: (name) => clone(readCfg().data[name]),
+    sectionVersion: (name) => readCfg().sv[name],
     validate: (section, values) => (VALIDATE[section] ? VALIDATE[section](values) : {}),
     async save(section, values, baseVersion) {
       AW.requireRole(SECTION_ROLE[section] || 'administrator', t('Changing {section} settings', { section }));
       svc.conn.require();
       await wait(350);
       const cur = readCfg();
-      if (baseVersion != null && baseVersion !== cur.version) {
+      if (baseVersion != null && baseVersion !== cur.sv[section]) {
         throw new AppError('conflict', t('These settings were changed by {who} at {time} after you opened them. Reload to see the newer configuration; your edits were not saved.', { who: cur.updatedBy, time: AW.fmtTime(cur.updatedAt) }), { current: cur.version });
       }
       const errors = this.validate(section, values);
@@ -88,7 +94,7 @@
       AW.store.set('ctl.configPrev', clone(cur));      // kept for recovery
       const before = clone(cur.data[section]);
       cur.data[section] = clone(values);
-      writeCfg(cur);
+      writeCfg(cur, null, [section]);
       AW.audit('config.' + section + '_saved', { before, after: values });
       AW.log('info', 'config', 'Settings saved: ' + section, { version: cur.version });
       return clone(cur);
@@ -196,13 +202,13 @@
     async apply(n, baseVersion, onPhase) {
       AW.requireRole('administrator', t('Changing the network listener')); svc.conn.require();
       const cur = readCfg();
-      if (baseVersion != null && baseVersion !== cur.version) throw new AppError('conflict', t('The configuration changed after you opened it. Reload and try again.'));
+      if (baseVersion != null && baseVersion !== cur.sv.network) throw new AppError('conflict', t('The configuration changed after you opened it. Reload and try again.'));
       const res = await this.test(n);
       if (!res.ok) throw new AppError('invalid', t('The configuration did not pass validation. Nothing was changed.'), { checks: res.checks });
       const prev = clone(cur.data.network);
       const phase = (p, detail) => { if (onPhase) onPhase(p, detail); };
       phase('saving'); await wait(400);
-      AW.store.set('ctl.configPrev', clone(cur)); cur.data.network = clone(n); writeCfg(cur);
+      AW.store.set('ctl.configPrev', clone(cur)); cur.data.network = clone(n); writeCfg(cur, null, ['network']);
       phase('restarting'); svc.conn.set('reconnecting', t('Listener restarting on the new endpoint')); await wait(900);
       for (let i = 1; i <= 3; i++) {
         phase('probing', t('Attempt {i} of 3 — {url}', { i, url: this.urls(n)[0] })); await wait(800);
@@ -214,7 +220,7 @@
       }
       // Recovery: the previous listener configuration is put back and proven reachable.
       phase('rollback', t('The new endpoint did not answer. Restoring the previous listener.')); await wait(900);
-      const c2 = readCfg(); c2.data.network = prev; writeCfg(c2, 'automatic rollback');
+      const c2 = readCfg(); c2.data.network = prev; writeCfg(c2, 'automatic rollback', ['network']);
       svc.conn.set('online'); phase('recovered', this.urls(prev)[0]);
       AW.log('error', 'network', 'New endpoint unreachable; rolled back to the previous listener', {});
       AW.audit('network.listener_rollback', { attempted: n });
