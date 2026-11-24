@@ -84,7 +84,7 @@ de aplicação. O refinamento acrescentou:
 20. Entre como **Operator** e **Technician** para ver os limites; Demo tools → *Force the 2D fallback* testa
     a falha de WebGL.
 
-Os mesmos passos estão automatizados em `tests/` (Playwright): 28 + 44 + 61 verificações na última execução,
+Os mesmos passos estão automatizados em `tests/` (Playwright): 29 + 44 + 59 verificações (132) na última execução,
 todas aprovadas. Veja `tests/README.md`.
 
 ## Estrutura
